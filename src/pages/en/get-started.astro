@@ -1,7 +1,149 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PageStub from '../../components/PageStub.astro';
+import { highlightKai } from '../../lib/highlight';
+import { links } from '../../lib/links';
+
+const helloSnippet = `fn main() {
+  println("hello, kaikai")
+}`;
+const helloHtml = await highlightKai(helloSnippet);
 ---
+
 <Base title="Get started · kaikai" lang="en">
-  <PageStub title="Get started" note="Install instructions and first program. Coming soon." />
+  <article class="get-started-page">
+    <div class="container">
+      <header>
+        <p class="eyebrow">Get started</p>
+        <h1>Installing kaikai</h1>
+        <p class="lead">
+          The command-line tool is called <code>kai</code>. You can
+          install it via Homebrew (quick) or build it from source (if
+          you want to contribute to the language).
+        </p>
+      </header>
+
+      <section>
+        <h2>Homebrew &middot; macOS and Linux</h2>
+        <p>
+          The official distribution lives in its own tap.
+        </p>
+<pre><code>brew install kaikailang-org/kaikai/kaikai</code></pre>
+        <p>Verify the install:</p>
+<pre><code>kai --version</code></pre>
+        <p>
+          If <code>clang</code> is on your <code>PATH</code> (on macOS,
+          run <code>xcode-select --install</code> to get the Xcode
+          Command Line Tools), <code>kai</code> uses the LLVM backend by
+          default. Otherwise it falls back to the C backend, which works
+          on any machine with a standard <code>cc</code>.
+        </p>
+      </section>
+
+      <section>
+        <h2>From source</h2>
+        <p>
+          To hack on the compiler or track <code>main</code>, clone the
+          repo and build the three-stage bootstrap:
+        </p>
+<pre><code>git clone {links.github.kaikai}
+cd kaikai
+make tier0</code></pre>
+        <p>
+          The first <code>./bin/kai</code> invocation compiles whichever
+          stage binaries are missing; subsequent calls reuse them.
+          Stages 0 and 1 only need a C99 <code>cc</code>; stage 2 is the
+          user-facing path.
+        </p>
+      </section>
+
+      <section>
+        <h2>Your first program</h2>
+        <p>Save this as <code>hello.kai</code>:</p>
+        <div class="code-block" set:html={helloHtml} />
+        <p>Then run it:</p>
+<pre><code>kai run hello.kai
+# hello, kaikai</code></pre>
+        <p>To produce a native binary instead of running directly:</p>
+<pre><code>kai build hello.kai -o hello
+./hello</code></pre>
+      </section>
+
+      <section>
+        <h2>What's next</h2>
+        <ul class="nextsteps">
+          <li>
+            Browse the <a href="/en/examples">examples</a>.
+          </li>
+          <li>
+            Read the <a href="/en/book">book</a> for the long-form
+            walkthrough of the language with real programs.
+          </li>
+          <li>
+            Visit the <a href={links.github.kaikai} rel="noopener">GitHub
+            repo</a> and open an issue if something seems off.
+          </li>
+        </ul>
+      </section>
+    </div>
+  </article>
 </Base>
+
+<style>
+  .get-started-page {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .get-started-page header {
+    margin-bottom: var(--space-12);
+  }
+  .lead {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    color: var(--fg-muted);
+    max-width: 60ch;
+    line-height: 1.6;
+  }
+  section {
+    margin-top: var(--space-12);
+    max-width: 70ch;
+  }
+  section h2 {
+    margin-bottom: var(--space-4);
+  }
+  section p {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+  section pre {
+    margin-block: var(--space-4) var(--space-6);
+  }
+  .code-block :global(pre.shiki) {
+    background: var(--code-bg) !important;
+    margin-block: var(--space-4) var(--space-6);
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius);
+    overflow-x: auto;
+    font-size: 0.88rem;
+  }
+  .nextsteps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+  .nextsteps li::before {
+    content: "›";
+    color: var(--accent);
+    margin-right: 0.6rem;
+    font-weight: 700;
+  }
+</style>

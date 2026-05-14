@@ -5,3 +5,8 @@ dist/
 .env
 .env.local
 *.log
+
+# Book PDFs are built artifacts pulled from ../kaikai-book.
+# Run `scripts/sync-book-pdfs.sh` to regenerate before a deploy.
+public/kaikai-libro-es.pdf
+public/kaikai-book-en.pdf

@@ -61,10 +61,20 @@ import { links } from '../lib/links';
         </p>
 
         <div class="cta-row">
-          <a class="btn" href={links.github.book} rel="noopener">
+          <a class="btn" href={links.bookPdf.es} download>
+            Descargar PDF (español)
+          </a>
+          <a class="btn secondary" href={links.bookPdf.en} download>
+            Descargar PDF (inglés)
+          </a>
+          <a class="btn secondary" href={links.github.book} rel="noopener">
             Repositorio en GitHub
           </a>
         </div>
+        <p class="pdf-note">
+          Borrador en evolución. El PDF se regenera con cada cambio
+          significativo del libro.
+        </p>
       </div>
     </div>
   </article>
@@ -97,5 +107,12 @@ import { links } from '../lib/links';
     display: flex;
     gap: var(--space-3);
     flex-wrap: wrap;
+  }
+  .pdf-note {
+    margin-top: var(--space-4);
+    color: var(--fg-subtle);
+    font-size: 0.88rem;
+    font-style: italic;
+    font-family: var(--font-serif);
   }
 </style>
