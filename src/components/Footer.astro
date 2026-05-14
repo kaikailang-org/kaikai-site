@@ -1,5 +1,6 @@
 ---
 import { t, pathInLang, type Lang } from '../i18n/ui';
+import { links } from '../lib/links';
 
 interface Props {
   lang: Lang;
@@ -27,9 +28,9 @@ const tt = t(lang);
     </nav>
     <nav class="external" aria-label="External">
       <ul>
-        <li><a href="https://github.com/kaikailang-org/kaikai">GitHub · kaikai</a></li>
-        <li><a href="https://github.com/lnds/kaikai-book">GitHub · book</a></li>
-        <li><a href="https://lnds.net">lnds.net</a></li>
+        <li><a href={links.github.kaikai}>GitHub · kaikai</a></li>
+        <li><a href={links.github.book}>GitHub · kaikai-book</a></li>
+        <li><a href={links.blog}>lnds.net</a></li>
       </ul>
     </nav>
   </div>

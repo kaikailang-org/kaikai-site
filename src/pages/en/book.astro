@@ -1,7 +1,101 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PageStub from '../../components/PageStub.astro';
+import { links } from '../../lib/links';
 ---
+
 <Base title="The book · kaikai" lang="en">
-  <PageStub title="The book" note="The kaikai Programming Language — a reading book, not a reference manual. Coming soon." />
+  <article class="book-page">
+    <div class="container">
+      <header>
+        <p class="eyebrow">The book</p>
+        <h1>The kaikai Programming Language</h1>
+        <p class="byline">By Eduardo Díaz.</p>
+      </header>
+
+      <div class="prose">
+        <p>
+          A reading book, not a reference manual. The reference lives in
+          the language repo under <code>kaikai/docs</code>. This book is
+          the long-form companion: chapters that explain the <em>why</em>
+          behind the language and walk through working programs from the
+          first page.
+        </p>
+        <p>
+          The structural inspiration is <em>The Go Programming Language</em>
+          by Donovan and Kernighan: dense prose, real programs from
+          chapter one, integrating case studies, exercises at the end of
+          each chapter. The pedagogical inspiration is <em>Learn You a
+          Haskell for Great Good!</em> by Lipovača: warm tone where the
+          material gets new, concepts introduced gradually, room for the
+          reader to breathe.
+        </p>
+
+        <h2>Who it is for</h2>
+        <p>
+          A working programmer with experience in some imperative or
+          object-oriented language (Python, Go, Java, JavaScript, C#,
+          Rust) who has not necessarily worked in a functional language.
+          Concepts like algebraic data types, pattern matching,
+          immutability by default, and effects-in-types are introduced
+          with bridges from what you already know.
+        </p>
+        <p>
+          It is not for absolute beginners. You should already know what
+          a function, a type, a list, and a test are.
+        </p>
+
+        <h2>Bilingual edition</h2>
+        <p>
+          The book ships in two editions, both first-class. Neither is a
+          translation of the other: each is written in its native voice,
+          with code samples whose comments and file names live in the
+          language of the citing edition.
+        </p>
+
+        <h2>Status</h2>
+        <p>
+          The book is under active writing. 18 chapters planned plus 6
+          appendices. The repository includes the full table of contents,
+          chapters in progress, and the example sources each chapter
+          cites.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn" href={links.github.book} rel="noopener">
+            Repository on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
 </Base>
+
+<style>
+  .book-page {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .book-page header {
+    margin-bottom: var(--space-12);
+  }
+  .byline {
+    color: var(--fg-muted);
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+  .book-page h2 {
+    margin-top: var(--space-12);
+  }
+  .cta-row {
+    margin-top: var(--space-12);
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+</style>

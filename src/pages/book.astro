@@ -1,7 +1,101 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageStub from '../components/PageStub.astro';
+import { links } from '../lib/links';
 ---
+
 <Base title="El libro · kaikai" lang="es">
-  <PageStub title="El libro" note="The kaikai Programming Language: un libro de lectura, no un manual. En construcción." />
+  <article class="book-page">
+    <div class="container">
+      <header>
+        <p class="eyebrow">El libro</p>
+        <h1>The kaikai Programming Language</h1>
+        <p class="byline">Por Eduardo Díaz.</p>
+      </header>
+
+      <div class="prose">
+        <p>
+          Un libro de lectura, no un manual de referencia. La referencia
+          vive en el repo del lenguaje, en <code>kaikai/docs</code>. Este
+          libro es el acompañante extenso: capítulos que explican el
+          <em>porqué</em> detrás del lenguaje y recorren programas
+          ejecutables desde la primera página.
+        </p>
+        <p>
+          La inspiración estructural es <em>The Go Programming Language</em>
+          de Donovan y Kernighan: prosa densa, programas reales desde el
+          capítulo uno, casos de estudio integradores, ejercicios al
+          final de cada capítulo. La inspiración pedagógica es
+          <em>Learn You a Haskell for Great Good!</em> de Lipovača: tono
+          cálido donde el material es nuevo, conceptos introducidos
+          gradualmente, espacio para que el lector respire.
+        </p>
+
+        <h2>Para quién</h2>
+        <p>
+          Un programador con experiencia en algún lenguaje imperativo u
+          orientado a objetos (Python, Go, Java, JavaScript, C#, Rust) que
+          no necesariamente ha trabajado con lenguajes funcionales.
+          Conceptos como tipos algebraicos, pattern matching,
+          inmutabilidad por defecto y efectos visibles en el tipo se
+          introducen con puentes desde lo que el lector ya conoce.
+        </p>
+        <p>
+          No es para principiantes absolutos. Hay que saber qué es una
+          función, un tipo, una lista y una prueba.
+        </p>
+
+        <h2>Edición bilingüe</h2>
+        <p>
+          El libro existe en español e inglés, ambas ediciones de
+          primera clase. Ninguna es traducción de la otra: cada una se
+          escribió en su voz nativa, con ejemplos cuyos comentarios y
+          nombres de archivo viven en el idioma de la edición que los
+          cita.
+        </p>
+
+        <h2>Estado</h2>
+        <p>
+          El libro está en escritura activa. 18 capítulos planificados
+          más 6 apéndices. El repositorio incluye el índice completo, los
+          capítulos terminados y los ejemplos que cada capítulo cita.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn" href={links.github.book} rel="noopener">
+            Repositorio en GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
 </Base>
+
+<style>
+  .book-page {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .book-page header {
+    margin-bottom: var(--space-12);
+  }
+  .byline {
+    color: var(--fg-muted);
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+  .book-page h2 {
+    margin-top: var(--space-12);
+  }
+  .cta-row {
+    margin-top: var(--space-12);
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+</style>
