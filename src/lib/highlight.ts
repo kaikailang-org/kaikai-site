@@ -1,14 +1,5 @@
 import { createHighlighter, type Highlighter } from 'shiki';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-
-const grammarUrl = new URL(
-  '../syntax/kaikai.tmLanguage.json',
-  import.meta.url,
-);
-const kaikaiGrammar = JSON.parse(
-  readFileSync(fileURLToPath(grammarUrl), 'utf-8'),
-);
+import kaikaiGrammar from '../syntax/kaikai.tmLanguage.json';
 
 let highlighterPromise: Promise<Highlighter> | null = null;
 

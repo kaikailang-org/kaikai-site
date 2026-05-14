@@ -1,13 +1,8 @@
 import { defineConfig } from 'astro/config';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
-const kaikaiGrammar = JSON.parse(
-  readFileSync(
-    fileURLToPath(new URL('./src/syntax/kaikai.tmLanguage.json', import.meta.url)),
-    'utf-8',
-  ),
-);
+const require = createRequire(import.meta.url);
+const kaikaiGrammar = require('./src/syntax/kaikai.tmLanguage.json');
 
 export default defineConfig({
   site: 'https://kaikai-lang.org',
