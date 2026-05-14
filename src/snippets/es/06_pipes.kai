@@ -1,0 +1,30 @@
+# Familia de pipes: cuatro operadores, cuatro intenciones.
+#
+#   |>   apply       aplica una función al valor de la izquierda
+#   |    map         mapea sobre la colección
+#   ||   flat-map    mapea y aplana el resultado
+#   |?   filter      conserva los elementos que cumplen el predicado
+#
+#   $ kai run examples/quickstart/06_pipes.kai
+#   total=20
+
+fn rango_loop(i: Int, n: Int, acc: [Int]) : [Int]
+  = if i > n { list_reverse(acc) } else { rango_loop(i + 1, n, [i, ...acc]) }
+
+fn rango(n: Int) : [Int] = rango_loop(1, n, [])
+
+fn cuadrado(n: Int) : Int = n * n
+
+fn divisores(n: Int) : [Int] = [1, n]
+
+fn es_par(n: Int) : Bool = n % 2 == 0
+
+fn main() {
+  let total = rango(4)                # [1, 2, 3, 4]
+    | cuadrado                        # [1, 4, 9, 16]      (map)
+    || divisores                      # [1, 1, 1, 4, 1, 9, 1, 16] (flat-map)
+    |? es_par                         # [4, 16]            (filter)
+    |> list.sum                       # 20                 (apply)
+
+  println("total=#{total}")
+}

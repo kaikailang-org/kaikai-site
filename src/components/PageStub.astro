@@ -1,0 +1,28 @@
+---
+interface Props {
+  title: string;
+  note: string;
+}
+const { title, note } = Astro.props;
+---
+
+<section class="stub">
+  <div class="container">
+    <h1>{title}</h1>
+    <p class="note">{note}</p>
+  </div>
+</section>
+
+<style>
+  .stub {
+    padding-block: var(--space-16) var(--space-12);
+    min-height: 40vh;
+  }
+  .stub h1 { color: var(--accent); }
+  .note {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--fg-muted);
+    max-width: 60ch;
+  }
+</style>

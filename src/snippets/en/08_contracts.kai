@@ -1,0 +1,30 @@
+# Contracts: preconditions and postconditions in the signature.
+#
+# `requires` rejects callers passing invalid arguments.
+# `ensures` demands the result satisfy a property.
+# Inside `ensures`, the name `result` refers to the returned value.
+#
+#   $ kai run examples/quickstart/08_contracts.kai
+#   5
+#   3
+
+fn divide(a: Int, b: Int) : Int
+  requires b != 0
+  ensures  result * b == a
+{
+  a / b
+}
+
+# Absolute value: the postcondition guarantees a non-negative result
+# of the same magnitude as the argument.
+fn abs(n: Int) : Int
+  ensures result >= 0
+  ensures result == n or result == 0 - n
+{
+  if n >= 0 { n } else { 0 - n }
+}
+
+fn main() {
+  println(int_to_string(divide(10, 2)))   # 5
+  println(int_to_string(abs(0 - 3)))      # 3
+}

@@ -1,0 +1,142 @@
+---
+import { t, pathInLang, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const navItems = [
+  { href: pathInLang('/get-started', lang), key: 'nav.start' as const },
+  { href: pathInLang('/examples', lang), key: 'nav.examples' as const },
+  { href: pathInLang('/about', lang), key: 'nav.name' as const },
+  { href: pathInLang('/book', lang), key: 'nav.book' as const },
+  { href: pathInLang('/ecosystem', lang), key: 'nav.ecosystem' as const },
+  { href: pathInLang('/community', lang), key: 'nav.community' as const },
+];
+
+const otherLang: Lang = lang === 'es' ? 'en' : 'es';
+const otherPath = pathInLang(
+  Astro.url.pathname.replace(/^\/en/, '') || '/',
+  otherLang,
+);
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href={pathInLang('/', lang)} class="brand" aria-label="kaikai home">
+      <img
+        src="/kaikai-mark.svg"
+        alt=""
+        width="32"
+        height="32"
+        class="mark mark-light"
+      />
+      <img
+        src="/kaikai-mark-dark.svg"
+        alt=""
+        width="32"
+        height="32"
+        class="mark mark-dark"
+      />
+      <span class="brand-name">kaikai</span>
+    </a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <ul>
+        {navItems.map(({ href, key }) => (
+          <li><a href={href}>{tt(key)}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <a href={otherPath} class="lang-switch" aria-label={`Switch to ${otherLang}`}>
+      {otherLang === 'en' ? 'EN' : 'ES'}
+    </a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(8px);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    padding-block: var(--space-3);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--fg);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+  .brand:hover { text-decoration: none; }
+  .mark { display: block; }
+  .mark-light { display: block; }
+  .mark-dark { display: none; }
+  @media (prefers-color-scheme: dark) {
+    .mark-light { display: none; }
+    .mark-dark { display: block; }
+  }
+  .primary-nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .primary-nav ul {
+    display: flex;
+    gap: var(--space-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  .primary-nav a {
+    color: var(--fg-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .primary-nav a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--fg-muted);
+  }
+  .lang-switch:hover {
+    color: var(--fg);
+    background: var(--bg-subtle);
+    text-decoration: none;
+  }
+  @media (max-width: 720px) {
+    .header-inner {
+      flex-wrap: wrap;
+    }
+    .primary-nav {
+      order: 3;
+      width: 100%;
+      justify-content: flex-start;
+    }
+    .primary-nav ul { gap: var(--space-4); }
+  }
+</style>

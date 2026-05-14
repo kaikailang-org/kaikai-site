@@ -1,0 +1,68 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const features = [
+  { titleKey: 'features.effects.title',    bodyKey: 'features.effects.body' },
+  { titleKey: 'features.pipelines.title',  bodyKey: 'features.pipelines.body' },
+  { titleKey: 'features.memory.title',     bodyKey: 'features.memory.body' },
+  { titleKey: 'features.units.title',      bodyKey: 'features.units.body' },
+  { titleKey: 'features.contracts.title',  bodyKey: 'features.contracts.body' },
+  { titleKey: 'features.agents.title',     bodyKey: 'features.agents.body' },
+] as const;
+---
+
+<section class="features">
+  <div class="container">
+    <h2>{tt('features.title')}</h2>
+    <div class="grid">
+      {features.map(({ titleKey, bodyKey }) => (
+        <article class="card">
+          <h3>{tt(titleKey)}</h3>
+          <p>{tt(bodyKey)}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--border);
+  }
+  .features h2 {
+    margin-bottom: var(--space-8);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-6);
+  }
+  .card {
+    padding: var(--space-6);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: border-color 120ms ease, transform 120ms ease;
+  }
+  .card:hover {
+    border-color: var(--border-strong);
+  }
+  .card h3 {
+    margin-bottom: var(--space-3);
+    color: var(--accent);
+    font-size: 1.1rem;
+  }
+  .card p {
+    color: var(--fg-muted);
+    margin: 0;
+    line-height: 1.55;
+    font-size: 0.95rem;
+  }
+</style>

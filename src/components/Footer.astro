@@ -1,0 +1,80 @@
+---
+import { t, pathInLang, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="brand-col">
+      <strong>kaikai</strong>
+      <p>{tt('footer.tagline')}</p>
+      <p class="muted">{tt('footer.copy')}</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <ul>
+        <li><a href={pathInLang('/get-started', lang)}>{tt('nav.start')}</a></li>
+        <li><a href={pathInLang('/examples', lang)}>{tt('nav.examples')}</a></li>
+        <li><a href={pathInLang('/about', lang)}>{tt('nav.name')}</a></li>
+        <li><a href={pathInLang('/book', lang)}>{tt('nav.book')}</a></li>
+        <li><a href={pathInLang('/ecosystem', lang)}>{tt('nav.ecosystem')}</a></li>
+        <li><a href={pathInLang('/community', lang)}>{tt('nav.community')}</a></li>
+      </ul>
+    </nav>
+    <nav class="external" aria-label="External">
+      <ul>
+        <li><a href="https://github.com/kaikailang-org/kaikai">GitHub · kaikai</a></li>
+        <li><a href="https://github.com/lnds/kaikai-book">GitHub · book</a></li>
+        <li><a href="https://lnds.net">lnds.net</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    margin-top: var(--space-24);
+    padding-block: var(--space-12);
+    background: var(--bg-subtle);
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: var(--space-8);
+  }
+  .brand-col strong {
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+  .brand-col p {
+    margin: var(--space-2) 0 0;
+    color: var(--fg-muted);
+    font-size: 0.92rem;
+  }
+  .brand-col .muted {
+    color: var(--fg-subtle);
+  }
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  nav a {
+    color: var(--fg-muted);
+    font-size: 0.92rem;
+  }
+  nav a:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 720px) {
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,26 @@
+# Units of measure: arithmetic that doesn't mix currencies.
+#
+# Units live in the type. The compiler rejects adding USD to EUR;
+# converting between currencies requires an explicit step.
+#
+#   $ kai run examples/quickstart/07_uom.kai
+#   balance=845.1 USD
+
+unit USD
+unit EUR
+
+fn to_usd(amount: Real<EUR>, rate: Real<USD/EUR>) : Real<USD>
+  = amount * rate
+
+fn main() {
+  let salary    : Real<USD> = 1000.0<USD>
+  let groceries : Real<USD> =  250.0<USD>
+  let fee       : Real<USD> =    5.0<USD>
+  let refund    : Real<EUR> =   91.0<EUR>
+  let rate      : Real<USD/EUR> = 1.10<USD/EUR>
+
+  let balance = salary - groceries - fee + to_usd(refund, rate)
+
+  # 1000 - 250 - 5 + 100.1 = 845.1 USD
+  println("balance=#{balance}")
+}

@@ -1,0 +1,30 @@
+# Pipe family: four operators, four intents.
+#
+#   |>   apply       apply a function to the left-hand value
+#   |    map         map over the collection
+#   ||   flat-map    map and flatten the result
+#   |?   filter      keep elements that satisfy the predicate
+#
+#   $ kai run examples/quickstart/06_pipes.kai
+#   total=20
+
+fn range_loop(i: Int, n: Int, acc: [Int]) : [Int]
+  = if i > n { list_reverse(acc) } else { range_loop(i + 1, n, [i, ...acc]) }
+
+fn range(n: Int) : [Int] = range_loop(1, n, [])
+
+fn square(n: Int) : Int = n * n
+
+fn divisors(n: Int) : [Int] = [1, n]
+
+fn is_even(n: Int) : Bool = n % 2 == 0
+
+fn main() {
+  let total = range(4)                # [1, 2, 3, 4]
+    | square                          # [1, 4, 9, 16]      (map)
+    || divisors                       # [1, 1, 1, 4, 1, 9, 1, 16] (flat-map)
+    |? is_even                        # [4, 16]            (filter)
+    |> list.sum                       # 20                 (apply)
+
+  println("total=#{total}")
+}

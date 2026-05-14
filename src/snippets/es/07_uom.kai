@@ -1,0 +1,26 @@
+# Unidades de medida: aritmética que no confunde monedas.
+#
+# Las unidades viven en el tipo. El compilador rechaza sumar USD
+# con EUR; convertir entre monedas requiere un paso explícito.
+#
+#   $ kai run examples/quickstart/07_uom.kai
+#   balance=845 USD
+
+unit USD
+unit EUR
+
+fn convertir_a_usd(monto: Real<EUR>, tasa: Real<USD/EUR>) : Real<USD>
+  = monto * tasa
+
+fn main() {
+  let salario   : Real<USD> = 1000.0<USD>
+  let mercado   : Real<USD> =  250.0<USD>
+  let comision  : Real<USD> =    5.0<USD>
+  let reembolso : Real<EUR> =   91.0<EUR>
+  let tasa      : Real<USD/EUR> = 1.10<USD/EUR>
+
+  let balance = salario - mercado - comision + convertir_a_usd(reembolso, tasa)
+
+  # 1000 - 250 - 5 + 100.1 = 845.1 USD
+  println("balance=#{balance}")
+}

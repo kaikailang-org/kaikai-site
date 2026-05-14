@@ -1,0 +1,168 @@
+---
+import { t, pathInLang, type Lang } from '../i18n/ui';
+import { highlightKai } from '../lib/highlight';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const heroSnippet = `effect Log {
+  log(msg: String) : Unit
+}
+
+fn greet(name: String) : Unit / Log {
+  Log.log("hello, " ++ name)
+}
+
+fn main() {
+  handle {
+    greet("kaikai")
+    greet("world")
+  } with Log {
+    log(msg, resume) -> {
+      println("[INFO] " ++ msg)
+      resume(())
+    }
+  }
+}`;
+
+const heroHtml = await highlightKai(heroSnippet);
+---
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <picture class="hero-logo">
+        <source srcset="/kaikai-logo-dark.svg" media="(prefers-color-scheme: dark)" />
+        <img src="/kaikai-logo.svg" alt="kaikai" width="760" height="240" />
+      </picture>
+      <p class="tagline-1">{tt('hero.tagline.line1')}</p>
+      <p class="tagline-2">{tt('hero.tagline.line2')}</p>
+      <p class="why-name">
+        <a href={pathInLang('/about', lang)}>{tt('hero.whyName')}</a>
+      </p>
+      <div class="cta-row">
+        <a class="btn" href={pathInLang('/get-started', lang)}>
+          {tt('hero.cta.install')}
+        </a>
+        <a class="btn secondary" href={pathInLang('/examples', lang)}>
+          {tt('hero.cta.start')}
+        </a>
+        <a class="btn secondary" href={pathInLang('/book', lang)}>
+          {tt('hero.cta.book')}
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-code" aria-hidden="false">
+      <div class="window-chrome">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="filename">effect.kai</span>
+      </div>
+      <div class="code-body" set:html={heroHtml} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .hero-logo img {
+    width: min(440px, 100%);
+    height: auto;
+    margin-bottom: var(--space-6);
+  }
+  .tagline-1 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    line-height: 1.45;
+    color: var(--fg);
+    max-width: 38ch;
+    margin-bottom: var(--space-3);
+  }
+  .tagline-2 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    font-style: italic;
+    color: var(--accent);
+    max-width: 38ch;
+    margin-bottom: var(--space-2);
+  }
+  .why-name {
+    font-size: 0.88rem;
+    margin-bottom: var(--space-6);
+  }
+  .why-name a {
+    color: var(--fg-muted);
+    border-bottom: 1px dotted var(--fg-subtle);
+  }
+  .why-name a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    text-decoration: none;
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero-code {
+    background: var(--code-bg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 12px 40px -20px rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border);
+  }
+  .window-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.red    { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green  { background: #28c840; }
+  .filename {
+    margin-left: 0.6rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .hero-code :global(pre.shiki) {
+    margin: 0;
+    border-radius: 0;
+    font-size: 0.83rem;
+    padding: var(--space-4) var(--space-6);
+    background: var(--code-bg) !important;
+    overflow-x: auto;
+  }
+  .hero-code :global(pre.shiki code) {
+    font-family: var(--font-mono);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 880px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero { padding-block: var(--space-12) var(--space-8); }
+  }
+</style>

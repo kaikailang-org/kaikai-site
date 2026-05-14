@@ -1,0 +1,163 @@
+---
+import { t, type Lang } from '../i18n/ui';
+import fs from 'node:fs';
+import path from 'node:path';
+import { highlightKai } from '../lib/highlight';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const snippetsDir = path.resolve(process.cwd(), 'src/snippets', lang);
+const read = (file: string) =>
+  fs.readFileSync(path.join(snippetsDir, file), 'utf-8');
+
+const tabs = [
+  { id: 'hello',     label: tt('examples.tab.hello'),     file: '01_hello.kai' },
+  { id: 'fizzbuzz',  label: tt('examples.tab.fizzbuzz'),  file: '02_fizzbuzz.kai' },
+  { id: 'effect',    label: tt('examples.tab.effect'),    file: '04_effect.kai' },
+  { id: 'pipes',     label: tt('examples.tab.pipes'),     file: '06_pipes.kai' },
+  { id: 'uom',       label: tt('examples.tab.uom'),       file: '07_uom.kai' },
+  { id: 'contracts', label: tt('examples.tab.contracts'), file: '08_contracts.kai' },
+];
+
+const sources = await Promise.all(
+  tabs.map(async t => ({
+    ...t,
+    html: await highlightKai(read(t.file)),
+  })),
+);
+---
+
+<section class="examples">
+  <div class="container">
+    <h2>{tt('examples.title')}</h2>
+    <p class="intro">{tt('examples.intro')}</p>
+
+    <div class="tabs" role="tablist">
+      {sources.map((s, i) => (
+        <button
+          class:list={['tab', { active: i === 0 }]}
+          role="tab"
+          data-target={s.id}
+          aria-selected={i === 0 ? 'true' : 'false'}
+        >
+          {s.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="panels">
+      {sources.map((s, i) => (
+        <div
+          class:list={['panel', { active: i === 0 }]}
+          role="tabpanel"
+          data-panel={s.id}
+        >
+          <div class="window-chrome">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="filename">{s.file}</span>
+          </div>
+          <div class="code-body" set:html={s.html} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.tab');
+  const panels = document.querySelectorAll<HTMLDivElement>('.panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.target;
+      tabs.forEach(t => {
+        const active = t.dataset.target === target;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach(p => {
+        p.classList.toggle('active', p.dataset.panel === target);
+      });
+    });
+  });
+</script>
+
+<style>
+  .examples {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--border);
+  }
+  .intro {
+    color: var(--fg-muted);
+    margin-bottom: var(--space-6);
+    max-width: 60ch;
+  }
+  .tabs {
+    display: flex;
+    gap: var(--space-1);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--space-4);
+  }
+  .tab {
+    background: transparent;
+    color: var(--fg-muted);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 0.6rem 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 120ms ease, border-color 120ms ease;
+  }
+  .tab:hover { color: var(--fg); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .panel {
+    background: var(--code-bg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .window-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .dot.red    { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green  { background: #28c840; }
+  .filename {
+    margin-left: 0.6rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .panel :global(pre.shiki) {
+    margin: 0;
+    border-radius: 0;
+    padding: var(--space-4) var(--space-6);
+    background: var(--code-bg) !important;
+    overflow-x: auto;
+    font-size: 0.85rem;
+  }
+  .panel :global(pre.shiki code) {
+    font-family: var(--font-mono);
+    line-height: 1.55;
+  }
+</style>

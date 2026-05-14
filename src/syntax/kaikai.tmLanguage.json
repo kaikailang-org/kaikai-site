@@ -1,0 +1,261 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "kaikai",
+  "scopeName": "source.kaikai",
+  "fileTypes": ["kai"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#keywords" },
+    { "include": "#storage" },
+    { "include": "#types" },
+    { "include": "#numbers" },
+    { "include": "#strings" },
+    { "include": "#chars" },
+    { "include": "#regex_literal" },
+    { "include": "#attributes" },
+    { "include": "#operators" },
+    { "include": "#punctuation" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "match": "#.*$",
+          "name": "comment.line.kaikai"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(if|else|match|handle|with|where|requires|ensures)\\b",
+          "name": "keyword.control.kaikai"
+        },
+        {
+          "match": "\\b(and|or|not)\\b",
+          "name": "keyword.operator.logical.kaikai"
+        },
+        {
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.boolean.kaikai"
+        },
+        {
+          "match": "\\b(Nothing|None|Some|Ok|Err)\\b",
+          "name": "constant.language.kaikai"
+        },
+        {
+          "match": "\\b(import|use|as|pub)\\b",
+          "name": "keyword.other.import.kaikai"
+        },
+        {
+          "match": "\\b(test|bench|check|assert|todo!)\\b",
+          "name": "keyword.other.test.kaikai"
+        }
+      ]
+    },
+    "storage": {
+      "patterns": [
+        {
+          "match": "\\b(fn)\\s+([a-z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "storage.type.function.kaikai" },
+            "2": { "name": "entity.name.function.kaikai" }
+          }
+        },
+        {
+          "match": "\\b(fn)\\b",
+          "name": "storage.type.function.kaikai"
+        },
+        {
+          "match": "\\b(type|effect|protocol|impl|axiom|const|unit)\\b",
+          "name": "storage.type.kaikai"
+        },
+        {
+          "match": "\\b(let|var)\\b",
+          "name": "storage.modifier.kaikai"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "match": "\\b(Int|Real|Bool|String|Char|Unit|Nothing|Array|List|Option|Result|Pair|Triple|Quad|Pid|Ref|Decimal|Measure)\\b",
+          "name": "storage.type.builtin.kaikai"
+        },
+        {
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b",
+          "name": "entity.name.type.kaikai"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\b(\\d+(?:\\.\\d+)?)<([a-zA-Z][a-zA-Z0-9_/^*]*)>\\s*",
+          "captures": {
+            "1": { "name": "constant.numeric.kaikai" },
+            "2": { "name": "storage.type.uom.kaikai" }
+          }
+        },
+        {
+          "match": "\\b0x[0-9a-fA-F]+\\b",
+          "name": "constant.numeric.hex.kaikai"
+        },
+        {
+          "match": "\\b0b[01]+\\b",
+          "name": "constant.numeric.binary.kaikai"
+        },
+        {
+          "match": "\\b\\d+\\.\\d+\\b",
+          "name": "constant.numeric.float.kaikai"
+        },
+        {
+          "match": "\\b\\d+\\b",
+          "name": "constant.numeric.integer.kaikai"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.kaikai",
+          "begin": "\"",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.string.begin.kaikai" }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.kaikai" }
+          },
+          "patterns": [
+            {
+              "name": "meta.interpolation.kaikai",
+              "begin": "#\\{",
+              "beginCaptures": {
+                "0": { "name": "punctuation.section.interpolation.begin.kaikai" }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": { "name": "punctuation.section.interpolation.end.kaikai" }
+              },
+              "patterns": [{ "include": "$self" }]
+            },
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.kaikai"
+            }
+          ]
+        }
+      ]
+    },
+    "chars": {
+      "patterns": [
+        {
+          "match": "'(\\\\.|[^'])'",
+          "name": "string.quoted.single.kaikai"
+        }
+      ]
+    },
+    "regex_literal": {
+      "patterns": [
+        {
+          "name": "string.regexp.kaikai",
+          "begin": "~r/",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.regex.begin.kaikai" }
+          },
+          "end": "/[a-z]*",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.regex.end.kaikai" }
+          },
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.kaikai"
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": {
+      "patterns": [
+        {
+          "match": "\\[<[^>]+>\\]",
+          "name": "meta.annotation.kaikai"
+        },
+        {
+          "match": "#derive\\b",
+          "name": "meta.annotation.derive.kaikai"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "\\|>|\\|\\||\\|\\?|\\|",
+          "name": "keyword.operator.pipe.kaikai"
+        },
+        {
+          "match": "->|=>",
+          "name": "keyword.operator.arrow.kaikai"
+        },
+        {
+          "match": ":=|=",
+          "name": "keyword.operator.assignment.kaikai"
+        },
+        {
+          "match": "==|!=|<=|>=|<|>",
+          "name": "keyword.operator.comparison.kaikai"
+        },
+        {
+          "match": "\\+\\+|\\+|-|\\*|//|/|%",
+          "name": "keyword.operator.arithmetic.kaikai"
+        },
+        {
+          "match": "!|\\?",
+          "name": "keyword.operator.postfix.kaikai"
+        },
+        {
+          "match": "@",
+          "name": "keyword.operator.capability.kaikai"
+        },
+        {
+          "match": "\\^",
+          "name": "keyword.operator.exponent.kaikai"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "match": "\\.\\.\\.",
+          "name": "punctuation.separator.spread.kaikai"
+        },
+        {
+          "match": "\\.\\.",
+          "name": "punctuation.separator.range.kaikai"
+        },
+        {
+          "match": "\\.",
+          "name": "punctuation.accessor.kaikai"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.kaikai"
+        },
+        {
+          "match": ":",
+          "name": "punctuation.separator.type.kaikai"
+        },
+        {
+          "match": ";",
+          "name": "punctuation.terminator.kaikai"
+        },
+        {
+          "match": "[\\(\\)\\[\\]\\{\\}]",
+          "name": "punctuation.section.kaikai"
+        }
+      ]
+    }
+  }
+}
