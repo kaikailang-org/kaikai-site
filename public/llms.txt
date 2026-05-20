@@ -1,0 +1,41 @@
+# kaikai
+
+> kaikai es un lenguaje de programación funcional, fuertemente tipado, con efectos algebraicos y compilación nativa vía LLVM. El sitio kaikai-lang.org publica la documentación oficial, el libro, ejemplos y referencias del lenguaje. Contenido disponible en español (rutas raíz) e inglés (rutas bajo /en/).
+
+## Documentación
+
+- [Inicio (es)](https://kaikai-lang.org/): visión general del lenguaje, principios de diseño y ejemplos cortos.
+- [Empezar (es)](https://kaikai-lang.org/get-started/): instalación y primeros pasos con el toolchain de kaikai.
+- [El libro (es)](https://kaikai-lang.org/book/): libro de referencia del lenguaje en línea; descarga directa en [PDF](https://kaikai-lang.org/kaikai-libro-es.pdf).
+- [Ejemplos (es)](https://kaikai-lang.org/examples/): programas de ejemplo que ilustran sintaxis, tipos y efectos.
+- [Ecosistema (es)](https://kaikai-lang.org/ecosystem/): librerías, herramientas y tooling alrededor del lenguaje.
+- [Comunidad (es)](https://kaikai-lang.org/community/): canales de discusión, contribuciones y código de conducta.
+- [El nombre (es)](https://kaikai-lang.org/about/): historia y significado del nombre kaikai.
+
+## English
+
+- [Home (en)](https://kaikai-lang.org/en/): language overview, design principles and short examples.
+- [Get started (en)](https://kaikai-lang.org/en/get-started/): installation and first steps with the kaikai toolchain.
+- [The book (en)](https://kaikai-lang.org/en/book/): online language reference; direct download as [PDF](https://kaikai-lang.org/kaikai-book-en.pdf).
+- [Examples (en)](https://kaikai-lang.org/en/examples/): example programs covering syntax, types and effects.
+- [Ecosystem (en)](https://kaikai-lang.org/en/ecosystem/): libraries, tools and tooling around the language.
+- [Community (en)](https://kaikai-lang.org/en/community/): discussion channels, contributions and code of conduct.
+- [About the name (en)](https://kaikai-lang.org/en/about/): history and meaning of the name kaikai.
+
+## Código fuente
+
+- [kaikailang-org/kaikai](https://github.com/kaikailang-org/kaikai): compilador, runtime y stdlib del lenguaje (funcional, tipado estático, efectos algebraicos, compilación LLVM nativa).
+- [kaikailang-org/kaikai-book](https://github.com/kaikailang-org/kaikai-book): fuentes del libro de referencia del lenguaje.
+- [kaikailang-org/kaikai-site](https://github.com/kaikailang-org/kaikai-site): código fuente del sitio kaikai-lang.org.
+
+## Tooling
+
+- [kaikailang-org/kaikai-vscode](https://github.com/kaikailang-org/kaikai-vscode): extensión de VS Code con cliente LSP y resaltado de sintaxis.
+- [kaikailang-org/kaikai.nvim](https://github.com/kaikailang-org/kaikai.nvim): plugin de Neovim — LSP, sintaxis, treesitter, snippets.
+- [kaikailang-org/tree-sitter-kaikai](https://github.com/kaikailang-org/tree-sitter-kaikai): grammar de tree-sitter para kaikai.
+- [kaikailang-org/homebrew-kaikai](https://github.com/kaikailang-org/homebrew-kaikai): tap de Homebrew para instalar kaikai.
+
+## Librerías
+
+- [kaikailang-org/kohau](https://github.com/kaikailang-org/kohau): clientes de base de datos para kaikai — SQLite (FFI a libsqlite3) y Postgres (protocolo nativo).
+- [kaikailang-org/henua](https://github.com/kaikailang-org/henua): building blocks DDD para kaikai — Repository, EventBus, Aggregate, Domain Events. Se apoya en kohau.
