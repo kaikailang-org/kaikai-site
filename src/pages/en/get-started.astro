@@ -16,43 +16,63 @@ const helloHtml = await highlightKai(helloSnippet);
         <p class="eyebrow">Get started</p>
         <h1>Installing kaikai</h1>
         <p class="lead">
-          The command-line tool is called <code>kai</code>. You can
-          install it via Homebrew (quick) or build it from source (if
-          you want to contribute to the language).
+          The command-line tool is called <code>kai</code>. The
+          recommended path is the official installer; Homebrew also
+          works, and you can build from source if you want to change
+          the compiler itself.
         </p>
       </header>
 
       <section>
-        <h2>Homebrew &middot; macOS and Linux</h2>
+        <h2>Official installer &middot; macOS (Apple Silicon)</h2>
         <p>
-          The official distribution lives in its own tap.
+          A rustup-style installer with no dependencies:
         </p>
-<pre><code>brew install kaikailang-org/kaikai/kaikai</code></pre>
-        <p>Verify the install:</p>
+<pre><code>curl -fsSL https://raw.githubusercontent.com/kaikailang-org/kaikai/main/install.sh | sh</code></pre>
+        <p>
+          It downloads the latest release, verifies its SHA-256,
+          installs it under <code>~/.kaikai/</code> and adds
+          <code>~/.kaikai/bin</code> to your <code>PATH</code>. Verify
+          the install:
+        </p>
 <pre><code>kai --version</code></pre>
         <p>
-          If <code>clang</code> is on your <code>PATH</code> (on macOS,
-          run <code>xcode-select --install</code> to get the Xcode
-          Command Line Tools), <code>kai</code> uses the LLVM backend by
-          default. Otherwise it falls back to the C backend, which works
-          on any machine with a standard <code>cc</code>.
+          The binary is self-contained: LLVM is statically linked, and
+          it compiles to native code with no <code>clang</code> or
+          external toolchain. To update later:
+        </p>
+<pre><code>kai upgrade</code></pre>
+      </section>
+
+      <section>
+        <h2>Homebrew</h2>
+        <p>
+          The official distribution also lives in its own tap.
+        </p>
+<pre><code>brew install kaikailang-org/kaikai/kaikai</code></pre>
+        <p>
+          On a Homebrew install, updates go through
+          <code>brew upgrade kaikai</code>, not <code>kai upgrade</code>.
         </p>
       </section>
 
       <section>
         <h2>From source</h2>
         <p>
-          To hack on the compiler or track <code>main</code>, clone the
-          repo and build the three-stage bootstrap:
+          You only need this to change the compiler itself, or on
+          platforms the installer does not ship binaries for yet
+          (prebuilts today are macOS on Apple Silicon). It requires a
+          <code>cc</code> and the LLVM development headers (located via
+          <code>llvm-config</code>):
         </p>
 <pre><code>git clone {links.github.kaikai}
 cd kaikai
-make tier0</code></pre>
+make all</code></pre>
         <p>
-          The first <code>./bin/kai</code> invocation compiles whichever
-          stage binaries are missing; subsequent calls reuse them.
-          Stages 0 and 1 only need a C99 <code>cc</code>; stage 2 is the
-          user-facing path.
+          The bootstrap regenerates the compiler from nothing but a C
+          compiler: stage 0 (C) builds <code>kaic0</code>, which
+          compiles the minimal compiler <code>kaic1</code>, which
+          compiles the full self-hosted compiler.
         </p>
       </section>
 

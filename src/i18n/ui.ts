@@ -35,9 +35,9 @@ export const ui = {
     'features.memory.title': 'Sin GC, sin borrow checker',
     'features.memory.body':
       'Perceus reference counting + fibras aisladas. La memoria es por-fibra; no hay pausas globales.',
-    'features.units.title': 'Unidades y branded types',
+    'features.units.title': 'Kinds: unidades, monedas, regiones',
     'features.units.body':
-      'Real<USD>, String<UserId>, Int<Seconds>. Información en el tipo, costo cero en runtime.',
+      'Real<m/s> para medidas, monedas que no se mezclan, arenas con region { }. Información en el tipo, costo cero en runtime.',
     'features.contracts.title': 'Contratos y refinements',
     'features.contracts.body':
       'requires, ensures, Int where >= 0. Lo que hace SPARK, sin SMT solver.',
@@ -47,7 +47,7 @@ export const ui = {
 
     'examples.title': 'Ejemplos',
     'examples.intro':
-      'Tres programas que muestran la forma del lenguaje. Todos se compilan con kai run.',
+      'Seis programas que muestran la forma del lenguaje. Todos se ejecutan con kai run.',
     'examples.tab.hello': 'Hola',
     'examples.tab.fizzbuzz': 'FizzBuzz',
     'examples.tab.effect': 'Efecto',
@@ -85,9 +85,9 @@ export const ui = {
     'features.memory.title': 'No GC, no borrow checker',
     'features.memory.body':
       'Perceus reference counting + isolated fibers. Memory is per-fiber; no global pauses.',
-    'features.units.title': 'Units & branded types',
+    'features.units.title': 'Kinds: units, currencies, regions',
     'features.units.body':
-      'Real<USD>, String<UserId>, Int<Seconds>. Information in the type, zero runtime cost.',
+      'Real<m/s> for measures, currencies that never mix, arenas via region { }. Information in the type, zero runtime cost.',
     'features.contracts.title': 'Contracts & refinements',
     'features.contracts.body':
       'requires, ensures, Int where >= 0. What SPARK does, without an SMT solver.',
@@ -97,7 +97,7 @@ export const ui = {
 
     'examples.title': 'Examples',
     'examples.intro':
-      'Three programs that show the shape of the language. All run with kai run.',
+      'Six programs that show the shape of the language. All run with kai run.',
     'examples.tab.hello': 'Hello',
     'examples.tab.fizzbuzz': 'FizzBuzz',
     'examples.tab.effect': 'Effect',

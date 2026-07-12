@@ -6,7 +6,7 @@
 
 - [Inicio (es)](https://kaikai-lang.org/): visión general del lenguaje, principios de diseño y ejemplos cortos.
 - [Empezar (es)](https://kaikai-lang.org/get-started/): instalación y primeros pasos con el toolchain de kaikai.
-- [El libro (es)](https://kaikai-lang.org/book/): libro de referencia del lenguaje en línea; descarga directa en [PDF](https://kaikai-lang.org/kaikai-libro-es.pdf).
+- [El libro (es)](https://kaikai-lang.org/book/): "Programación efectiva con kaikai", el libro del lenguaje; descarga directa en [PDF](https://kaikai-lang.org/kaikai-libro-es.pdf).
 - [Ejemplos (es)](https://kaikai-lang.org/examples/): programas de ejemplo que ilustran sintaxis, tipos y efectos.
 - [Ecosistema (es)](https://kaikai-lang.org/ecosystem/): librerías, herramientas y tooling alrededor del lenguaje.
 - [Comunidad (es)](https://kaikai-lang.org/community/): canales de discusión, contribuciones y código de conducta.
@@ -16,7 +16,7 @@
 
 - [Home (en)](https://kaikai-lang.org/en/): language overview, design principles and short examples.
 - [Get started (en)](https://kaikai-lang.org/en/get-started/): installation and first steps with the kaikai toolchain.
-- [The book (en)](https://kaikai-lang.org/en/book/): online language reference; direct download as [PDF](https://kaikai-lang.org/kaikai-book-en.pdf).
+- [The book (en)](https://kaikai-lang.org/en/book/): "Effective Programming with kaikai", the language's book; direct download as [PDF](https://kaikai-lang.org/kaikai-book-en.pdf).
 - [Examples (en)](https://kaikai-lang.org/en/examples/): example programs covering syntax, types and effects.
 - [Ecosystem (en)](https://kaikai-lang.org/en/ecosystem/): libraries, tools and tooling around the language.
 - [Community (en)](https://kaikai-lang.org/en/community/): discussion channels, contributions and code of conduct.
@@ -25,7 +25,7 @@
 ## Código fuente
 
 - [kaikailang-org/kaikai](https://github.com/kaikailang-org/kaikai): compilador, runtime y stdlib del lenguaje (funcional, tipado estático, efectos algebraicos, compilación LLVM nativa).
-- [kaikailang-org/kaikai-book](https://github.com/kaikailang-org/kaikai-book): fuentes del libro de referencia del lenguaje.
+- [kaikailang-org/kaikai-book](https://github.com/kaikailang-org/kaikai-book): fuentes del libro "Effective Programming with kaikai" / "Programación efectiva con kaikai".
 - [kaikailang-org/kaikai-site](https://github.com/kaikailang-org/kaikai-site): código fuente del sitio kaikai-lang.org.
 
 ## Tooling
@@ -39,3 +39,7 @@
 
 - [kaikailang-org/kohau](https://github.com/kaikailang-org/kohau): clientes de base de datos para kaikai — SQLite (FFI a libsqlite3) y Postgres (protocolo nativo).
 - [kaikailang-org/henua](https://github.com/kaikailang-org/henua): building blocks DDD para kaikai — Repository, EventBus, Aggregate, Domain Events. Se apoya en kohau.
+- [kaikailang-org/rongo](https://github.com/kaikailang-org/rongo): red avanzada para kaikai — TLS y protocolos que cargan dependencias de sistema (fuera del stdlib core).
+- [kaikailang-org/garo](https://github.com/kaikailang-org/garo): criptografía avanzada para kaikai — ciphers, KDFs y primitivas con dependencias de sistema (fuera del stdlib core).
+- [kaikailang-org/terevaka](https://github.com/kaikailang-org/terevaka): framework TUI de concurrencia estructurada para kaikai.
+- [kaikailang-org/ahu](https://github.com/kaikailang-org/ahu): framework estilo OTP sobre kaikai — supervisión, gen-server, procesos con nombre.
