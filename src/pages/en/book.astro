@@ -1,6 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { links } from '../../lib/links';
+import { t } from '../../i18n/ui';
+import { getBookChapters, bookChapterPath } from '../../lib/book';
+
+const tt = t('en');
+const chapters = await getBookChapters('en');
+const mainChapters = chapters.filter((c) => c.data.part === 'chapter');
+const appendices = chapters.filter((c) => c.data.part === 'appendix');
+const firstChapter = chapters[0];
 ---
 
 <Base title="The book · kaikai" lang="en">
@@ -62,7 +70,12 @@ import { links } from '../../lib/links';
         </p>
 
         <div class="cta-row">
-          <a class="btn" href={links.bookPdf.en} download>
+          {firstChapter && (
+            <a class="btn" href={bookChapterPath('en', firstChapter.data.slug)}>
+              {tt('book.startReading')}
+            </a>
+          )}
+          <a class="btn secondary" href={links.bookPdf.en} download>
             Download PDF (English)
           </a>
           <a class="btn secondary" href={links.bookPdf.es} download>
@@ -73,10 +86,35 @@ import { links } from '../../lib/links';
           </a>
         </div>
         <p class="pdf-note">
-          Living draft. The PDF is regenerated whenever the book sees a
-          significant change.
+          Living draft. Read it online chapter by chapter; the PDF is
+          regenerated whenever the book sees a significant change.
         </p>
       </div>
+
+      {chapters.length > 0 && (
+        <section class="toc" aria-labelledby="toc-title">
+          <h2 id="toc-title">{tt('book.contents')}</h2>
+          <ol class="toc-chapters">
+            {mainChapters.map((c) => (
+              <li>
+                <a href={bookChapterPath('en', c.data.slug)}>{c.data.title}</a>
+              </li>
+            ))}
+          </ol>
+          {appendices.length > 0 && (
+            <>
+              <h3>{tt('book.appendices')}</h3>
+              <ol class="toc-chapters appendices">
+                {appendices.map((c) => (
+                  <li>
+                    <a href={bookChapterPath('en', c.data.slug)}>{c.data.title}</a>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
+        </section>
+      )}
     </div>
   </article>
 </Base>
@@ -115,5 +153,37 @@ import { links } from '../../lib/links';
     font-size: 0.88rem;
     font-style: italic;
     font-family: var(--font-serif);
+  }
+  .toc {
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border);
+    max-width: var(--content-width);
+  }
+  .toc h2 { margin-bottom: var(--space-6); }
+  .toc h3 {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-4);
+    color: var(--fg-muted);
+  }
+  .toc-chapters {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .toc-chapters li {
+    border-bottom: 1px solid var(--border);
+  }
+  .toc-chapters a {
+    display: block;
+    padding: var(--space-3) 0;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--fg);
+  }
+  .toc-chapters a:hover {
+    color: var(--accent);
+    text-decoration: none;
+    padding-left: var(--space-2);
   }
 </style>
