@@ -16,6 +16,15 @@ export const ui = {
     'nav.ecosystem': 'Ecosistema',
     'nav.community': 'Comunidad',
 
+    'book.contents': 'Contenidos',
+    'book.chapters': 'Capítulos',
+    'book.appendices': 'Apéndices',
+    'book.readOnline': 'Leer online',
+    'book.startReading': 'Empezar a leer',
+    'book.prev': 'Anterior',
+    'book.next': 'Siguiente',
+    'book.backToIndex': 'Volver al índice',
+
     'hero.tagline.line1':
       'Lenguaje funcional con efectos algebraicos y fibras aisladas. Sin recolector de basura, sin borrow checker.',
     'hero.tagline.line2':
@@ -65,6 +74,15 @@ export const ui = {
     'nav.book': 'The book',
     'nav.ecosystem': 'Ecosystem',
     'nav.community': 'Community',
+
+    'book.contents': 'Contents',
+    'book.chapters': 'Chapters',
+    'book.appendices': 'Appendices',
+    'book.readOnline': 'Read online',
+    'book.startReading': 'Start reading',
+    'book.prev': 'Previous',
+    'book.next': 'Next',
+    'book.backToIndex': 'Back to contents',
 
     'hero.tagline.line1':
       'A functional language with algebraic effects and isolated fibers. No garbage collector, no borrow checker.',

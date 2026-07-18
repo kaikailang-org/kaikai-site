@@ -1,0 +1,20 @@
+---
+import { render } from 'astro:content';
+import BookChapter from '../../layouts/BookChapter.astro';
+import { getBookChapters } from '../../lib/book';
+
+export async function getStaticPaths() {
+  const chapters = await getBookChapters('es');
+  return chapters.map((entry, i) => ({
+    params: { slug: entry.data.slug },
+    props: { entry, prev: chapters[i - 1], next: chapters[i + 1] },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BookChapter entry={entry} prev={prev} next={next}>
+  <Content />
+</BookChapter>

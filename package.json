@@ -8,7 +8,10 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sync:book": "bash scripts/sync-book-content.sh",
+    "sync:book-pdfs": "bash scripts/sync-book-pdfs.sh",
+    "prebuild": "npm run sync:book"
   },
   "dependencies": {
     "astro": "^5.0.0"

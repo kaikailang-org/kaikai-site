@@ -10,3 +10,10 @@ dist/
 # Run `scripts/sync-book-pdfs.sh` to regenerate before a deploy.
 public/kaikai-libro-es.pdf
 public/kaikai-book-en.pdf
+
+# Book HTML content is synced from ../kaikai-book, like the PDFs.
+# `npm run build` regenerates it via scripts/sync-book-content.sh
+# (the prebuild hook). The .gitkeep files keep the dirs so the
+# content collection resolves even before the first sync.
+src/content/book/**/*.md
+public/book/figuras/*.png
