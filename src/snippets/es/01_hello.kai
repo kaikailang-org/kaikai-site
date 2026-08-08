@@ -1,7 +1,7 @@
-# Hello, world.
+# Hola, mundo.
 #
-# Every kaikai program starts at `fn main()`. `println` is the
-# default-handled stdout effect — no `import` needed.
+# Todo programa kaikai empieza en `fn main()`. `println` es el efecto
+# de salida estándar, con handler por defecto — no requiere `import`.
 #
 #   $ kai run examples/quickstart/01_hello.kai
 #   Hello, kaikai

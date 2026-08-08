@@ -1,29 +1,35 @@
-# Mini calculator — recursive sum types + pattern match.
+# Mini calculadora — tipos suma recursivos + calce de patrones.
 #
-# `Expr` is a sum type that mentions itself in its own constructors,
-# making the AST a tree. `eval` walks the tree by pattern-matching
-# each shape and recursing on children.
+# `Expr` es un tipo suma que se menciona a sí mismo en sus propios
+# constructores, lo que convierte al AST en un árbol. `eval` recorre
+# ese árbol calzando cada forma y recursando sobre los hijos.
 #
 #   $ kai run examples/quickstart/03_calculator.kai
-#   14
+#   2 + 3 * 4 = 14
 
 type Expr
   = Lit(Int)
-  | Add(Expr, Expr)
-  | Mul(Expr, Expr)
+  | Suma(Expr, Expr)
+  | Mult(Expr, Expr)
   | Neg(Expr)
 
-fn eval(e: Expr) : Int {
-  match e {
-    Lit(n)    -> n
-    Add(l, r) -> eval(l) + eval(r)
-    Mul(l, r) -> eval(l) * eval(r)
-    Neg(x)    -> -eval(x)
-  }
+# Una función cuyo cuerpo entero es una sola expresión usa `=`: sin
+# llaves y sin `return`.
+fn eval(e: Expr) : Int = match e {
+  Lit(n)     -> n
+  Suma(l, r) -> eval(l) + eval(r)
+  Mult(l, r) -> eval(l) * eval(r)
+  Neg(x)     -> -eval(x)
+}
+
+fn mostrar(e: Expr) : String = match e {
+  Lit(n)     -> "#{n}"
+  Suma(l, r) -> "#{mostrar(l)} + #{mostrar(r)}"
+  Mult(l, r) -> "#{mostrar(l)} * #{mostrar(r)}"
+  Neg(x)     -> "-#{mostrar(x)}"
 }
 
 fn main() {
-  # 2 + 3 * 4 = 14
-  let e = Add(Lit(2), Mul(Lit(3), Lit(4)))
-  println(int_to_string(eval(e)))
+  let e = Suma(Lit(2), Mult(Lit(3), Lit(4)))
+  println("#{mostrar(e)} = #{eval(e)}")
 }

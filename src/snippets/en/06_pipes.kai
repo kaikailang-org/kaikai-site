@@ -8,11 +8,6 @@
 #   $ kai run examples/quickstart/06_pipes.kai
 #   total=20
 
-fn range_loop(i: Int, n: Int, acc: [Int]) : [Int]
-  = if i > n { list_reverse(acc) } else { range_loop(i + 1, n, [i, ...acc]) }
-
-fn range(n: Int) : [Int] = range_loop(1, n, [])
-
 fn square(n: Int) : Int = n * n
 
 fn divisors(n: Int) : [Int] = [1, n]
@@ -20,7 +15,9 @@ fn divisors(n: Int) : [Int] = [1, n]
 fn is_even(n: Int) : Bool = n % 2 == 0
 
 fn main() {
-  let total = range(4)                # [1, 2, 3, 4]
+  # `[1..4]` is a range literal — no hand-written accumulator loop.
+  # `[1..10..2]` adds a step.
+  let total = [1..4]                  # [1, 2, 3, 4]
     | square                          # [1, 4, 9, 16]      (map)
     || divisors                       # [1, 1, 1, 4, 1, 9, 1, 16] (flat-map)
     |? is_even                        # [4, 16]            (filter)

@@ -5,10 +5,13 @@
 # is an explicit cooperation point: the current fiber suspends and
 # the scheduler picks the next one ready.
 #
-# Without yields, both workers would run in arbitrary chunks. With
-# yields, the scheduler interleaves them so the output rotates.
+# `loop.repeat(n) { ... }` is an ordinary stdlib function, not a
+# keyword: the body is a trailing lambda, so its effect row (here
+# `Stdout + Spawn`) flows straight out into the caller's row.
 #
-#   $ kai run examples/quickstart/05_concurrent.kai
+# The strict A/B rotation below holds on a single scheduler thread.
+#
+#   $ KAI_THREADS=1 kai run examples/quickstart/05_concurrent.kai
 #   A
 #   B
 #   A
@@ -17,17 +20,19 @@
 #   B
 
 import spawn
+import loop
 
 fn worker(tag: String, n: Int) : Unit / Stdout + Spawn {
-  if n > 0 {
+  loop.repeat(n) {
     println(tag)
     spawn.yield()
-    worker(tag, n - 1)
   }
 }
 
 fn main() {
-  let f = spawn.spawn(() => worker("B", 3))
+  # Trailing-lambda form: `spawn.spawn { ... }` instead of
+  # `spawn.spawn(() => ...)`.
+  let f = spawn.spawn { worker("B", 3) }
   worker("A", 3)
   spawn.await(f)
 }

@@ -5,7 +5,7 @@
 # each shape and recursing on children.
 #
 #   $ kai run examples/quickstart/03_calculator.kai
-#   14
+#   2 + 3 * 4 = 14
 
 type Expr
   = Lit(Int)
@@ -13,17 +13,23 @@ type Expr
   | Mul(Expr, Expr)
   | Neg(Expr)
 
-fn eval(e: Expr) : Int {
-  match e {
-    Lit(n)    -> n
-    Add(l, r) -> eval(l) + eval(r)
-    Mul(l, r) -> eval(l) * eval(r)
-    Neg(x)    -> -eval(x)
-  }
+# A function whose whole body is one expression uses `=`; no braces,
+# no `return`.
+fn eval(e: Expr) : Int = match e {
+  Lit(n)    -> n
+  Add(l, r) -> eval(l) + eval(r)
+  Mul(l, r) -> eval(l) * eval(r)
+  Neg(x)    -> -eval(x)
+}
+
+fn show(e: Expr) : String = match e {
+  Lit(n)    -> "#{n}"
+  Add(l, r) -> "#{show(l)} + #{show(r)}"
+  Mul(l, r) -> "#{show(l)} * #{show(r)}"
+  Neg(x)    -> "-#{show(x)}"
 }
 
 fn main() {
-  # 2 + 3 * 4 = 14
   let e = Add(Lit(2), Mul(Lit(3), Lit(4)))
-  println(int_to_string(eval(e)))
+  println("#{show(e)} = #{eval(e)}")
 }

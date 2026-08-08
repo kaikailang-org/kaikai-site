@@ -19,12 +19,12 @@ fn dividir(a: Int, b: Int) : Int
 # y de la misma magnitud que el argumento.
 fn abs(n: Int) : Int
   ensures result >= 0
-  ensures result == n or result == 0 - n
+  ensures result == n or result == -n
 {
-  if n >= 0 { n } else { 0 - n }
+  if n >= 0 { n } else { -n }
 }
 
 fn main() {
-  println(int_to_string(dividir(10, 2)))   # 5
-  println(int_to_string(abs(0 - 3)))       # 3
+  println("#{dividir(10, 2)}")   # 5
+  println("#{abs(-3)}")          # 3
 }
