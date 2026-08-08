@@ -4,7 +4,7 @@
 # con EUR; convertir entre monedas requiere un paso explícito.
 #
 #   $ kai run examples/quickstart/07_uom.kai
-#   balance=845 USD
+#   balance=845.1 USD
 
 unit USD
 unit EUR

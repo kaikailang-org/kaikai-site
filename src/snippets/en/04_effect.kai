@@ -17,7 +17,8 @@ effect Log {
 }
 
 fn greet(name: String) : Unit / Log {
-  Log.log("hello, " ++ name)
+  # `#{...}` interpolates into the string — no manual concatenation.
+  Log.log("hello, #{name}")
 }
 
 fn main() {
@@ -26,7 +27,7 @@ fn main() {
     greet("world")
   } with Log {
     log(msg, resume) -> {
-      println("[INFO] " ++ msg)
+      println("[INFO] #{msg}")
       resume(())
     }
   }

@@ -1,7 +1,8 @@
 # FizzBuzz.
 #
-# Sum types + pattern match. kaikai is expression-oriented: `if`,
-# `match`, and blocks all return a value.
+# Tipos suma + calce de patrones, expresados como pipeline en vez de
+# una recursión escrita a mano: `[1..15]` es un literal de rango, `|`
+# mapea sobre la lista y `|>` aplica una función a la lista completa.
 #
 #   $ kai run examples/quickstart/02_fizzbuzz.kai
 #   1
@@ -13,36 +14,32 @@
 #   FizzBuzz
 
 type Tag
-  = Both
+  = Ambos
   | Fizz
   | Buzz
-  | Other(Int)
+  | Otro(Int)
 
-fn classify(n: Int) : Tag {
-  if n % 15 == 0     { Both }
-  else if n % 3 == 0 { Fizz }
-  else if n % 5 == 0 { Buzz }
-  else               { Other(n) }
+# Las guardas permiten que cada rama lleve su propia condición, así la
+# cascada de `if / else if` se colapsa dentro del match.
+fn clasificar(n: Int) : Tag = match n {
+  n if n % 15 == 0 -> Ambos
+  n if n % 3 == 0  -> Fizz
+  n if n % 5 == 0  -> Buzz
+  n                -> Otro(n)
 }
 
-fn label(c: Tag) : String {
-  match c {
-    Both     -> "FizzBuzz"
-    Fizz     -> "Fizz"
-    Buzz     -> "Buzz"
-    Other(n) -> int_to_string(n)
-  }
-}
-
-fn loop(i: Int, n: Int) : Unit / Stdout {
-  # `if` without `else` returns `()` implicitly when the condition
-  # is false — common shape for "do work or stop the recursion".
-  if i <= n {
-    println(label(classify(i)))
-    loop(i + 1, n)
-  }
+fn etiqueta(c: Tag) : String = match c {
+  Ambos    -> "FizzBuzz"
+  Fizz     -> "Fizz"
+  Buzz     -> "Buzz"
+  # Interpolación de strings: `#{expr}` renderiza cualquier valor
+  # mostrable.
+  Otro(n)  -> "#{n}"
 }
 
 fn main() {
-  loop(1, 15)
+  [1..15]
+    | clasificar              # map: [Int] -> [Tag]
+    | etiqueta                # map: [Tag] -> [String]
+    |> list.foreach(println)  # apply: imprime cada línea
 }

@@ -14,7 +14,7 @@ const heroSnippet = `effect Log {
 }
 
 fn greet(name: String) : Unit / Log {
-  Log.log("hello, " ++ name)
+  Log.log("hello, #{name}")
 }
 
 fn main() {
@@ -23,7 +23,7 @@ fn main() {
     greet("world")
   } with Log {
     log(msg, resume) -> {
-      println("[INFO] " ++ msg)
+      println("[INFO] #{msg}")
       resume(())
     }
   }
