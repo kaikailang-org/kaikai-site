@@ -3,6 +3,9 @@
 # Las unidades viven en el tipo. El compilador rechaza sumar USD
 # con EUR; convertir entre monedas requiere un paso explícito.
 #
+# `unit` no es una función atornillada al lenguaje: mints un habitante
+# del kind `Measure`. El ejemplo de kinds muestra qué gana con eso.
+#
 #   $ kai run examples/quickstart/07_uom.kai
 #   balance=845.1 USD
 

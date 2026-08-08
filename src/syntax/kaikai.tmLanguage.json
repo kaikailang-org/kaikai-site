@@ -67,7 +67,7 @@
           "name": "storage.type.function.kaikai"
         },
         {
-          "match": "\\b(type|effect|protocol|impl|axiom|const|unit)\\b",
+          "match": "\\b(type|effect|protocol|impl|axiom|const|unit|kind|theory|region|layout|currency)\\b",
           "name": "storage.type.kaikai"
         },
         {

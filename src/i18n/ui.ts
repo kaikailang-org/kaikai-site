@@ -56,12 +56,13 @@ export const ui = {
 
     'examples.title': 'Ejemplos',
     'examples.intro':
-      'Seis programas que muestran la forma del lenguaje. Todos se ejecutan con kai run.',
+      'Siete programas que muestran la forma del lenguaje. Todos se ejecutan con kai run.',
     'examples.tab.hello': 'Hola',
     'examples.tab.fizzbuzz': 'FizzBuzz',
     'examples.tab.effect': 'Efecto',
     'examples.tab.pipes': 'Pipes',
     'examples.tab.uom': 'Unidades',
+    'examples.tab.kinds': 'Kinds',
     'examples.tab.contracts': 'Contratos',
 
     'footer.tagline': 'Lenguaje de programación.',
@@ -115,12 +116,13 @@ export const ui = {
 
     'examples.title': 'Examples',
     'examples.intro':
-      'Six programs that show the shape of the language. All run with kai run.',
+      'Seven programs that show the shape of the language. All run with kai run.',
     'examples.tab.hello': 'Hello',
     'examples.tab.fizzbuzz': 'FizzBuzz',
     'examples.tab.effect': 'Effect',
     'examples.tab.pipes': 'Pipes',
     'examples.tab.uom': 'Units',
+    'examples.tab.kinds': 'Kinds',
     'examples.tab.contracts': 'Contracts',
 
     'footer.tagline': 'Programming language.',
