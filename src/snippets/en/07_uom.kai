@@ -3,6 +3,9 @@
 # Units live in the type. The compiler rejects adding USD to EUR;
 # converting between currencies requires an explicit step.
 #
+# `unit` is not a bolted-on feature: it mints a habitant of the kind
+# `Measure`. See the kinds example for what that buys you.
+#
 #   $ kai run examples/quickstart/07_uom.kai
 #   balance=845.1 USD
 

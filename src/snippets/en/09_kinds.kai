@@ -1,0 +1,48 @@
+# Kinds: units of measure are not a special case.
+#
+# Types classify values; kinds classify types.
+#
+#   42     : Int       a value, and its type
+#   Int    : Type      a type,  and its kind
+#   m      : Measure   a unit,  and its kind
+#
+# So `unit m` is not special syntax bolted onto the compiler. It mints
+# a habitant of the kind `Measure`, exactly the way `type` mints one
+# of `Type` and `effect` mints one of `Effect`. Units of measure are
+# just the kind `Measure` — nothing more.
+#
+# `Measure` is declared over the `AbelianGroup` theory, and that
+# theory is where the unit algebra actually comes from: it is what
+# makes `m * m` become `m^2` and `dp / frame` become `dp/frame`.
+#
+#   $ kai run examples/quickstart/09_kinds.kai
+#   floor=12 m^2
+#   scroll=60 dp/frame
+
+unit m
+
+# `[u: Measure]` is a type parameter ranging over units instead of
+# over types — the same slot that usually holds `[a]`, `[b]`. The
+# theory does the rest: two `Real<u>` multiply into `Real<u^2>`.
+fn area[u: Measure](w: Real<u>, h: Real<u>) : Real<u^2> = w * h
+
+# Because units are only a kind, the machinery is open: declare your
+# own kind over the same theory and you get your own habitants with
+# the same algebra. `with screen` names the keyword that mints them.
+kind Screen : AbelianGroup with screen
+screen dp
+screen frame
+
+fn scroll_speed(d: Real<dp>, t: Real<frame>) : Real<dp/frame> = d / t
+
+fn main() {
+  let floor  = area(3.0<m>, 4.0<m>)
+  let scroll = scroll_speed(120.0<dp>, 2.0<frame>)
+
+  # Habitants of different kinds never unify. `area(3.0<dp>, 4.0<dp>)`
+  # is a type error — `dp` inhabits `Screen`, not `Measure` — and so
+  # is `3.0<m> + 4.0<dp>`. The isolation is the point: your kind
+  # cannot leak into anyone else's.
+  println("floor=#{floor}")
+  println("scroll=#{scroll}")
+}
