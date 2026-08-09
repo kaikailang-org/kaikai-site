@@ -11,38 +11,45 @@
 # of `Type` and `effect` mints one of `Effect`. Units of measure are
 # just the kind `Measure` — nothing more.
 #
-# `Measure` is declared over the `AbelianGroup` theory, and that
-# theory is where the unit algebra actually comes from: it is what
-# makes `m * m` become `m^2` and `dp / frame` become `dp/frame`.
+# Every kind is declared over a *theory*, and the theory is what
+# decides the algebra its habitants obey. That choice is the whole
+# design surface, so pick it to match the domain.
 #
 #   $ kai run examples/quickstart/09_kinds.kai
 #   floor=12 m^2
-#   scroll=60 dp/frame
+#   score=165 xp
 
 unit m
 
-# `[u: Measure]` is a type parameter ranging over units instead of
-# over types — the same slot that usually holds `[a]`, `[b]`. The
-# theory does the rest: two `Real<u>` multiply into `Real<u^2>`.
+# `Measure` is declared over `AbelianGroup`, which has multiplicative
+# closure: metres times metres is a real quantity, so `u^2` is a unit
+# you can name. `[u: Measure]` is an ordinary type parameter that
+# ranges over units instead of over types.
 fn area[u: Measure](w: Real<u>, h: Real<u>) : Real<u^2> = w * h
 
-# Because units are only a kind, the machinery is open: declare your
-# own kind over the same theory and you get your own habitants with
-# the same algebra. `with screen` names the keyword that mints them.
-kind Screen : AbelianGroup with screen
-screen dp
-screen frame
+# Because units are only a kind, the machinery is open — declare your
+# own. Experience points add up, but `xp^2` is meaningless, so this
+# kind is declared over `Module`: an additive group with NO
+# multiplicative closure. A quantity is either scalar or carries
+# exactly one habitant, and `fn sq(a: Real<xp>) : Real<xp^2>` is
+# rejected at the point the unit is written:
+#
+#   error: unit `xp^2` does not exist: `Points` habitants have no
+#          products or powers
+#
+# Same machinery as `Measure`, different theory, different algebra.
+kind Points : Module with points
+points xp
 
-fn scroll_speed(d: Real<dp>, t: Real<frame>) : Real<dp/frame> = d / t
+fn gain(a: Real<xp>, b: Real<xp>) : Real<xp> = a + b
 
 fn main() {
-  let floor  = area(3.0<m>, 4.0<m>)
-  let scroll = scroll_speed(120.0<dp>, 2.0<frame>)
+  let floor = area(3.0<m>, 4.0<m>)
+  let score = gain(120.0<xp>, 45.0<xp>)
 
-  # Habitants of different kinds never unify. `area(3.0<dp>, 4.0<dp>)`
-  # is a type error — `dp` inhabits `Screen`, not `Measure` — and so
-  # is `3.0<m> + 4.0<dp>`. The isolation is the point: your kind
-  # cannot leak into anyone else's.
+  # Habitants of different kinds never unify either: `3.0<m> +
+  # 4.0<xp>` is a type error. Your kind cannot leak into anyone
+  # else's.
   println("floor=#{floor}")
-  println("scroll=#{scroll}")
+  println("score=#{score}")
 }

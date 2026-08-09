@@ -24,9 +24,12 @@ const helloHtml = await highlightKai(helloSnippet);
       </header>
 
       <section>
-        <h2>Instalador oficial · macOS (Apple Silicon)</h2>
+        <h2>Instalador oficial · macOS y Linux</h2>
         <p>
-          Un instalador estilo rustup, sin dependencias:
+          Un instalador estilo rustup, sin dependencias. Publica
+          binarios para macOS en Apple Silicon
+          (<code>darwin-arm64</code>) y Linux en x86-64
+          (<code>linux-x86_64</code>); detecta la plataforma solo:
         </p>
 <pre><code>curl -fsSL https://raw.githubusercontent.com/kaikailang-org/kaikai/main/install.sh | sh</code></pre>
         <p>
@@ -44,9 +47,10 @@ const helloHtml = await highlightKai(helloSnippet);
       </section>
 
       <section>
-        <h2>Homebrew</h2>
+        <h2>Homebrew · solo macOS (Apple Silicon)</h2>
         <p>
-          La distribución oficial también vive en un tap propio.
+          La distribución oficial también vive en un tap propio. En
+          Linux usa el instalador oficial.
         </p>
 <pre><code>brew install kaikailang-org/kaikai/kaikai</code></pre>
         <p>
@@ -60,7 +64,8 @@ const helloHtml = await highlightKai(helloSnippet);
         <p>
           Solo lo necesitas para modificar el compilador, o en
           plataformas donde el instalador aún no publica binarios (hoy
-          los precompilados son para macOS en Apple Silicon). Requiere
+          los precompilados son para macOS en Apple Silicon y Linux en
+          x86-64). Requiere
           un <code>cc</code> y los headers de desarrollo de LLVM
           (ubicados vía <code>llvm-config</code>):
         </p>
