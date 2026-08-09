@@ -1,0 +1,201 @@
+---
+import { t, type Lang } from '../i18n/ui';
+import fs from 'node:fs';
+import path from 'node:path';
+import { highlightKai } from '../lib/highlight';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const snippetsDir = path.resolve(process.cwd(), 'src/snippets', lang);
+const read = (file: string) =>
+  fs.readFileSync(path.join(snippetsDir, file), 'utf-8');
+
+// The quickstart, in the order it is meant to be read. `env` carries the
+// environment a program needs to produce the output its header documents.
+const examples = [
+  { id: 'hello', file: '01_hello.kai' },
+  { id: 'fizzbuzz', file: '02_fizzbuzz.kai' },
+  { id: 'calculator', file: '03_calculator.kai' },
+  { id: 'effect', file: '04_effect.kai' },
+  { id: 'concurrent', file: '05_concurrent.kai', env: 'KAI_THREADS=1' },
+  { id: 'pipes', file: '06_pipes.kai' },
+  { id: 'uom', file: '07_uom.kai' },
+  { id: 'kinds', file: '09_kinds.kai' },
+  { id: 'contracts', file: '08_contracts.kai' },
+];
+
+const items = await Promise.all(
+  examples.map(async (e, i) => ({
+    ...e,
+    n: String(i + 1).padStart(2, '0'),
+    title: tt(`examples.item.${e.id}.title` as never),
+    desc: tt(`examples.item.${e.id}.desc` as never),
+    cmd: `${e.env ? e.env + ' ' : ''}kai run ${e.file}`,
+    html: await highlightKai(read(e.file)),
+  })),
+);
+---
+
+<section class="gallery">
+  <div class="container">
+    <header class="gallery-head">
+      <h1>{tt('examples.page.title')}</h1>
+      <p class="lead">{tt('examples.page.lead')}</p>
+      <p class="note">{tt('examples.page.note')}</p>
+    </header>
+
+    <nav class="jump" aria-label={tt('examples.page.index')}>
+      <ol>
+        {items.map((it) => (
+          <li>
+            <a href={`#${it.id}`}>
+              <span class="jump-n">{it.n}</span>
+              {it.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    {items.map((it) => (
+      <article class="example" id={it.id}>
+        <h2>
+          <span class="ex-n">{it.n}</span>
+          <a href={`#${it.id}`}>{it.title}</a>
+        </h2>
+        <p class="ex-desc">{it.desc}</p>
+        <p class="ex-cmd"><code>$ {it.cmd}</code></p>
+        <div class="window">
+          <div class="window-chrome">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="filename">{it.file}</span>
+          </div>
+          <div class="code-body" set:html={it.html} />
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .gallery {
+    padding-block: var(--space-12);
+  }
+  .gallery-head h1 {
+    color: var(--accent);
+  }
+  .lead {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    max-width: 62ch;
+  }
+  .note {
+    color: var(--fg-muted);
+    max-width: 62ch;
+    font-size: 0.95rem;
+  }
+
+  .jump {
+    margin-block: var(--space-8);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .jump ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.4rem var(--space-6);
+  }
+  .jump a {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--fg);
+    padding: 0.15rem 0;
+  }
+  .jump a:hover { color: var(--accent); }
+  .jump-n,
+  .ex-n {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--fg-muted);
+  }
+
+  .example {
+    margin-block: var(--space-10);
+    scroll-margin-top: var(--space-8);
+  }
+  .example h2 {
+    display: flex;
+    gap: 0.7rem;
+    align-items: baseline;
+    margin-bottom: 0.3rem;
+  }
+  .example h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .example h2 a:hover { color: var(--accent); }
+  .ex-desc {
+    color: var(--fg-muted);
+    max-width: 62ch;
+    margin-block: 0 var(--space-3);
+  }
+  .ex-cmd {
+    margin-block: 0 var(--space-3);
+  }
+  .ex-cmd code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+  }
+
+  .window {
+    background: var(--code-bg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .window-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .dot {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+  .filename {
+    margin-left: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--fg-muted);
+  }
+  .code-body :global(pre) {
+    margin: 0;
+    padding: var(--space-4) var(--space-5);
+    overflow-x: auto;
+  }
+
+  @media (max-width: 40rem) {
+    .jump ol { grid-template-columns: 1fr; }
+  }
+</style>

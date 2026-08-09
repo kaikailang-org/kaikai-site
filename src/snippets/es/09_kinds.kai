@@ -2,8 +2,8 @@
 #
 # Los tipos clasifican valores; los kinds clasifican tipos.
 #
-#   42     : Int       un valor,  y su tipo
-#   Int    : Type      un tipo,   y su kind
+#   42     : Int       un valor,   y su tipo
+#   Int    : Type      un tipo,    y su kind
 #   m      : Measure   una unidad, y su kind
 #
 # Entonces `unit m` no es sintaxis especial atornillada al compilador.
@@ -11,39 +11,45 @@
 # uno de `Type` y `effect` uno de `Effect`. Las unidades de medida son
 # solo el kind `Measure` — nada más.
 #
-# `Measure` está declarado sobre la teoría `AbelianGroup`, y de esa
-# teoría sale realmente el álgebra de unidades: es lo que hace que
-# `m * m` sea `m^2` y que `dp / frame` sea `dp/frame`.
+# Todo kind se declara sobre una *teoría*, y la teoría es la que
+# decide el álgebra que obedecen sus habitantes. Esa elección es toda
+# la superficie de diseño: se escoge para calzar con el dominio.
 #
 #   $ kai run examples/quickstart/09_kinds.kai
 #   piso=12 m^2
-#   scroll=60 dp/frame
+#   puntaje=165 xp
 
 unit m
 
-# `[u: Measure]` es un parámetro de tipo que recorre unidades en vez
-# de tipos — la misma ranura que suele llevar `[a]`, `[b]`. La teoría
-# hace el resto: dos `Real<u>` se multiplican en `Real<u^2>`.
+# `Measure` está declarado sobre `AbelianGroup`, que tiene clausura
+# multiplicativa: metros por metros es una cantidad real, así que
+# `u^2` es una unidad que puedes nombrar. `[u: Measure]` es un
+# parámetro de tipo común que recorre unidades en vez de tipos.
 fn area[u: Measure](w: Real<u>, h: Real<u>) : Real<u^2> = w * h
 
 # Como las unidades son solo un kind, la maquinaria queda abierta:
-# declara tu propio kind sobre la misma teoría y obtienes habitantes
-# propios con la misma álgebra. `with screen` nombra la palabra que
-# los mints.
-kind Screen : AbelianGroup with screen
-screen dp
-screen frame
+# declara el tuyo. Los puntos de experiencia se suman, pero `xp^2` no
+# significa nada, así que este kind se declara sobre `Module`: un
+# grupo aditivo SIN clausura multiplicativa. Una cantidad es escalar o
+# lleva exactamente un habitante, y `fn sq(a: Real<xp>) : Real<xp^2>`
+# se rechaza justo donde se escribe la unidad:
+#
+#   error: unit `xp^2` does not exist: `Points` habitants have no
+#          products or powers
+#
+# Misma maquinaria que `Measure`, otra teoría, otra álgebra.
+kind Points : Module with points
+points xp
 
-fn velocidad_scroll(d: Real<dp>, t: Real<frame>) : Real<dp/frame> = d / t
+fn ganar(a: Real<xp>, b: Real<xp>) : Real<xp> = a + b
 
 fn main() {
-  let piso   = area(3.0<m>, 4.0<m>)
-  let scroll = velocidad_scroll(120.0<dp>, 2.0<frame>)
+  let piso    = area(3.0<m>, 4.0<m>)
+  let puntaje = ganar(120.0<xp>, 45.0<xp>)
 
-  # Habitantes de kinds distintos nunca unifican. `area(3.0<dp>,
-  # 4.0<dp>)` es un error de tipo — `dp` habita `Screen`, no `Measure`
-  # — y lo mismo `3.0<m> + 4.0<dp>`. El aislamiento es justamente el
-  # punto: tu kind no puede filtrarse en el de nadie más.
+  # Habitantes de kinds distintos tampoco unifican nunca: `3.0<m> +
+  # 4.0<xp>` es un error de tipo. Tu kind no puede filtrarse en el de
+  # nadie más.
   println("piso=#{piso}")
-  println("scroll=#{scroll}")
+  println("puntaje=#{puntaje}")
 }
