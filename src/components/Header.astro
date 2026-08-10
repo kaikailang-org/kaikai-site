@@ -53,6 +53,26 @@ const otherPath = pathInLang(
     </nav>
 
     <div class="header-actions">
+      <button
+        type="button"
+        class="icon-link theme-toggle"
+        data-theme-toggle
+        aria-label={tt('theme.toggle')}
+        title={tt('theme.toggle')}
+      >
+        <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" fill="currentColor" />
+          <g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M18.8 5.2l-1.7 1.7M6.9 17.1l-1.7 1.7" />
+          </g>
+        </svg>
+        <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"
+          />
+        </svg>
+      </button>
       <a
         href={links.github.kaikai}
         class="icon-link"
@@ -102,10 +122,33 @@ const otherPath = pathInLang(
   .mark { display: block; }
   .mark-light { display: block; }
   .mark-dark { display: none; }
+  /* Follows the OS unless the reader picked a theme; then the choice wins. */
   @media (prefers-color-scheme: dark) {
-    .mark-light { display: none; }
-    .mark-dark { display: block; }
+    :root:not([data-theme='light']) .mark-light { display: none; }
+    :root:not([data-theme='light']) .mark-dark { display: block; }
   }
+  :root[data-theme='dark'] .mark-light { display: none; }
+  :root[data-theme='dark'] .mark-dark { display: block; }
+  :root[data-theme='light'] .mark-light { display: block; }
+  :root[data-theme='light'] .mark-dark { display: none; }
+
+  /* The toggle shows the theme you would switch TO, not the current one. */
+  .theme-toggle {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+  }
+  .theme-toggle .i-sun { display: none; }
+  .theme-toggle .i-moon { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .theme-toggle .i-sun { display: block; }
+    :root:not([data-theme='light']) .theme-toggle .i-moon { display: none; }
+  }
+  :root[data-theme='dark'] .theme-toggle .i-sun { display: block; }
+  :root[data-theme='dark'] .theme-toggle .i-moon { display: none; }
+  :root[data-theme='light'] .theme-toggle .i-sun { display: none; }
+  :root[data-theme='light'] .theme-toggle .i-moon { display: block; }
   .primary-nav {
     flex: 1;
     display: flex;
@@ -175,3 +218,22 @@ const otherPath = pathInLang(
     .primary-nav ul { gap: var(--space-4); }
   }
 </style>
+
+<script>
+  // The toggle flips to the opposite of what is currently shown, taking the
+  // OS preference as the starting point when nothing was chosen before.
+  const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  btn?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const current =
+      root.getAttribute('data-theme') ??
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try {
+      localStorage.setItem('kaikai-theme', next);
+    } catch (e) {
+      /* nothing to persist to; the choice still applies for this page */
+    }
+  });
+</script>

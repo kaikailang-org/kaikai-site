@@ -49,6 +49,20 @@ const desc =
     <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content="https://kaikai-lang.org/kaikai-og-1200x630.png" />
 
+    <script is:inline>
+      // Runs before first paint, so a stored choice never flashes the other
+      // theme. No stored choice means no attribute at all, and the CSS falls
+      // back to prefers-color-scheme.
+      try {
+        var saved = localStorage.getItem('kaikai-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {
+        /* localStorage unavailable (private mode): keep the OS preference */
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

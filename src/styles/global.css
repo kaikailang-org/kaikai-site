@@ -50,8 +50,12 @@
   --radius-lg: 12px;
 }
 
+/* Dark palette. Applied when the system asks for it, unless the reader has
+   explicitly chosen light; and always when they have explicitly chosen dark.
+   The two selectors carry the same tokens on purpose: one answers the OS,
+   the other answers the toggle, and the toggle has to win either way. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #0f1419;
     --bg-elevated: #161b22;
     --bg-subtle: #1c2128;
@@ -66,6 +70,22 @@
     --code-bg: #0d1117;
     --code-fg: #e6edf3;
   }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0f1419;
+  --bg-elevated: #161b22;
+  --bg-subtle: #1c2128;
+  --fg: #e6e6f0;
+  --fg-muted: #9aa3b2;
+  --fg-subtle: #6a7385;
+  --border: #2a323f;
+  --border-strong: #3d4757;
+  --accent: #7aa7d9;
+  --accent-soft: #ffd166;
+  --accent-fg: #0f1419;
+  --code-bg: #0d1117;
+  --code-fg: #e6edf3;
 }
 
 * {
