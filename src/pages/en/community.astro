@@ -1,7 +1,133 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PageStub from '../../components/PageStub.astro';
+import { links } from '../../lib/links';
 ---
+
 <Base title="Community · kaikai" lang="en">
-  <PageStub title="Community" note="GitHub, blog, acknowledgments. Coming soon." />
+  <article class="community-page">
+    <div class="container">
+      <header>
+        <p class="eyebrow">Community</p>
+        <h1>Where kaikai happens</h1>
+        <p class="lead">
+          The project is young and developed in the open. There is no
+          forum or chat yet: everything happens in the repositories
+          and on the blog.
+        </p>
+      </header>
+
+      <section>
+        <h2>The code</h2>
+        <p>
+          The language, the libraries and this site live in
+          <a href={links.github.org} rel="noopener">the GitHub organisation</a>.
+          The compiler repository is
+          <a href={links.github.kaikai} rel="noopener">kaikailang-org/kaikai</a>:
+          the self-hosted compiler, the runtime, the stdlib and the
+          design documentation are all there.
+        </p>
+        <p>
+          Issues are open and are the main way to report. A useful
+          report carries the output of <code>kai --version</code> and
+          the smallest program that reproduces the problem; if the
+          compiler accepts something it should not, or rejects
+          something it should not, that minimal case is half the fix.
+        </p>
+      </section>
+
+      <section>
+        <h2>The book</h2>
+        <p>
+          <em>Effective Programming with kaikai</em> is written
+          alongside the language, in English and Spanish, and can be
+          <a href="/en/book">read online</a> or downloaded as a PDF.
+          It is a living draft: each version is validated against the
+          compiler of the moment, so the examples it carries are the
+          ones that actually run.
+        </p>
+        <p>
+          Its repository is
+          <a href={links.github.book} rel="noopener">kaikailang-org/kaikai-book</a>,
+          and corrections to the text are welcome as issues too.
+        </p>
+      </section>
+
+      <section>
+        <h2>The blog</h2>
+        <p>
+          The design decisions —why algebraic effects, why reference
+          counting instead of a collector, what was tried and
+          discarded— are written up at
+          <a href={links.blog} rel="noopener">lnds.net</a>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Project status</h2>
+        <p>
+          kaikai is <strong>pre-1.0</strong> and on the
+          <em>Hanga Roa</em> edition. Within an edition the language
+          surface stays stable, so upgrading means reading the release
+          notes, running <code>kai upgrade</code>, and recompiling.
+          Breaking changes are saved for the crossing into the next
+          edition.
+        </p>
+        <p>
+          The 1.0 label is postponed on purpose: the goal is for it to
+          arrive when the surface is pinned, not on a date.
+        </p>
+      </section>
+
+      <section>
+        <h2>Acknowledgments</h2>
+        <p>
+          kaikai owes its shape to languages that answered the same
+          questions first: algebraic effects and their row checking
+          come from the Koka and Effekt line; Perceus reference
+          counting, from the research Koka published; type inference,
+          from the ML tradition; structured concurrency, from the
+          nurseries Trio popularised; the edition model, from Rust's
+          stability manifesto; and the distribution model, from Go.
+        </p>
+      </section>
+    </div>
+  </article>
 </Base>
+
+<style>
+  .community-page {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .community-page header {
+    margin-bottom: var(--space-12);
+  }
+  .lead {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    max-width: 62ch;
+    line-height: 1.65;
+  }
+  section {
+    margin-top: var(--space-12);
+    max-width: 70ch;
+  }
+  section h2 {
+    margin-bottom: var(--space-4);
+  }
+  section p {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+  section em {
+    color: var(--accent);
+    font-style: italic;
+  }
+</style>

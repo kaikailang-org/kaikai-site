@@ -1,10 +1,185 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageStub from '../components/PageStub.astro';
+import { links } from '../lib/links';
 ---
+
 <Base title="El nombre · kaikai" lang="es">
-  <PageStub
-    title="El nombre"
-    note="kai kai es, en rapanui, el juego de figuras hechas con un cordel entre los dedos. Cada figura tiene su canto, el pata'u ta'u, que se recita mientras las manos forman la figura. Verso y forma viajan juntos. El lenguaje toma esa imagen como analogía del tipado: los tipos son la figura, el código es el verso. (Página en construcción.)"
-  />
+  <article class="name-page">
+    <div class="container">
+      <header>
+        <p class="eyebrow">El nombre</p>
+        <h1>kai kai</h1>
+        <p class="lead">
+          En rapanui, <em>kai kai</em> es el juego de figuras hechas
+          con un cordel entre los dedos. Cada figura tiene su canto,
+          el <em>pata'u ta'u</em>, que se recita mientras las manos la
+          forman. Verso y forma viajan juntos: uno no se sostiene sin
+          el otro.
+        </p>
+      </header>
+
+      <section>
+        <h2>Por qué ese nombre</h2>
+        <p>
+          El lenguaje toma esa imagen como analogía del tipado. Los
+          tipos son la figura; el código es el verso. Escribir un
+          programa es recitar y formar al mismo tiempo, y el
+          compilador está para comprobar que ambas cosas siguen
+          coincidiendo.
+        </p>
+        <p>
+          La analogía tiene una consecuencia práctica que atraviesa el
+          diseño: si la figura y el verso son inseparables, el tipo no
+          es un comentario sobre el código sino parte de lo que el
+          código dice. Por eso los efectos aparecen en la firma, por
+          eso las unidades viven en el tipo, y por eso los contratos
+          se escriben junto a la función y no en un archivo aparte.
+        </p>
+      </section>
+
+      <section>
+        <h2>Rapa Nui en todo el proyecto</h2>
+        <p>
+          El nombre no es un gesto aislado. Las bibliotecas del
+          ecosistema llevan nombres en rapanui elegidos por lo que
+          hacen —<em>ahu</em>, la plataforma de piedra;
+          <em>kohau</em>, la tablilla rongorongo; <em>henua</em>, la
+          tierra— y están descritas en
+          <a href="/ecosystem">la página del ecosistema</a>.
+        </p>
+        <p>
+          Las <strong>ediciones</strong> del lenguaje llevan nombres
+          geográficos de la isla. Una edición es el mecanismo de
+          estabilidad: dentro de una edición la superficie del
+          lenguaje no rompe, y los cambios incompatibles solo ocurren
+          al cruzar de una a la siguiente, siempre con la opción
+          explícita de quien programa.
+        </p>
+        <ul class="editions">
+          <li>
+            <span class="ed-name">Tongariki</span>
+            <span class="ed-note">
+              La fase previa. Iteración rápida sobre los internos
+              mientras la superficie de usuario se asentaba.
+            </span>
+          </li>
+          <li class="current">
+            <span class="ed-name">Hanga Roa</span>
+            <span class="ed-badge">edición actual</span>
+            <span class="ed-note">
+              La primera edición con destino público. Es la que usa
+              hoy quien instala el lenguaje.
+            </span>
+          </li>
+          <li>
+            <span class="ed-name">Orongo</span>
+            <span class="ed-note">
+              La edición de estabilización, todavía por cortar.
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Cómo se escribe</h2>
+        <p>
+          El lenguaje se escribe <strong>kaikai</strong>, en una
+          palabra y en minúscula, incluso al comienzo de una frase.
+          El juego rapanui que le da origen se escribe
+          <em>kai kai</em>, en dos. La herramienta de línea de
+          comandos es <code>kai</code>, y los archivos terminan en
+          <code>.kai</code>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Quién lo hace</h2>
+        <p>
+          kaikai lo desarrolla Eduardo Díaz. El código vive en
+          <a href={links.github.org} rel="noopener">GitHub</a> y el
+          proceso de diseño se cuenta en
+          <a href={links.blog} rel="noopener">el blog</a>. Hay más en
+          <a href="/community">la página de comunidad</a>.
+        </p>
+      </section>
+    </div>
+  </article>
 </Base>
+
+<style>
+  .name-page {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .name-page header {
+    margin-bottom: var(--space-12);
+  }
+  .name-page h1 {
+    font-family: var(--font-mono);
+    color: var(--accent);
+  }
+  .lead {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    max-width: 62ch;
+    line-height: 1.65;
+  }
+  section {
+    margin-top: var(--space-12);
+    max-width: 70ch;
+  }
+  section h2 {
+    margin-bottom: var(--space-4);
+  }
+  section p {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+  section em {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .editions {
+    list-style: none;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .editions li {
+    border-left: 2px solid var(--border);
+    padding-left: var(--space-4);
+  }
+  .editions li.current {
+    border-left-color: var(--accent);
+  }
+  .ed-name {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    margin-right: var(--space-2);
+  }
+  .ed-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 0.05rem 0.45rem;
+  }
+  .ed-note {
+    display: block;
+    color: var(--fg-muted);
+    font-family: var(--font-serif);
+    line-height: 1.55;
+    margin-top: 0.2rem;
+  }
+</style>

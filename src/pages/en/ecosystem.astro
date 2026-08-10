@@ -1,7 +1,270 @@
 ---
 import Base from '../../layouts/Base.astro';
-import PageStub from '../../components/PageStub.astro';
+import { links } from '../../lib/links';
+
+const org = links.github.org;
+
+// Each repo's published version. Status is the real one, not the plan:
+// "not started" means the repo exists and the scope is settled.
+const layers = [
+  {
+    id: 'language',
+    title: 'The language',
+    blurb:
+      'What the default install ships: compiler, runtime and the core stdlib. One download, no package manager in between.',
+    repos: [
+      {
+        name: 'kaikai',
+        version: '0.111',
+        status: 'active',
+        desc: 'Self-hosted compiler, a runtime with a cooperative scheduler and Perceus reference counting, and the core stdlib.',
+      },
+    ],
+  },
+  {
+    id: 'platform',
+    title: 'Platform',
+    blurb:
+      'Infrastructure common to serious applications that is not a language primitive. If several projects above would otherwise reinvent it, it lives here.',
+    repos: [
+      {
+        name: 'ahu',
+        version: '0.2.1',
+        status: 'active',
+        desc: 'Stateful message loops, restart policies, structured logging and streams. It takes up what OTP got right without transliterating what Erlang needs because of its runtime.',
+      },
+    ],
+  },
+  {
+    id: 'domain',
+    title: 'Domain toolkits',
+    blurb: 'One repo per domain, versioned separately. Installed with kai add.',
+    repos: [
+      {
+        name: 'kohau',
+        version: '0.4.0',
+        status: 'active',
+        desc: 'Database and persistence. SQLite in two layers: a typed FFI surface, and a client that confines access to a single fiber.',
+      },
+      {
+        name: 'henua',
+        version: '0.3.1',
+        status: 'active',
+        desc: 'Domain-driven design building blocks: aggregates, events, repositories, bounded contexts. It is not an ORM.',
+      },
+      {
+        name: 'rongo',
+        version: '0.6.0',
+        status: 'active',
+        desc: 'Advanced networking. Speaks HTTPS on both sides over OpenSSL without blocking the thread: a request in flight yields the fiber.',
+      },
+      {
+        name: 'garo',
+        version: null,
+        status: 'not started',
+        desc: 'Advanced cryptography: ciphers, key derivation and signing over a system stack. Base crypto stays in the stdlib.',
+      },
+      {
+        name: 'hopu',
+        version: null,
+        status: 'not started',
+        noRepo: true,
+        desc: 'Fintech platform: payment processing, double-entry ledgers, reconciliation and regulatory reporting.',
+      },
+    ],
+  },
+  {
+    id: 'products',
+    title: 'Client products',
+    blurb: 'End-user frameworks, with an identity of their own.',
+    repos: [
+      {
+        name: 'terevaka',
+        version: '0.1.2',
+        status: 'active',
+        desc: 'A terminal UI framework: a UI tree, widgets, and a model/update/view runtime with flicker-free repainting.',
+      },
+      {
+        name: 'manutara',
+        version: null,
+        status: 'not started',
+        noRepo: true,
+        desc: 'A web framework with server-side state and client-side diffing. What terevaka is for the terminal, manutara is for the web.',
+      },
+    ],
+  },
+];
 ---
+
 <Base title="Ecosystem · kaikai" lang="en">
-  <PageStub title="Ecosystem" note="ahu, kohau, henua, rongo, garo, terevaka. Coming soon." />
+  <article class="eco-page">
+    <div class="container">
+      <header>
+        <p class="eyebrow">Ecosystem</p>
+        <h1>What ships with kaikai, and what installs separately</h1>
+        <p class="lead">
+          The distribution model follows Go's: the language comes with
+          its stdlib in a single install, and everything else lives in
+          separate repos under the organisation, added with
+          <code>kai add</code>.
+        </p>
+        <p class="note">
+          The line between core and the rest is
+          <strong>API stability</strong>, not maturity. A library can
+          be solid and still live outside core because its surface is
+          still moving, or because it carries a heavy system
+          dependency that must not ride in the base binary — the TLS
+          case.
+        </p>
+      </header>
+
+      {layers.map((layer) => (
+        <section id={layer.id}>
+          <h2>{layer.title}</h2>
+          <p class="layer-blurb">{layer.blurb}</p>
+          <ul class="repo-list">
+            {layer.repos.map((r) => (
+              <li class:list={['repo', { pending: r.status === 'not started' }]}>
+                <div class="repo-head">
+                  {r.noRepo ? (
+                    <span class="repo-name plain">{r.name}</span>
+                  ) : (
+                    <a class="repo-name" href={`${org}/${r.name}`} rel="noopener">
+                      {r.name}
+                    </a>
+                  )}
+                  {r.version ? (
+                    <span class="badge version">{r.version}</span>
+                  ) : (
+                    <span class="badge pending-badge">not started</span>
+                  )}
+                </div>
+                <p class="repo-desc">{r.desc}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <section id="names">
+        <h2>The names</h2>
+        <p>
+          Every project carries a Rapa Nui name, chosen for what it
+          does rather than for how it sounds. <em>ahu</em> is the
+          stone platform the moai stand on, and it is the layer
+          everything else stands on. <em>kohau</em> is the rongorongo
+          tablet, the surface that holds inscribed data.
+          <em>henua</em> is the land, the territory: the domain.
+          <em>rongo</em> is the message, the errand — a network
+          carries messages. <em>garo</em> is to conceal, and
+          encrypting is concealing. <em>terevaka</em> is the island's
+          highest volcano, the point from which you see everything: a
+          terminal UI is that whole view.
+        </p>
+        <p>
+          There is more about the language's own name on
+          <a href="/en/about">the name page</a>.
+        </p>
+      </section>
+    </div>
+  </article>
 </Base>
+
+<style>
+  .eco-page {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .eco-page header {
+    margin-bottom: var(--space-12);
+  }
+  .lead {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    max-width: 64ch;
+    line-height: 1.6;
+  }
+  .note {
+    color: var(--fg-muted);
+    max-width: 64ch;
+    font-size: 0.95rem;
+  }
+  section {
+    margin-top: var(--space-12);
+    max-width: 72ch;
+  }
+  section h2 {
+    margin-bottom: var(--space-2);
+  }
+  .layer-blurb {
+    color: var(--fg-muted);
+    margin-bottom: var(--space-5);
+    max-width: 64ch;
+  }
+  .repo-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .repo {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+  }
+  .repo.pending {
+    opacity: 0.72;
+  }
+  .repo-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: 0.35rem;
+  }
+  .repo-name {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .repo-name:hover {
+    text-decoration: underline;
+  }
+  /* No repo yet: the name shows, but does not link to a 404. */
+  .repo-name.plain {
+    color: var(--fg-muted);
+  }
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+  .repo-desc {
+    margin: 0;
+    font-family: var(--font-serif);
+    line-height: 1.6;
+    color: var(--fg);
+  }
+  section p {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+  #names em {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.95em;
+    color: var(--accent);
+  }
+</style>

@@ -1,7 +1,271 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageStub from '../components/PageStub.astro';
+import { links } from '../lib/links';
+
+const org = links.github.org;
+
+// Versión publicada de cada repo. El estado es el real, no el previsto:
+// "sin empezar" significa que el repo existe y el alcance está decidido.
+const layers = [
+  {
+    id: 'lenguaje',
+    title: 'El lenguaje',
+    blurb:
+      'Lo que trae la instalación por defecto: compilador, runtime y la stdlib del núcleo. Una sola descarga, sin gestor de paquetes de por medio.',
+    repos: [
+      {
+        name: 'kaikai',
+        version: '0.111',
+        status: 'activo',
+        desc: 'Compilador autoalojado, runtime con scheduler cooperativo y conteo de referencias Perceus, y la stdlib del núcleo.',
+      },
+    ],
+  },
+  {
+    id: 'plataforma',
+    title: 'Plataforma',
+    blurb:
+      'Infraestructura común a aplicaciones serias que no es primitiva del lenguaje. Si varios proyectos de arriba tendrían que reinventarla, vive aquí.',
+    repos: [
+      {
+        name: 'ahu',
+        version: '0.2.1',
+        status: 'activo',
+        desc: 'Bucles de mensajes con estado, políticas de reinicio, logging estructurado y streams. Retoma lo que OTP hizo bien sin transliterar lo que Erlang necesita por su runtime.',
+      },
+    ],
+  },
+  {
+    id: 'dominio',
+    title: 'Toolkits de dominio',
+    blurb:
+      'Un repo por dominio, con versionado propio. Se instalan con kai add.',
+    repos: [
+      {
+        name: 'kohau',
+        version: '0.4.0',
+        status: 'activo',
+        desc: 'Base de datos y persistencia. SQLite en dos capas: una superficie FFI tipada y un cliente que confina el acceso a una fibra.',
+      },
+      {
+        name: 'henua',
+        version: '0.3.1',
+        status: 'activo',
+        desc: 'Bloques de diseño guiado por el dominio: agregados, eventos, repositorios, contextos acotados. No es un ORM.',
+      },
+      {
+        name: 'rongo',
+        version: '0.6.0',
+        status: 'activo',
+        desc: 'Redes avanzadas. Habla HTTPS de ambos lados sobre OpenSSL, sin bloquear el hilo: una petición en vuelo cede la fibra.',
+      },
+      {
+        name: 'garo',
+        version: null,
+        status: 'sin empezar',
+        desc: 'Criptografía avanzada: cifradores, derivación de claves y firma sobre un stack de sistema. La cripto base se queda en la stdlib.',
+      },
+      {
+        name: 'hopu',
+        version: null,
+        status: 'sin empezar',
+        noRepo: true,
+        desc: 'Plataforma fintech: procesamiento de pagos, libros contables de doble entrada, conciliación y reportería regulatoria.',
+      },
+    ],
+  },
+  {
+    id: 'productos',
+    title: 'Productos cliente',
+    blurb: 'Frameworks de cara al usuario final, con identidad propia.',
+    repos: [
+      {
+        name: 'terevaka',
+        version: '0.1.2',
+        status: 'activo',
+        desc: 'Framework de interfaces de terminal: un árbol de UI, widgets y un runtime modelo/actualización/vista con repintado sin parpadeo.',
+      },
+      {
+        name: 'manutara',
+        version: null,
+        status: 'sin empezar',
+        noRepo: true,
+        desc: 'Framework web con estado en el servidor y diferencias hacia el cliente. Lo que terevaka es para el terminal, manutara para la web.',
+      },
+    ],
+  },
+];
 ---
+
 <Base title="Ecosistema · kaikai" lang="es">
-  <PageStub title="Ecosistema" note="ahu, kohau, henua, rongo, garo, terevaka. En construcción." />
+  <article class="eco-page">
+    <div class="container">
+      <header>
+        <p class="eyebrow">Ecosistema</p>
+        <h1>Qué viene con kaikai y qué se instala aparte</h1>
+        <p class="lead">
+          El modelo de distribución sigue al de Go: el lenguaje viene
+          con su stdlib en una sola instalación, y todo lo demás vive
+          en repos separados bajo la organización, que se agregan con
+          <code>kai add</code>.
+        </p>
+        <p class="note">
+          La línea que separa el núcleo de lo demás es la
+          <strong>estabilidad de la API</strong>, no la madurez. Una
+          biblioteca puede ser sólida y vivir fuera del núcleo porque
+          su superficie todavía se mueve, o porque arrastra una
+          dependencia de sistema pesada que no debe viajar en el
+          binario base — el caso de TLS.
+        </p>
+      </header>
+
+      {layers.map((layer) => (
+        <section id={layer.id}>
+          <h2>{layer.title}</h2>
+          <p class="layer-blurb">{layer.blurb}</p>
+          <ul class="repo-list">
+            {layer.repos.map((r) => (
+              <li class:list={['repo', { pending: r.status === 'sin empezar' }]}>
+                <div class="repo-head">
+                  {r.noRepo ? (
+                    <span class="repo-name plain">{r.name}</span>
+                  ) : (
+                    <a class="repo-name" href={`${org}/${r.name}`} rel="noopener">
+                      {r.name}
+                    </a>
+                  )}
+                  {r.version ? (
+                    <span class="badge version">{r.version}</span>
+                  ) : (
+                    <span class="badge pending-badge">sin empezar</span>
+                  )}
+                </div>
+                <p class="repo-desc">{r.desc}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <section id="nombres">
+        <h2>Los nombres</h2>
+        <p>
+          Todos los proyectos llevan nombres en rapanui, elegidos por
+          lo que hacen y no por sonar bien. <em>ahu</em> es la
+          plataforma de piedra sobre la que se levantan los moái, y es
+          la capa sobre la que se levanta todo lo demás.
+          <em>kohau</em> es la tablilla rongorongo, el soporte que
+          guarda los datos inscritos. <em>henua</em> es la tierra, el
+          territorio: el dominio. <em>rongo</em> es el mensaje, el
+          recado — una red transporta mensajes. <em>garo</em> es
+          ocultar, y cifrar es ocultar. <em>terevaka</em> es el volcán
+          más alto de la isla, el punto desde el que se ve todo:
+          una interfaz de terminal es esa vista completa.
+        </p>
+        <p>
+          Hay más sobre el nombre del lenguaje en
+          <a href="/about">la página del nombre</a>.
+        </p>
+      </section>
+    </div>
+  </article>
 </Base>
+
+<style>
+  .eco-page {
+    padding-block: var(--space-16) var(--space-12);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .eco-page header {
+    margin-bottom: var(--space-12);
+  }
+  .lead {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    max-width: 64ch;
+    line-height: 1.6;
+  }
+  .note {
+    color: var(--fg-muted);
+    max-width: 64ch;
+    font-size: 0.95rem;
+  }
+  section {
+    margin-top: var(--space-12);
+    max-width: 72ch;
+  }
+  section h2 {
+    margin-bottom: var(--space-2);
+  }
+  .layer-blurb {
+    color: var(--fg-muted);
+    margin-bottom: var(--space-5);
+    max-width: 64ch;
+  }
+  .repo-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .repo {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+  }
+  .repo.pending {
+    opacity: 0.72;
+  }
+  .repo-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: 0.35rem;
+  }
+  .repo-name {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .repo-name:hover {
+    text-decoration: underline;
+  }
+  /* Sin repo todavía: el nombre se muestra, pero no enlaza a un 404. */
+  .repo-name.plain {
+    color: var(--fg-muted);
+  }
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+  .repo-desc {
+    margin: 0;
+    font-family: var(--font-serif);
+    line-height: 1.6;
+    color: var(--fg);
+  }
+  section p {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 1.65;
+  }
+  #nombres em {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.95em;
+    color: var(--accent);
+  }
+</style>
