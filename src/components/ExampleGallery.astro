@@ -3,6 +3,7 @@ import { t, type Lang } from '../i18n/ui';
 import fs from 'node:fs';
 import path from 'node:path';
 import { highlightKai } from '../lib/highlight';
+import { parseSnippet } from '../lib/snippet';
 
 interface Props {
   lang: Lang;
@@ -14,14 +15,13 @@ const snippetsDir = path.resolve(process.cwd(), 'src/snippets', lang);
 const read = (file: string) =>
   fs.readFileSync(path.join(snippetsDir, file), 'utf-8');
 
-// The quickstart, in the order it is meant to be read. `env` carries the
-// environment a program needs to produce the output its header documents.
+// The quickstart, in the order it is meant to be read.
 const examples = [
   { id: 'hello', file: '01_hello.kai' },
   { id: 'fizzbuzz', file: '02_fizzbuzz.kai' },
   { id: 'calculator', file: '03_calculator.kai' },
   { id: 'effect', file: '04_effect.kai' },
-  { id: 'concurrent', file: '05_concurrent.kai', env: 'KAI_THREADS=1' },
+  { id: 'concurrent', file: '05_concurrent.kai' },
   { id: 'pipes', file: '06_pipes.kai' },
   { id: 'uom', file: '07_uom.kai' },
   { id: 'kinds', file: '09_kinds.kai' },
@@ -29,54 +29,69 @@ const examples = [
 ];
 
 const items = await Promise.all(
-  examples.map(async (e, i) => ({
-    ...e,
-    n: String(i + 1).padStart(2, '0'),
-    title: tt(`examples.item.${e.id}.title` as never),
-    desc: tt(`examples.item.${e.id}.desc` as never),
-    cmd: `${e.env ? e.env + ' ' : ''}kai run ${e.file}`,
-    html: await highlightKai(read(e.file)),
-  })),
+  examples.map(async (e, i) => {
+    // The header explains the program and shows its transcript; the page
+    // already frames each example, so only the program itself is rendered,
+    // with the transcript given its own terminal panel.
+    const parsed = parseSnippet(read(e.file));
+    return {
+      ...e,
+      n: String(i + 1).padStart(2, '0'),
+      title: tt(`examples.item.${e.id}.title` as never),
+      desc: tt(`examples.item.${e.id}.desc` as never),
+      prompt: `$ ${parsed.command?.replace(/examples\/quickstart\//, '') ?? ''}`,
+      outputText: parsed.output.join('\n'),
+      output: parsed.output,
+      html: await highlightKai(parsed.code),
+    };
+  }),
 );
 ---
 
 <section class="gallery">
   <div class="container">
     <header class="gallery-head">
+      <p class="eyebrow">{tt('examples.page.eyebrow')}</p>
       <h1>{tt('examples.page.title')}</h1>
       <p class="lead">{tt('examples.page.lead')}</p>
-      <p class="note">{tt('examples.page.note')}</p>
     </header>
 
     <nav class="jump" aria-label={tt('examples.page.index')}>
-      <ol>
-        {items.map((it) => (
-          <li>
-            <a href={`#${it.id}`}>
-              <span class="jump-n">{it.n}</span>
-              {it.title}
-            </a>
-          </li>
-        ))}
-      </ol>
+      {items.map((it) => (
+        <a class="chip" href={`#${it.id}`}>
+          <span class="chip-n">{it.n}</span>
+          <span class="chip-t">{it.title}</span>
+        </a>
+      ))}
     </nav>
 
     {items.map((it) => (
       <article class="example" id={it.id}>
-        <h2>
-          <span class="ex-n">{it.n}</span>
-          <a href={`#${it.id}`}>{it.title}</a>
-        </h2>
-        <p class="ex-desc">{it.desc}</p>
-        <p class="ex-cmd"><code>$ {it.cmd}</code></p>
-        <div class="window">
-          <div class="window-chrome">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-            <span class="filename">{it.file}</span>
+        <div class="ex-head">
+          <span class="ex-n" aria-hidden="true">{it.n}</span>
+          <div>
+            <h2><a href={`#${it.id}`}>{it.title}</a></h2>
+            <p class="ex-desc">{it.desc}</p>
           </div>
-          <div class="code-body" set:html={it.html} />
+        </div>
+
+        <div class="ex-body">
+          <div class="window">
+            <div class="window-chrome">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+              <span class="filename">{it.file}</span>
+            </div>
+            <div class="code-body" set:html={it.html} />
+          </div>
+
+          {it.output.length > 0 && (
+            <div class="term" aria-label={tt('examples.page.output')}>
+              <div class="term-chrome">{tt('examples.page.output')}</div>
+              <pre class="term-body"><code><span class="prompt">{it.prompt}</span><span>{it.outputText}</span></code></pre>
+            </div>
+          )}
         </div>
       </article>
     ))}
@@ -85,61 +100,78 @@ const items = await Promise.all(
 
 <style>
   .gallery {
-    padding-block: var(--space-12);
+    padding-block: var(--space-16) var(--space-12);
   }
-  .gallery-head h1 {
+  .eyebrow {
     color: var(--accent);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+  }
+  .gallery-head {
+    margin-bottom: var(--space-12);
   }
   .lead {
     font-family: var(--font-serif);
     font-size: 1.15rem;
-    max-width: 62ch;
-  }
-  .note {
+    max-width: 60ch;
+    line-height: 1.6;
     color: var(--fg-muted);
-    max-width: 62ch;
-    font-size: 0.95rem;
   }
 
+  /* Index: chips that wrap, instead of a boxed multi-column list. */
   .jump {
-    margin-block: var(--space-8);
-    padding: var(--space-4) var(--space-5);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-  }
-  .jump ol {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-    gap: 0.4rem var(--space-6);
-  }
-  .jump a {
     display: flex;
-    gap: 0.6rem;
-    align-items: baseline;
-    text-decoration: none;
-    color: var(--fg);
-    padding: 0.15rem 0;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: var(--space-16);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--border);
   }
-  .jump a:hover { color: var(--accent); }
-  .jump-n,
-  .ex-n {
-    font-family: var(--font-mono);
-    font-size: 0.85em;
+  .chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    text-decoration: none;
     color: var(--fg-muted);
+    font-size: 0.9rem;
+    transition: color 120ms ease, border-color 120ms ease;
+  }
+  .chip:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .chip-n {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    opacity: 0.65;
   }
 
   .example {
-    margin-block: var(--space-10);
+    margin-bottom: var(--space-16);
     scroll-margin-top: var(--space-8);
   }
-  .example h2 {
+  .ex-head {
     display: flex;
-    gap: 0.7rem;
-    align-items: baseline;
-    margin-bottom: 0.3rem;
+    gap: var(--space-4);
+    align-items: flex-start;
+    margin-bottom: var(--space-6);
+  }
+  .ex-n {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--accent);
+    opacity: 0.35;
+  }
+  .example h2 {
+    margin: 0 0 0.2rem;
+    font-size: 1.5rem;
   }
   .example h2 a {
     color: inherit;
@@ -147,32 +179,44 @@ const items = await Promise.all(
   }
   .example h2 a:hover { color: var(--accent); }
   .ex-desc {
+    margin: 0;
     color: var(--fg-muted);
-    max-width: 62ch;
-    margin-block: 0 var(--space-3);
-  }
-  .ex-cmd {
-    margin-block: 0 var(--space-3);
-  }
-  .ex-cmd code {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--fg-muted);
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    line-height: 1.55;
+    max-width: 58ch;
   }
 
-  .window {
+  /* Code and its output side by side; the output panel is the payoff. */
+  .ex-body {
+    display: grid;
+    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .window,
+  .term {
     background: var(--code-bg);
     border-radius: var(--radius-lg);
-    overflow: hidden;
     border: 1px solid var(--border);
+    overflow: hidden;
   }
-  .window-chrome {
+  .window-chrome,
+  .term-chrome {
     display: flex;
     align-items: center;
     gap: 0.4rem;
     padding: 0.55rem 0.9rem;
     background: rgba(255, 255, 255, 0.04);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(230, 237, 243, 0.62);
+  }
+  .term-chrome {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
   .dot {
     width: 0.7rem;
@@ -187,15 +231,38 @@ const items = await Promise.all(
     margin-left: 0.6rem;
     font-family: var(--font-mono);
     font-size: 0.78rem;
-    color: var(--fg-muted);
-  }
-  .code-body :global(pre) {
-    margin: 0;
-    padding: var(--space-4) var(--space-5);
-    overflow-x: auto;
   }
 
+  /* Shiki sets background-color inline, which would paint a lighter slab
+     inside the window; !important is the only way to override it. */
+  .code-body :global(pre.shiki) {
+    background: transparent !important;
+    margin: 0;
+    padding: var(--space-4) var(--space-6);
+    overflow-x: auto;
+  }
+  .term-body {
+    margin: 0;
+    padding: var(--space-4) var(--space-6);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--code-fg);
+  }
+  .prompt {
+    color: rgba(230, 237, 243, 0.55);
+    display: block;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  }
+
+  @media (max-width: 62rem) {
+    .ex-body { grid-template-columns: 1fr; }
+    .term-body { max-height: 16rem; }
+  }
   @media (max-width: 40rem) {
-    .jump ol { grid-template-columns: 1fr; }
+    .ex-n { font-size: 1.5rem; }
   }
 </style>

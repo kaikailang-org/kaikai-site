@@ -16,6 +16,8 @@ export const ui = {
     'nav.ecosystem': 'Ecosistema',
     'nav.community': 'Comunidad',
 
+    'theme.toggle': 'Cambiar entre claro y oscuro',
+
     'book.contents': 'Contenidos',
     'book.chapters': 'Capítulos',
     'book.appendices': 'Apéndices',
@@ -70,7 +72,14 @@ export const ui = {
       'Los programas del quickstart, en orden de lectura. Cada uno cabe en una pantalla y muestra una idea del lenguaje.',
     'examples.page.note':
       'Todos se ejecutan tal cual con kai run. La salida que documenta cada cabecera es la que produce el programa en kaikai 0.110.',
+    'examples.page.eyebrow': 'Quickstart',
     'examples.page.index': 'Índice de ejemplos',
+    'examples.page.output': 'Salida',
+
+    'featured.title': 'Míralo correr',
+    'featured.intro':
+      'Un programa completo y su salida. Este encadena los cuatro pipes sobre un rango para sumar los cuadrados pares.',
+    'featured.seeAll': 'Ver los nueve ejemplos',
 
     'examples.item.hello.title': 'Hola, mundo',
     'examples.item.hello.desc':
@@ -110,6 +119,8 @@ export const ui = {
     'nav.book': 'The book',
     'nav.ecosystem': 'Ecosystem',
     'nav.community': 'Community',
+
+    'theme.toggle': 'Toggle light and dark',
 
     'book.contents': 'Contents',
     'book.chapters': 'Chapters',
@@ -165,7 +176,14 @@ export const ui = {
       'The quickstart programs, in reading order. Each fits on a screen and shows one idea from the language.',
     'examples.page.note':
       'They all run as-is with kai run. The output each header documents is what the program prints on kaikai 0.110.',
+    'examples.page.eyebrow': 'Quickstart',
     'examples.page.index': 'Example index',
+    'examples.page.output': 'Output',
+
+    'featured.title': 'See it run',
+    'featured.intro':
+      'A whole program and what it prints. This one chains all four pipes over a range to sum the even squares.',
+    'featured.seeAll': 'See all nine examples',
 
     'examples.item.hello.title': 'Hello, world',
     'examples.item.hello.desc':

@@ -1,0 +1,156 @@
+---
+import { t, pathInLang, type Lang } from '../i18n/ui';
+import fs from 'node:fs';
+import path from 'node:path';
+import { highlightKai } from '../lib/highlight';
+import { parseSnippet } from '../lib/snippet';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+// The hero already carries the effects example, so the featured slot shows a
+// different face of the language. The full set lives on /examples.
+const FILE = '06_pipes.kai';
+
+const source = fs.readFileSync(
+  path.resolve(process.cwd(), 'src/snippets', lang, FILE),
+  'utf-8',
+);
+const parsed = parseSnippet(source);
+const html = await highlightKai(parsed.code);
+const prompt = `$ ${parsed.command?.replace(/examples\/quickstart\//, '') ?? ''}`;
+const outputText = parsed.output.join('\n');
+---
+
+<section class="featured">
+  <div class="container">
+    <div class="featured-head">
+      <div>
+        <h2>{tt('featured.title')}</h2>
+        <p class="intro">{tt('featured.intro')}</p>
+      </div>
+      <a class="all-link" href={pathInLang('/examples', lang)}>
+        {tt('featured.seeAll')} <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="ex-body">
+      <div class="window">
+        <div class="window-chrome">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="filename">{FILE}</span>
+        </div>
+        <div class="code-body" set:html={html} />
+      </div>
+
+      <div class="term">
+        <div class="term-chrome">{tt('examples.page.output')}</div>
+        <pre class="term-body"><code><span class="prompt">{prompt}</span><span>{outputText}</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured {
+    padding-block: var(--space-12);
+    border-top: 1px solid var(--border);
+  }
+  .featured-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+  }
+  .featured-head h2 {
+    margin: 0 0 0.3rem;
+  }
+  .intro {
+    color: var(--fg-muted);
+    margin: 0;
+    max-width: 60ch;
+  }
+  .all-link {
+    white-space: nowrap;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .ex-body {
+    display: grid;
+    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .window,
+  .term {
+    background: var(--code-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .window-chrome,
+  .term-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: rgba(230, 237, 243, 0.62);
+  }
+  .term-chrome {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .dot {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+  .filename {
+    margin-left: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+  /* Shiki paints a background inline; clear it so the window reads as one. */
+  .code-body :global(pre.shiki) {
+    background: transparent !important;
+    margin: 0;
+    padding: var(--space-4) var(--space-6);
+    overflow-x: auto;
+  }
+  .term-body {
+    margin: 0;
+    padding: var(--space-4) var(--space-6);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--code-fg);
+  }
+  .prompt {
+    color: rgba(230, 237, 243, 0.55);
+    display: block;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  }
+
+  @media (max-width: 62rem) {
+    .ex-body { grid-template-columns: 1fr; }
+  }
+</style>
