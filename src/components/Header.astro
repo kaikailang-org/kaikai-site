@@ -4,8 +4,11 @@ import { links } from '../lib/links';
 
 interface Props {
   lang: Lang;
+  /** Where the language switch goes, for pages whose path is not the same
+   *  across editions (book chapters, whose slugs are translated). */
+  altPath?: string;
 }
-const { lang } = Astro.props;
+const { lang, altPath } = Astro.props;
 const tt = t(lang);
 
 const navItems = [
@@ -18,10 +21,9 @@ const navItems = [
 ];
 
 const otherLang: Lang = lang === 'es' ? 'en' : 'es';
-const otherPath = pathInLang(
-  Astro.url.pathname.replace(/^\/en/, '') || '/',
-  otherLang,
-);
+const otherPath =
+  altPath ??
+  pathInLang(Astro.url.pathname.replace(/^\/en/, '') || '/', otherLang);
 ---
 
 <header class="site-header">
