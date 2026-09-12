@@ -28,7 +28,7 @@
     "keywords": {
       "patterns": [
         {
-          "match": "\\b(if|else|match|handle|with|where|requires|ensures)\\b",
+          "match": "\\b(if|else|match|case|when|handle|with|where|requires|ensures)\\b",
           "name": "keyword.control.kaikai"
         },
         {
@@ -44,7 +44,7 @@
           "name": "constant.language.kaikai"
         },
         {
-          "match": "\\b(import|use|as|pub)\\b",
+          "match": "\\b(import|use|as|pub|priv|extern)\\b",
           "name": "keyword.other.import.kaikai"
         },
         {
@@ -67,7 +67,7 @@
           "name": "storage.type.function.kaikai"
         },
         {
-          "match": "\\b(type|effect|protocol|impl|axiom|const|unit|kind|theory|region|layout|currency)\\b",
+          "match": "\\b(type|effect|protocol|impl|for|axiom|const|theory)\\b",
           "name": "storage.type.kaikai"
         },
         {
