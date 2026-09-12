@@ -11,7 +11,13 @@
 # of the working tree. By default it follows the checkout's current HEAD —
 # check out the ref you want to publish (a tag, main, a branch) and sync.
 #
-#   KAIKAI_BOOK_DIR   path to the kaikai-book repo (default ../kaikai-book)
+# Nothing here assumes a fixed machine layout: KAIKAI_BOOK_DIR wins if set,
+# then the conventional sibling checkout (../kaikai-book), then a bounded
+# search under $HOME for whatever the user actually cloned it into. If none
+# of that turns up a real kaikai-book checkout, this WARNS and exits 0 —
+# the site build carries on without book chapters rather than failing.
+#
+#   KAIKAI_BOOK_DIR   path to the kaikai-book repo (default: search for it)
 #   KAIKAI_BOOK_REF   git ref to sync: tag/branch/sha (default: HEAD, i.e.
 #                     whatever the checkout points at), or WORKTREE to read
 #                     the working tree as-is (uncommitted edits included)
@@ -20,15 +26,45 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 SITE_DIR="$(pwd)"
 
-BOOK_DIR="${KAIKAI_BOOK_DIR:-../kaikai-book}"
-REF="${KAIKAI_BOOK_REF:-HEAD}"
+# Looks for a real kaikai-book checkout (has capitulos/ or chapters/) and
+# prints its path on success. Tries, in order: an explicit KAIKAI_BOOK_DIR,
+# the conventional sibling directory, then a bounded search under $HOME.
+find_book_dir() {
+  if [ -n "${KAIKAI_BOOK_DIR:-}" ]; then
+    if [ -d "$KAIKAI_BOOK_DIR" ]; then
+      printf '%s\n' "$KAIKAI_BOOK_DIR"
+      return 0
+    fi
+    echo "warn: KAIKAI_BOOK_DIR=$KAIKAI_BOOK_DIR does not exist, searching elsewhere" >&2
+  fi
 
-if [ ! -d "$BOOK_DIR" ]; then
-  echo "error: kaikai-book not found at $BOOK_DIR" >&2
-  echo "set KAIKAI_BOOK_DIR to point at your kaikai-book checkout" >&2
-  exit 1
+  if [ -d "../kaikai-book" ]; then
+    printf '%s\n' "../kaikai-book"
+    return 0
+  fi
+
+  if [ -n "${HOME:-}" ]; then
+    local cand
+    while IFS= read -r cand; do
+      if [ -d "$cand/capitulos" ] || [ -d "$cand/chapters" ]; then
+        printf '%s\n' "$cand"
+        return 0
+      fi
+    done < <(find "$HOME" -maxdepth 6 -type d -name kaikai-book \
+                -not -path '*/node_modules/*' -not -path '*/.git/*' 2>/dev/null)
+  fi
+
+  return 1
+}
+
+if ! BOOK_DIR="$(find_book_dir)"; then
+  echo "warn: kaikai-book checkout not found (checked \$KAIKAI_BOOK_DIR, ../kaikai-book, and a search under \$HOME)." >&2
+  echo "warn: building without book chapters. Clone kaikailang-org/kaikai-book next to this repo, or set KAIKAI_BOOK_DIR, to include it." >&2
+  exit 0
 fi
 BOOK_DIR="$(cd "$BOOK_DIR" && pwd)"
+REF="${KAIKAI_BOOK_REF:-HEAD}"
+echo "using kaikai-book at $BOOK_DIR" >&2
 
 CONTENT_DIR="$SITE_DIR/src/content/book"
 FIG_DIR="$SITE_DIR/public/book/figuras"
@@ -38,7 +74,12 @@ FIG_DIR="$SITE_DIR/public/book/figuras"
 # checkout's current branch. WORKTREE reads the working tree directly (for
 # previewing in-progress edits before they're tagged).
 STAGE=""
-cleanup() { [ -n "$STAGE" ] && rm -rf "$STAGE"; }
+# Runs as the EXIT trap, so its status becomes the script's: it must end in a
+# success. Reading the working tree leaves STAGE empty and nothing to remove.
+cleanup() {
+  [ -n "$STAGE" ] && rm -rf "$STAGE"
+  return 0
+}
 trap cleanup EXIT
 
 if [ "$REF" = "WORKTREE" ]; then

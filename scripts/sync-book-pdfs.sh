@@ -22,12 +22,44 @@ if [ -n "${KAIKAI_BOOK_RELEASE:-}" ]; then
     --pattern "kaikai-book-en-*.pdf" \
     --output "$SITE_DIR/public/kaikai-book-en.pdf" --clobber
 else
-  BOOK_DIR="${KAIKAI_BOOK_DIR:-../kaikai-book}"
-  if [ ! -d "$BOOK_DIR" ]; then
-    echo "error: kaikai-book not found at $BOOK_DIR" >&2
-    echo "set KAIKAI_BOOK_DIR to override, or KAIKAI_BOOK_RELEASE=<tag> to fetch from a release" >&2
-    exit 1
+  # Same machine-agnostic lookup as sync-book-content.sh: explicit dir, then
+  # the conventional sibling, then a bounded search under $HOME. If none of
+  # that finds a real checkout, warn and skip instead of failing the build —
+  # use KAIKAI_BOOK_RELEASE for a lookup that never depends on the local disk.
+  find_book_dir() {
+    if [ -n "${KAIKAI_BOOK_DIR:-}" ]; then
+      if [ -d "$KAIKAI_BOOK_DIR" ]; then
+        printf '%s\n' "$KAIKAI_BOOK_DIR"
+        return 0
+      fi
+      echo "warn: KAIKAI_BOOK_DIR=$KAIKAI_BOOK_DIR does not exist, searching elsewhere" >&2
+    fi
+
+    if [ -d "../kaikai-book" ]; then
+      printf '%s\n' "../kaikai-book"
+      return 0
+    fi
+
+    if [ -n "${HOME:-}" ]; then
+      local cand
+      while IFS= read -r cand; do
+        if [ -d "$cand/borradores/build-pdf" ]; then
+          printf '%s\n' "$cand"
+          return 0
+        fi
+      done < <(find "$HOME" -maxdepth 6 -type d -name kaikai-book \
+                  -not -path '*/node_modules/*' -not -path '*/.git/*' 2>/dev/null)
+    fi
+
+    return 1
+  }
+
+  if ! BOOK_DIR="$(find_book_dir)"; then
+    echo "warn: kaikai-book checkout not found (checked \$KAIKAI_BOOK_DIR, ../kaikai-book, and a search under \$HOME)." >&2
+    echo "warn: building without book PDFs. Clone kaikailang-org/kaikai-book next to this repo, set KAIKAI_BOOK_DIR, or set KAIKAI_BOOK_RELEASE=<tag> to fetch from a release." >&2
+    exit 0
   fi
+  echo "using kaikai-book at $BOOK_DIR" >&2
   cd "$BOOK_DIR/borradores/build-pdf"
   bash build.sh
   bash build-en.sh
