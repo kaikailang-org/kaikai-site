@@ -1,7 +1,12 @@
 ---
 import Base from './Base.astro';
 import { t, type Lang } from '../i18n/ui';
-import { getBookChapters, bookChapterPath, type BookEntry } from '../lib/book';
+import {
+  getBookChapters,
+  bookChapterPath,
+  bookCounterpartPath,
+  type BookEntry,
+} from '../lib/book';
 
 interface Props {
   entry: BookEntry;
@@ -17,6 +22,7 @@ const chapters = await getBookChapters(lang);
 const mainChapters = chapters.filter((c) => c.data.part === 'chapter');
 const appendices = chapters.filter((c) => c.data.part === 'appendix');
 const indexPath = bookChapterPath(lang, '').replace(/\/$/, '');
+const altPath = await bookCounterpartPath(entry);
 
 function tocLink(c: BookEntry) {
   return {
@@ -27,7 +33,7 @@ function tocLink(c: BookEntry) {
 }
 ---
 
-<Base title={`${entry.data.title} · kaikai`} lang={lang}>
+<Base title={`${entry.data.title} · kaikai`} lang={lang} altPath={altPath}>
   <div class="book-reader container">
     <aside class="book-toc" aria-label={tt('book.contents')}>
       <a class="toc-home" href={indexPath}>{tt('nav.book')}</a>

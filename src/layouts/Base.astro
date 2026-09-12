@@ -8,9 +8,12 @@ interface Props {
   title: string;
   description?: string;
   lang?: Lang;
+  /** Passed through to the header for pages whose counterpart in the other
+   *  edition does not share this path. */
+  altPath?: string;
 }
 
-const { title, description, lang: explicitLang } = Astro.props;
+const { title, description, lang: explicitLang, altPath } = Astro.props;
 const lang: Lang = explicitLang ?? getLangFromUrl(Astro.url);
 const desc =
   description ??
@@ -71,7 +74,7 @@ const desc =
     />
   </head>
   <body>
-    <Header lang={lang} />
+    <Header lang={lang} altPath={altPath} />
     <main>
       <slot />
     </main>
