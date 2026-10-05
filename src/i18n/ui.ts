@@ -71,7 +71,7 @@ export const ui = {
     'examples.page.lead':
       'Los programas del quickstart, en orden de lectura. Cada uno cabe en una pantalla y muestra una idea del lenguaje.',
     'examples.page.note':
-      'Todos se ejecutan tal cual con kai run. La salida que documenta cada cabecera es la que produce el programa en kaikai 0.110.',
+      'Todos se ejecutan tal cual con kai run. La salida que documenta cada cabecera es la que produce el programa en kaikai 0.130.',
     'examples.page.eyebrow': 'Quickstart',
     'examples.page.index': 'Índice de ejemplos',
     'examples.page.output': 'Salida',
@@ -175,7 +175,7 @@ export const ui = {
     'examples.page.lead':
       'The quickstart programs, in reading order. Each fits on a screen and shows one idea from the language.',
     'examples.page.note':
-      'They all run as-is with kai run. The output each header documents is what the program prints on kaikai 0.110.',
+      'They all run as-is with kai run. The output each header documents is what the program prints on kaikai 0.130.',
     'examples.page.eyebrow': 'Quickstart',
     'examples.page.index': 'Example index',
     'examples.page.output': 'Output',
