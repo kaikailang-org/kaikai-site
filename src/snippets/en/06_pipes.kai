@@ -15,7 +15,7 @@ fn divisors(n: Int) : [Int] = [1, n]
 fn is_even(n: Int) : Bool = n % 2 == 0
 
 fn main() {
-  # `[1..4]` is a range literal — no hand-written accumulator loop.
+  # `[1..4]` is a range literal: no hand-written accumulator loop.
   # `[1..10..2]` adds a step.
   let total = [1..4]                  # [1, 2, 3, 4]
     | square                          # [1, 4, 9, 16]      (map)

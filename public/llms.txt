@@ -5,10 +5,10 @@
 ## Documentación
 
 - [Inicio (es)](https://kaikai-lang.org/): visión general del lenguaje, principios de diseño y ejemplos cortos.
-- [Empezar (es)](https://kaikai-lang.org/get-started/): instalación y primeros pasos con el toolchain de kaikai.
+- [Empezar (es)](https://kaikai-lang.org/get-started/): instalación y primeros pasos con las herramientas de kaikai.
 - [El libro (es)](https://kaikai-lang.org/book/): "Programación efectiva con kaikai", el libro del lenguaje; descarga directa en [PDF](https://kaikai-lang.org/kaikai-libro-es.pdf).
 - [Ejemplos (es)](https://kaikai-lang.org/examples/): programas de ejemplo que ilustran sintaxis, tipos y efectos.
-- [Ecosistema (es)](https://kaikai-lang.org/ecosystem/): librerías, herramientas y tooling alrededor del lenguaje.
+- [Ecosistema (es)](https://kaikai-lang.org/ecosystem/): bibliotecas y herramientas alrededor del lenguaje.
 - [Comunidad (es)](https://kaikai-lang.org/community/): canales de discusión, contribuciones y código de conducta.
 - [El nombre (es)](https://kaikai-lang.org/about/): historia y significado del nombre kaikai.
 
@@ -24,7 +24,7 @@
 
 ## Código fuente
 
-- [kaikailang-org/kaikai](https://github.com/kaikailang-org/kaikai): compilador, runtime y stdlib del lenguaje (funcional, tipado estático, efectos algebraicos, compilación LLVM nativa).
+- [kaikailang-org/kaikai](https://github.com/kaikailang-org/kaikai): compilador, entorno de ejecución y biblioteca estándar del lenguaje (funcional, tipado estático, efectos algebraicos, compilación LLVM nativa).
 - [kaikailang-org/kaikai-book](https://github.com/kaikailang-org/kaikai-book): fuentes del libro "Effective Programming with kaikai" / "Programación efectiva con kaikai".
 - [kaikailang-org/kaikai-site](https://github.com/kaikailang-org/kaikai-site): código fuente del sitio kaikai-lang.org.
 

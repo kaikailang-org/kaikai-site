@@ -48,7 +48,7 @@ const items = await Promise.all(
 );
 ---
 
-<section class="gallery">
+<section class="gallery page backdrop">
   <div class="container">
     <header class="gallery-head">
       <p class="eyebrow">{tt('examples.page.eyebrow')}</p>
@@ -78,9 +78,6 @@ const items = await Promise.all(
         <div class="ex-body">
           <div class="window">
             <div class="window-chrome">
-              <span class="dot red"></span>
-              <span class="dot yellow"></span>
-              <span class="dot green"></span>
               <span class="filename">{it.file}</span>
             </div>
             <div class="code-body" set:html={it.html} />
@@ -99,26 +96,6 @@ const items = await Promise.all(
 </section>
 
 <style>
-  .gallery {
-    padding-block: var(--space-16) var(--space-12);
-  }
-  .eyebrow {
-    color: var(--accent);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-2);
-  }
-  .gallery-head {
-    margin-bottom: var(--space-12);
-  }
-  .lead {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    max-width: 60ch;
-    line-height: 1.6;
-    color: var(--fg-muted);
-  }
 
   /* Index: chips that wrap, instead of a boxed multi-column list. */
   .jump {
@@ -166,8 +143,8 @@ const items = await Promise.all(
     font-size: 2rem;
     line-height: 1;
     font-weight: 600;
-    color: var(--accent);
-    opacity: 0.35;
+    color: var(--accent-warm);
+    opacity: 0.55;
   }
   .example h2 {
     margin: 0 0 0.2rem;
@@ -181,7 +158,6 @@ const items = await Promise.all(
   .ex-desc {
     margin: 0;
     color: var(--fg-muted);
-    font-family: var(--font-serif);
     font-size: 1.02rem;
     line-height: 1.55;
     max-width: 58ch;
@@ -199,38 +175,31 @@ const items = await Promise.all(
   .term {
     background: var(--code-bg);
     border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
+    border: 1px solid var(--code-border);
     overflow: hidden;
   }
   .window-chrome,
   .term-chrome {
     display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.55rem 0.9rem;
-    background: rgba(255, 255, 255, 0.04);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: rgba(230, 237, 243, 0.62);
-  }
-  .term-chrome {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .dot {
-    width: 0.7rem;
-    height: 0.7rem;
-    border-radius: 50%;
-    display: inline-block;
-  }
-  .dot.red { background: #ff5f57; }
-  .dot.yellow { background: #febc2e; }
-  .dot.green { background: #28c840; }
-  .filename {
-    margin-left: 0.6rem;
+    border-bottom: 1px solid var(--code-border);
+    background: rgba(255, 255, 255, 0.03);
     font-family: var(--font-mono);
     font-size: 0.78rem;
+    color: rgba(230, 237, 243, 0.8);
+  }
+  .filename,
+  .term-chrome {
+    padding: 0.6rem 1rem;
+  }
+  .filename {
+    border-bottom: 2px solid var(--accent-soft);
+    margin-bottom: -1px;
+  }
+  .term-chrome {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(230, 237, 243, 0.55);
   }
 
   /* Shiki sets background-color inline, which would paint a lighter slab

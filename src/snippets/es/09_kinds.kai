@@ -1,19 +1,19 @@
 # Kinds: las unidades de medida no son un caso especial.
 #
-# Los tipos clasifican valores; los kinds clasifican tipos.
+# Los tipos clasifican valores y los kinds clasifican tipos.
 #
 #   42     : Int       un valor,   y su tipo
 #   Int    : Type      un tipo,    y su kind
 #   m      : Measure   una unidad, y su kind
 #
-# Entonces `unit m` no es sintaxis especial atornillada al compilador.
-# Mints un habitante del kind `Measure`, exactamente como `type` mints
-# uno de `Type` y `effect` uno de `Effect`. Las unidades de medida son
-# solo el kind `Measure` — nada más.
+# Por eso `unit m` no es sintaxis especial metida en el compilador.
+# Crea un habitante del kind `Measure`, igual que `type` crea uno de
+# `Type` y `effect` uno de `Effect`. Las unidades de medida son el
+# kind `Measure` y nada más.
 #
-# Todo kind se declara sobre una *teoría*, y la teoría es la que
-# decide el álgebra que obedecen sus habitantes. Esa elección es toda
-# la superficie de diseño: se escoge para calzar con el dominio.
+# Todo kind se declara sobre una *teoría*, y la teoría decide el
+# álgebra que obedecen sus habitantes. Esa elección es todo lo que hay
+# que diseñar: la escoges según tu dominio.
 #
 #   $ kai run examples/quickstart/09_kinds.kai
 #   piso=12 m^2

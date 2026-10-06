@@ -17,7 +17,7 @@ effect Log {
 }
 
 fn greet(name: String) : Unit / Log {
-  # `#{...}` interpolates into the string — no manual concatenation.
+  # `#{...}` interpolates into the string, with no manual concatenation.
   Log.log("hello, #{name}")
 }
 

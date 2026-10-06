@@ -1,9 +1,9 @@
-# Familia de pipes: cuatro operadores, cuatro intenciones.
+# Tuberías: cuatro operadores, cuatro intenciones.
 #
-#   |>   apply       aplica una función al valor de la izquierda
-#   |    map         mapea sobre la colección
-#   ||   flat-map    mapea y aplana el resultado
-#   |?   filter      conserva los elementos que cumplen el predicado
+#   |>   aplica        le pasa el valor de la izquierda a una función
+#   |    transforma    aplica la función a cada elemento
+#   ||   aplana        transforma cada elemento y junta los resultados
+#   |?   filtra        conserva los elementos que cumplen la condición
 #
 #   $ kai run examples/quickstart/06_pipes.kai
 #   total=20
@@ -15,13 +15,13 @@ fn divisores(n: Int) : [Int] = [1, n]
 fn es_par(n: Int) : Bool = n % 2 == 0
 
 fn main() {
-  # `[1..4]` es un literal de rango — sin acumulador escrito a mano.
+  # `[1..4]` es un literal de rango: no hace falta un acumulador a mano.
   # `[1..10..2]` agrega un paso.
   let total = [1..4]                  # [1, 2, 3, 4]
-    | cuadrado                        # [1, 4, 9, 16]      (map)
-    || divisores                      # [1, 1, 1, 4, 1, 9, 1, 16] (flat-map)
-    |? es_par                         # [4, 16]            (filter)
-    |> list.sum                       # 20                 (apply)
+    | cuadrado                        # [1, 4, 9, 16]      (transforma)
+    || divisores                      # [1, 1, 1, 4, 1, 9, 1, 16] (aplana)
+    |? es_par                         # [4, 16]            (filtra)
+    |> list.sum                       # 20                 (aplica)
 
   println("total=#{total}")
 }

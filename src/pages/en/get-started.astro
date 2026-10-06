@@ -10,7 +10,7 @@ const helloHtml = await highlightKai(helloSnippet);
 ---
 
 <Base title="Get started · kaikai" lang="en">
-  <article class="get-started-page">
+  <article class="get-started-page page page--doc backdrop">
     <div class="container">
       <header>
         <p class="eyebrow">Get started</p>
@@ -115,46 +115,12 @@ make all</code></pre>
 </Base>
 
 <style>
-  .get-started-page {
-    padding-block: var(--space-16) var(--space-12);
-  }
-  .eyebrow {
-    color: var(--accent);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-2);
-  }
-  .get-started-page header {
-    margin-bottom: var(--space-12);
-  }
-  .lead {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    color: var(--fg-muted);
-    max-width: 60ch;
-    line-height: 1.6;
-  }
-  section {
-    margin-top: var(--space-12);
-    max-width: 70ch;
-  }
-  section h2 {
-    margin-bottom: var(--space-4);
-  }
-  section p {
-    font-family: var(--font-serif);
-    font-size: 1.02rem;
-    line-height: 1.65;
-  }
-  section pre {
-    margin-block: var(--space-4) var(--space-6);
-  }
   .code-block :global(pre.shiki) {
     background: var(--code-bg) !important;
     margin-block: var(--space-4) var(--space-6);
     padding: var(--space-4) var(--space-6);
-    border-radius: var(--radius);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-lg);
     overflow-x: auto;
     font-size: 0.88rem;
   }
@@ -162,7 +128,6 @@ make all</code></pre>
     list-style: none;
     padding: 0;
     margin: 0;
-    font-family: var(--font-serif);
     font-size: 1.05rem;
     line-height: 1.8;
   }

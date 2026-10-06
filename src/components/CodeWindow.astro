@@ -1,0 +1,72 @@
+---
+interface Props {
+  filename: string;
+  /** Highlighted program, as produced by highlightKai. */
+  html: string;
+  /** Shell line that runs the program; shown with its output underneath. */
+  command?: string;
+  output?: string;
+}
+const { filename, html, command, output } = Astro.props;
+---
+
+<figure class="code-window">
+  <figcaption class="tab-bar">
+    <span class="tab">{filename}</span>
+  </figcaption>
+  <div class="code-body" set:html={html} />
+  {command && (
+    <pre class="run"><code><span class="prompt">$ {command}</span>{output && <span class="out">{output}</span>}</code></pre>
+  )}
+</figure>
+
+<style>
+  .code-window {
+    margin: 0;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--code-border);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .tab {
+    padding: 0.6rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: rgba(230, 237, 243, 0.8);
+    border-bottom: 2px solid var(--accent-soft);
+    margin-bottom: -1px;
+  }
+  /* Shiki paints a background inline; clear it so the window reads as one. */
+  .code-body :global(pre.shiki) {
+    background: transparent !important;
+    margin: 0;
+    border-radius: 0;
+    padding: var(--space-4) var(--space-6);
+    font-size: 0.83rem;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .run {
+    margin: 0;
+    border-radius: 0;
+    border-top: 1px solid var(--code-border);
+    background: rgba(0, 0, 0, 0.25);
+    padding: var(--space-3) var(--space-6) var(--space-4);
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  .prompt {
+    display: block;
+    color: rgba(230, 237, 243, 0.5);
+  }
+  .out {
+    display: block;
+    color: var(--code-fg);
+  }
+</style>

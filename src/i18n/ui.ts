@@ -21,40 +21,46 @@ export const ui = {
     'book.contents': 'Contenidos',
     'book.chapters': 'Capítulos',
     'book.appendices': 'Apéndices',
-    'book.readOnline': 'Leer online',
+    'book.readOnline': 'Leer en línea',
     'book.startReading': 'Empezar a leer',
     'book.prev': 'Anterior',
     'book.next': 'Siguiente',
     'book.backToIndex': 'Volver al índice',
 
-    'hero.tagline.line1':
-      'Lenguaje funcional con efectos algebraicos y fibras aisladas. Sin recolector de basura, sin borrow checker.',
-    'hero.tagline.line2':
-      'Diseñado para que humanos y agentes lo escriban juntos.',
+    'hero.title.line1': 'Efectos en el tipo.',
+    'hero.title.line2': 'Memoria sin pausas.',
+    'hero.lead':
+      'kaikai es un lenguaje funcional con efectos algebraicos y fibras aisladas, sin recolector de basura ni verificador de préstamos. Pensado para que personas y agentes lo escriban juntos.',
     'hero.cta.install': 'Instalar',
     'hero.cta.start': 'Empezar',
+    'hero.cta.examples': 'Ver ejemplos',
     'hero.cta.book': 'Leer el libro',
     'hero.whyName': '¿por qué este nombre?', // intencionalmente minúscula: enlace pequeño
 
+    'install.copy': 'Copiar',
+    'install.copied': 'Copiado',
+
     'features.title': 'Por qué kaikai',
+    'features.intro':
+      'Seis ideas que definen el lenguaje, cada una con el código que la muestra.',
     'features.effects.title': 'Efectos algebraicos',
     'features.effects.body':
-      'Efectos visibles en el tipo, handlers compositivos. Sin async/await que se propaga por toda la pila de llamadas.',
-    'features.pipelines.title': 'Familia de pipes',
+      'Lo que una función hace queda escrito en su tipo, y tú decides cómo se resuelve con un manejador. Adiós al async/await que contagia toda la cadena de llamadas.',
+    'features.pipelines.title': 'Familia de tuberías',
     'features.pipelines.body':
-      'Cuatro operadores, cuatro intenciones: |> aplica, | mapea, || aplana, |? filtra. Cada forma dice qué hace antes de leer la función.',
-    'features.memory.title': 'Sin GC, sin borrow checker',
+      'Cuatro operadores, cuatro intenciones: |> aplica, | transforma, || aplana y |? filtra. Sabes qué hace cada paso antes de leer la función.',
+    'features.memory.title': 'Memoria sin recolector de basura',
     'features.memory.body':
-      'Perceus reference counting + fibras aisladas. La memoria es por-fibra; no hay pausas globales.',
-    'features.units.title': 'Kinds: unidades, monedas, regiones',
+      'Conteo de referencias Perceus y fibras aisladas. Cada fibra cuida su propia memoria, así que no hay pausas globales ni un verificador de préstamos al que convencer.',
+    'features.units.title': 'Unidades, monedas y regiones',
     'features.units.body':
-      'Real<m/s> para medidas, monedas que no se mezclan, arenas con region { }. Información en el tipo, costo cero en runtime.',
-    'features.contracts.title': 'Contratos y refinements',
+      'Real<m/s> para medidas, monedas que no se mezclan y regiones de memoria con region { }. La información va en el tipo y no cuesta nada al ejecutar.',
+    'features.contracts.title': 'Contratos y refinamientos',
     'features.contracts.body':
-      'requires, ensures, Int where >= 0. Lo que hace SPARK, sin SMT solver.',
+      'requires, ensures e Int where >= 0. Lo que la función exige y lo que promete se escribe junto a ella, al estilo de SPARK y sin un demostrador SMT.',
     'features.agents.title': 'Diálogo con el compilador',
     'features.agents.body':
-      'Holes (?), --holes-json, diagnósticos JSON. Diseñado para que humanos y agentes escriban juntos.',
+      'Deja un hueco con ? y el compilador te cuenta qué tipo espera ahí, también en JSON. Pensado para que personas y agentes escriban juntos.',
 
     'examples.title': 'Ejemplos',
     'examples.intro':
@@ -62,52 +68,56 @@ export const ui = {
     'examples.tab.hello': 'Hola',
     'examples.tab.fizzbuzz': 'FizzBuzz',
     'examples.tab.effect': 'Efecto',
-    'examples.tab.pipes': 'Pipes',
+    'examples.tab.pipes': 'Tuberías',
     'examples.tab.uom': 'Unidades',
     'examples.tab.kinds': 'Kinds',
     'examples.tab.contracts': 'Contratos',
 
     'examples.page.title': 'Ejemplos',
     'examples.page.lead':
-      'Los programas del quickstart, en orden de lectura. Cada uno cabe en una pantalla y muestra una idea del lenguaje.',
+      'Nueve programas cortos para conocer el lenguaje paso a paso. Cada uno cabe en una pantalla y te muestra una sola idea.',
     'examples.page.note':
-      'Todos se ejecutan tal cual con kai run. La salida que documenta cada cabecera es la que produce el programa en kaikai 0.130.',
-    'examples.page.eyebrow': 'Quickstart',
+      'Puedes ejecutarlos tal cual con kai run. La salida que ves junto a cada uno es la que produce kaikai 0.130.',
+    'examples.page.eyebrow': 'Inicio rápido',
     'examples.page.index': 'Índice de ejemplos',
     'examples.page.output': 'Salida',
 
     'featured.title': 'Míralo correr',
     'featured.intro':
-      'Un programa completo y su salida. Este encadena los cuatro pipes sobre un rango para sumar los cuadrados pares.',
+      'Un programa completo con su salida. Toma los números del 1 al 4 y encadena las cuatro tuberías para sumar los cuadrados pares.',
     'featured.seeAll': 'Ver los nueve ejemplos',
 
     'examples.item.hello.title': 'Hola, mundo',
     'examples.item.hello.desc':
-      'El punto de entrada y el efecto de salida estándar, con handler por defecto.',
+      'Tu primer programa: una función main y una línea que saluda. No hay nada que importar.',
     'examples.item.fizzbuzz.title': 'FizzBuzz',
     'examples.item.fizzbuzz.desc':
-      'Tipos suma, guardas en el match y un pipeline sobre un literal de rango.',
+      'El clásico, resuelto sin bucles: un tipo suma clasifica cada número y una cadena de operadores hace el recorrido.',
     'examples.item.calculator.title': 'Calculadora',
     'examples.item.calculator.desc':
-      'Un tipo suma recursivo como AST, recorrido con calce de patrones.',
+      'Una expresión aritmética es un árbol. Aquí lo defines con un tipo suma y lo recorres calzando patrones.',
     'examples.item.effect.title': 'Efectos',
     'examples.item.effect.desc':
-      'Un efecto propio: la función declara qué usa, quien la llama decide cómo se cumple.',
+      'Defines tu propio efecto. La función dice qué necesita y quien la llama decide cómo se resuelve.',
     'examples.item.concurrent.title': 'Concurrencia',
     'examples.item.concurrent.desc':
-      'Dos fibras cooperativas que ceden el control en puntos explícitos.',
-    'examples.item.pipes.title': 'Pipes',
+      'Dos fibras que se turnan: cada una avanza un paso y le cede el control a la otra.',
+    'examples.item.pipes.title': 'Tuberías',
     'examples.item.pipes.desc':
-      'Cuatro operadores para cuatro intenciones: aplicar, mapear, aplanar y filtrar.',
+      'Cuatro operadores para encadenar pasos: aplicar, transformar, aplanar y filtrar. Se lee de arriba hacia abajo, como una receta.',
     'examples.item.uom.title': 'Unidades de medida',
     'examples.item.uom.desc':
-      'Las unidades viven en el tipo, así que el compilador no deja mezclar monedas.',
+      'Las unidades van en el tipo, así que el compilador no te deja sumar dólares con euros por descuido.',
     'examples.item.kinds.title': 'Kinds',
     'examples.item.kinds.desc':
-      'Por qué las unidades no son un caso especial, y cómo declarar un kind propio.',
+      'Las unidades no son un caso especial del lenguaje. Aquí ves por qué, y cómo declarar un kind propio.',
     'examples.item.contracts.title': 'Contratos',
     'examples.item.contracts.desc':
-      'Precondiciones y postcondiciones que viven en la firma de la función.',
+      'Lo que la función exige y lo que promete, escrito en su propia firma.',
+
+    'cta.title': '¿Lo probamos?',
+    'cta.body':
+      'Se instala con un solo comando en macOS y Linux, sin dependencias. Y el libro te acompaña desde el primer programa hasta un caso de estudio completo.',
 
     'footer.tagline': 'Lenguaje de programación.',
     'footer.copy': 'Por Eduardo Díaz.',
@@ -131,34 +141,40 @@ export const ui = {
     'book.next': 'Next',
     'book.backToIndex': 'Back to contents',
 
-    'hero.tagline.line1':
-      'A functional language with algebraic effects and isolated fibers. No garbage collector, no borrow checker.',
-    'hero.tagline.line2':
-      'Designed to be written with — and by — agents.',
+    'hero.title.line1': 'Effects in the type.',
+    'hero.title.line2': 'Memory with no GC.',
+    'hero.lead':
+      'kaikai is a functional language with algebraic effects and isolated fibers, with no garbage collector and no borrow checker. Designed for people and agents to write together.',
     'hero.cta.install': 'Install',
     'hero.cta.start': 'Get started',
+    'hero.cta.examples': 'See examples',
     'hero.cta.book': 'Read the book',
     'hero.whyName': 'why this name?',
 
+    'install.copy': 'Copy',
+    'install.copied': 'Copied',
+
     'features.title': 'Why kaikai',
+    'features.intro':
+      'Six ideas that define the language, each with the code that shows it.',
     'features.effects.title': 'Algebraic effects',
     'features.effects.body':
-      'Effects visible in the type, composable handlers. No async/await infecting the whole call stack.',
+      'What a function does is written in its type, and you decide how it is resolved with a handler. No more async/await spreading through the whole call stack.',
     'features.pipelines.title': 'Pipe family',
     'features.pipelines.body':
-      'Four operators, four intents: |> applies, | maps, || flat-maps, |? filters. Each form tells you what it does before you read the function.',
+      'Four operators, four intents: |> applies, | maps, || flat-maps and |? filters. You know what each step does before you read the function.',
     'features.memory.title': 'No GC, no borrow checker',
     'features.memory.body':
-      'Perceus reference counting + isolated fibers. Memory is per-fiber; no global pauses.',
+      'Perceus reference counting and isolated fibers. Each fiber looks after its own memory, so there are no global pauses and no borrow checker to argue with.',
     'features.units.title': 'Kinds: units, currencies, regions',
     'features.units.body':
-      'Real<m/s> for measures, currencies that never mix, arenas via region { }. Information in the type, zero runtime cost.',
+      'Real<m/s> for measures, currencies that never mix, and memory regions with region { }. The information lives in the type and costs nothing at run time.',
     'features.contracts.title': 'Contracts & refinements',
     'features.contracts.body':
-      'requires, ensures, Int where >= 0. What SPARK does, without an SMT solver.',
+      'requires, ensures and Int where >= 0. What a function demands and what it promises sit right next to it, in the spirit of SPARK and without an SMT solver.',
     'features.agents.title': 'Dialogue with the compiler',
     'features.agents.body':
-      'Holes (?), --holes-json, structured diagnostics. Designed for humans and agents to write together.',
+      'Leave a hole with ? and the compiler tells you what type it expects there, in JSON too. Designed for people and agents to write together.',
 
     'examples.title': 'Examples',
     'examples.intro':
@@ -173,45 +189,49 @@ export const ui = {
 
     'examples.page.title': 'Examples',
     'examples.page.lead':
-      'The quickstart programs, in reading order. Each fits on a screen and shows one idea from the language.',
+      'Nine short programs to get to know the language one step at a time. Each fits on a screen and shows you a single idea.',
     'examples.page.note':
-      'They all run as-is with kai run. The output each header documents is what the program prints on kaikai 0.130.',
+      'You can run them as they are with kai run. The output next to each one is what kaikai 0.130 prints.',
     'examples.page.eyebrow': 'Quickstart',
     'examples.page.index': 'Example index',
     'examples.page.output': 'Output',
 
     'featured.title': 'See it run',
     'featured.intro':
-      'A whole program and what it prints. This one chains all four pipes over a range to sum the even squares.',
+      'A whole program and what it prints. It takes the numbers 1 to 4 and chains all four pipes to sum the even squares.',
     'featured.seeAll': 'See all nine examples',
 
     'examples.item.hello.title': 'Hello, world',
     'examples.item.hello.desc':
-      'The entry point and the default-handled stdout effect.',
+      'Your first program: a main function and one line that says hello. Nothing to import.',
     'examples.item.fizzbuzz.title': 'FizzBuzz',
     'examples.item.fizzbuzz.desc':
-      'Sum types, match guards, and a pipeline over a range literal.',
+      'The classic, solved without loops: a sum type classifies each number and a chain of operators does the walking.',
     'examples.item.calculator.title': 'Calculator',
     'examples.item.calculator.desc':
-      'A recursive sum type as an AST, walked by pattern matching.',
+      'An arithmetic expression is a tree. Here you define it with a sum type and walk it by pattern matching.',
     'examples.item.effect.title': 'Effects',
     'examples.item.effect.desc':
-      'A custom effect: the function declares what it uses, the caller decides how it is met.',
+      'You define your own effect. The function says what it needs and the caller decides how it is resolved.',
     'examples.item.concurrent.title': 'Concurrency',
     'examples.item.concurrent.desc':
-      'Two cooperative fibers yielding control at explicit points.',
+      'Two fibers taking turns: each one moves a step forward and hands control to the other.',
     'examples.item.pipes.title': 'Pipes',
     'examples.item.pipes.desc':
-      'Four operators for four intents: apply, map, flat-map and filter.',
+      'Four operators for chaining steps: apply, map, flat-map and filter. It reads top to bottom, like a recipe.',
     'examples.item.uom.title': 'Units of measure',
     'examples.item.uom.desc':
-      'Units live in the type, so the compiler will not let you mix currencies.',
+      'Units live in the type, so the compiler will not let you add dollars to euros by accident.',
     'examples.item.kinds.title': 'Kinds',
     'examples.item.kinds.desc':
-      'Why units are not a special case, and how to declare a kind of your own.',
+      'Units are not a special case in the language. Here you see why, and how to declare a kind of your own.',
     'examples.item.contracts.title': 'Contracts',
     'examples.item.contracts.desc':
-      'Preconditions and postconditions that live in the function signature.',
+      'What a function demands and what it promises, written in its own signature.',
+
+    'cta.title': 'Shall we try it?',
+    'cta.body':
+      'It installs with a single command on macOS and Linux, with no dependencies. And the book walks with you from the first program to a complete case study.',
 
     'footer.tagline': 'Programming language.',
     'footer.copy': 'By Eduardo Díaz.',

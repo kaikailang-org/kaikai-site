@@ -4,7 +4,7 @@ import { links } from '../lib/links';
 ---
 
 <Base title="El nombre · kaikai" lang="es">
-  <article class="name-page">
+  <article class="name-page page page--doc backdrop">
     <div class="container">
       <header>
         <p class="eyebrow">El nombre</p>
@@ -42,25 +42,24 @@ import { links } from '../lib/links';
         <p>
           El nombre no es un gesto aislado. Las bibliotecas del
           ecosistema llevan nombres en rapanui elegidos por lo que
-          hacen —<em>ahu</em>, la plataforma de piedra;
+          hacen: <em>ahu</em>, la plataforma de piedra;
           <em>kohau</em>, la tablilla rongorongo; <em>henua</em>, la
-          tierra— y están descritas en
+          tierra. Las encuentras en
           <a href="/ecosystem">la página del ecosistema</a>.
         </p>
         <p>
           Las <strong>ediciones</strong> del lenguaje llevan nombres
-          geográficos de la isla. Una edición es el mecanismo de
-          estabilidad: dentro de una edición la superficie del
-          lenguaje no rompe, y los cambios incompatibles solo ocurren
-          al cruzar de una a la siguiente, siempre con la opción
-          explícita de quien programa.
+          geográficos de la isla. Una edición es una promesa de
+          estabilidad: dentro de una edición tu código sigue
+          compilando, y los cambios incompatibles solo llegan al pasar
+          a la siguiente, cuando tú decides dar el paso.
         </p>
         <ul class="editions">
           <li>
             <span class="ed-name">Tongariki</span>
             <span class="ed-note">
-              La fase previa. Iteración rápida sobre los internos
-              mientras la superficie de usuario se asentaba.
+              La etapa previa. Se iteró rápido por dentro mientras el
+              lenguaje que ves hoy tomaba forma.
             </span>
           </li>
           <li class="current">
@@ -74,7 +73,7 @@ import { links } from '../lib/links';
           <li>
             <span class="ed-name">Orongo</span>
             <span class="ed-note">
-              La edición de estabilización, todavía por cortar.
+              La edición de estabilización, que todavía no se publica.
             </span>
           </li>
         </ul>
@@ -107,40 +106,9 @@ import { links } from '../lib/links';
 </Base>
 
 <style>
-  .name-page {
-    padding-block: var(--space-16) var(--space-12);
-  }
-  .eyebrow {
-    color: var(--accent);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-2);
-  }
-  .name-page header {
-    margin-bottom: var(--space-12);
-  }
   .name-page h1 {
     font-family: var(--font-mono);
     color: var(--accent);
-  }
-  .lead {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    max-width: 62ch;
-    line-height: 1.65;
-  }
-  section {
-    margin-top: var(--space-12);
-    max-width: 70ch;
-  }
-  section h2 {
-    margin-bottom: var(--space-4);
-  }
-  section p {
-    font-family: var(--font-serif);
-    font-size: 1.02rem;
-    line-height: 1.65;
   }
   section em {
     color: var(--accent);
@@ -178,7 +146,6 @@ import { links } from '../lib/links';
   .ed-note {
     display: block;
     color: var(--fg-muted);
-    font-family: var(--font-serif);
     line-height: 1.55;
     margin-top: 0.2rem;
   }

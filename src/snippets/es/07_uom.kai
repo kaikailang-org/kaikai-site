@@ -1,10 +1,10 @@
-# Unidades de medida: aritmética que no confunde monedas.
+# Unidades de medida: cuentas que no confunden monedas.
 #
-# Las unidades viven en el tipo. El compilador rechaza sumar USD
-# con EUR; convertir entre monedas requiere un paso explícito.
+# Las unidades van en el tipo. El compilador no te deja sumar USD con
+# EUR: para pasar de una moneda a otra hay que dar un paso explícito.
 #
-# `unit` no es una función atornillada al lenguaje: mints un habitante
-# del kind `Measure`. El ejemplo de kinds muestra qué gana con eso.
+# `unit` no es un agregado especial del lenguaje: crea un habitante
+# del kind `Measure`. El ejemplo de kinds muestra qué se gana con eso.
 #
 #   $ kai run examples/quickstart/07_uom.kai
 #   balance=845.1 USD
