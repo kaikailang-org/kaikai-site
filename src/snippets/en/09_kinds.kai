@@ -9,7 +9,7 @@
 # So `unit m` is not special syntax bolted onto the compiler. It mints
 # a habitant of the kind `Measure`, exactly the way `type` mints one
 # of `Type` and `effect` mints one of `Effect`. Units of measure are
-# just the kind `Measure` — nothing more.
+# just the kind `Measure`, nothing more.
 #
 # Every kind is declared over a *theory*, and the theory is what
 # decides the algebra its habitants obey. That choice is the whole
@@ -27,7 +27,7 @@ unit m
 # ranges over units instead of over types.
 fn area[u: Measure](w: Real<u>, h: Real<u>) : Real<u^2> = w * h
 
-# Because units are only a kind, the machinery is open — declare your
+# Because units are only a kind, the machinery is open: declare your
 # own. Experience points add up, but `xp^2` is meaningless, so this
 # kind is declared over `Module`: an additive group with NO
 # multiplicative closure. A quantity is either scalar or carries

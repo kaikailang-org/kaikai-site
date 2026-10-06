@@ -16,7 +16,7 @@ const PROMPT = /^\s*\$\s+(.*)$/;
  * Split a quickstart snippet into its three parts.
  *
  * Every snippet opens with a comment header that explains the program and
- * then shows a shell transcript — the `kai run` line plus the output it
+ * then shows a shell transcript: the `kai run` line plus the output it
  * produces. Rendering that header verbatim above the code duplicates the
  * page's own prose, so the parts are separated and laid out on their own.
  */

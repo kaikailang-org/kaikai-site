@@ -1,8 +1,9 @@
-# Mini calculadora — tipos suma recursivos + calce de patrones.
+# Mini calculadora.
 #
-# `Expr` es un tipo suma que se menciona a sí mismo en sus propios
-# constructores, lo que convierte al AST en un árbol. `eval` recorre
-# ese árbol calzando cada forma y recursando sobre los hijos.
+# Una expresión aritmética es un árbol. `Expr` es un tipo suma que se
+# nombra a sí mismo en sus constructores, y con eso basta para
+# describirlo. `eval` recorre el árbol calzando cada forma y bajando
+# a sus hijos.
 #
 #   $ kai run examples/quickstart/03_calculator.kai
 #   2 + 3 * 4 = 14
@@ -13,8 +14,8 @@ type Expr
   | Mult(Expr, Expr)
   | Neg(Expr)
 
-# Una función cuyo cuerpo entero es una sola expresión usa `=`: sin
-# llaves y sin `return`.
+# Cuando el cuerpo de una función es una sola expresión basta con
+# `=`: sin llaves y sin `return`.
 fn eval(e: Expr) : Int = match e {
   Lit(n)     -> n
   Suma(l, r) -> eval(l) + eval(r)

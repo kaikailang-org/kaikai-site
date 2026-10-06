@@ -12,64 +12,19 @@ const firstChapter = chapters[0];
 ---
 
 <Base title="El libro · kaikai" lang="es">
-  <article class="book-page">
+  <article class="book-page page page--doc backdrop">
     <div class="container">
       <header>
         <p class="eyebrow">El libro</p>
         <h1>Programación efectiva con kaikai</h1>
         <p class="byline">Por Eduardo Díaz.</p>
-      </header>
-
-      <div class="prose">
-        <p>
+        <p class="lead">
           Un libro de lectura, no un manual de referencia. La referencia
-          vive en el repo del lenguaje, en <code>kaikai/docs</code>. Este
+          vive en el repositorio del lenguaje, en <code>kaikai/docs</code>. Este
           libro es el acompañante extenso: capítulos que explican el
           <em>porqué</em> detrás del lenguaje y recorren programas
           ejecutables desde la primera página.
         </p>
-        <p>
-          La inspiración estructural es <em>The Go Programming Language</em>
-          de Donovan y Kernighan: prosa densa, programas reales desde el
-          capítulo uno, casos de estudio integradores, ejercicios al
-          final de cada capítulo. La inspiración pedagógica es
-          <em>Learn You a Haskell for Great Good!</em> de Lipovača: tono
-          cálido donde el material es nuevo, conceptos introducidos
-          gradualmente, espacio para que el lector respire.
-        </p>
-
-        <h2>Para quién</h2>
-        <p>
-          Un programador con experiencia en algún lenguaje imperativo u
-          orientado a objetos (Python, Go, Java, JavaScript, C#, Rust) que
-          no necesariamente ha trabajado con lenguajes funcionales.
-          Conceptos como tipos algebraicos, pattern matching,
-          inmutabilidad por defecto y efectos visibles en el tipo se
-          introducen con puentes desde lo que el lector ya conoce.
-        </p>
-        <p>
-          No es para principiantes absolutos. Hay que saber qué es una
-          función, un tipo, una lista y una prueba.
-        </p>
-
-        <h2>Edición bilingüe</h2>
-        <p>
-          El libro existe en español e inglés, ambas ediciones de
-          primera clase. Ninguna es traducción de la otra: cada una se
-          escribió en su voz nativa, con ejemplos cuyos comentarios y
-          nombres de archivo viven en el idioma de la edición que los
-          cita.
-        </p>
-
-        <h2>Estado</h2>
-        <p>
-          El libro está en escritura activa. 19 capítulos planificados
-          más 6 apéndices. El repositorio incluye el índice completo, los
-          capítulos terminados y los ejemplos que cada capítulo cita.
-          Se escribe y valida contra la edición <strong>Hanga Roa</strong>
-          del lenguaje, la actual.
-        </p>
-
         <div class="cta-row">
           {firstChapter && (
             <a class="btn" href={bookChapterPath('es', firstChapter.data.slug)}>
@@ -87,10 +42,60 @@ const firstChapter = chapters[0];
           </a>
         </div>
         <p class="pdf-note">
-          Borrador en evolución. Se lee online por capítulos; el PDF se
+          Borrador en evolución. Se lee en línea por capítulos; el PDF se
           regenera con cada cambio significativo del libro.
         </p>
-      </div>
+      </header>
+
+      <section>
+        <p>
+          La inspiración estructural es <em>The Go Programming Language</em>
+          de Donovan y Kernighan: prosa densa, programas reales desde el
+          capítulo uno, casos de estudio integradores, ejercicios al
+          final de cada capítulo. La inspiración pedagógica es
+          <em>Learn You a Haskell for Great Good!</em> de Lipovača: tono
+          cálido donde el material es nuevo, conceptos introducidos
+          gradualmente, espacio para que el lector respire.
+        </p>
+      </section>
+
+      <section>
+        <h2>Para quién</h2>
+        <p>
+          Un programador con experiencia en algún lenguaje imperativo u
+          orientado a objetos (Python, Go, Java, JavaScript, C#, Rust) que
+          no necesariamente ha trabajado con lenguajes funcionales.
+          Conceptos como tipos algebraicos, calce de patrones,
+          inmutabilidad por defecto y efectos visibles en el tipo se
+          introducen con puentes desde lo que el lector ya conoce.
+        </p>
+        <p>
+          No es para principiantes absolutos. Hay que saber qué es una
+          función, un tipo, una lista y una prueba.
+        </p>
+      </section>
+
+      <section>
+        <h2>Edición bilingüe</h2>
+        <p>
+          El libro existe en español e inglés, ambas ediciones de
+          primera clase. Ninguna es traducción de la otra: cada una se
+          escribió en su voz nativa, con ejemplos cuyos comentarios y
+          nombres de archivo viven en el idioma de la edición que los
+          cita.
+        </p>
+      </section>
+
+      <section>
+        <h2>Estado</h2>
+        <p>
+          El libro está en escritura activa. 19 capítulos planificados
+          más 6 apéndices. El repositorio incluye el índice completo, los
+          capítulos terminados y los ejemplos que cada capítulo cita.
+          Se escribe y valida contra la edición <strong>Hanga Roa</strong>
+          del lenguaje, la actual.
+        </p>
+      </section>
 
       {chapters.length > 0 && (
         <section class="toc" aria-labelledby="toc-title">
@@ -121,29 +126,11 @@ const firstChapter = chapters[0];
 </Base>
 
 <style>
-  .book-page {
-    padding-block: var(--space-16) var(--space-12);
-  }
-  .eyebrow {
-    color: var(--accent);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-2);
-  }
-  .book-page header {
-    margin-bottom: var(--space-12);
-  }
   .byline {
     color: var(--fg-muted);
-    font-family: var(--font-serif);
-    font-style: italic;
-  }
-  .book-page h2 {
-    margin-top: var(--space-12);
   }
   .cta-row {
-    margin-top: var(--space-12);
+    margin-top: var(--space-6);
     display: flex;
     gap: var(--space-3);
     flex-wrap: wrap;
@@ -153,15 +140,7 @@ const firstChapter = chapters[0];
     color: var(--fg-subtle);
     font-size: 0.88rem;
     font-style: italic;
-    font-family: var(--font-serif);
   }
-  .toc {
-    margin-top: var(--space-16);
-    padding-top: var(--space-8);
-    border-top: 1px solid var(--border);
-    max-width: var(--content-width);
-  }
-  .toc h2 { margin-bottom: var(--space-6); }
   .toc h3 {
     margin-top: var(--space-8);
     margin-bottom: var(--space-4);
@@ -171,24 +150,32 @@ const firstChapter = chapters[0];
     list-style: none;
     margin: 0;
     padding: 0;
-    counter-reset: chapter;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
   }
   .toc-chapters li {
-    counter-increment: chapter;
-    border-bottom: 1px solid var(--border);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: border-color 120ms ease;
   }
-  .toc-chapters.appendices { counter-reset: none; }
-  .toc-chapters.appendices li { counter-increment: none; }
+  .toc-chapters li:hover {
+    border-color: var(--border-strong);
+  }
   .toc-chapters a {
     display: block;
-    padding: var(--space-3) 0;
-    font-family: var(--font-serif);
-    font-size: 1.05rem;
+    height: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: 0.98rem;
+    font-weight: 500;
     color: var(--fg);
   }
   .toc-chapters a:hover {
     color: var(--accent);
     text-decoration: none;
-    padding-left: var(--space-2);
+  }
+  @media (max-width: 40rem) {
+    .toc-chapters { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

@@ -1,5 +1,6 @@
 ---
 import { t, type Lang } from '../i18n/ui';
+import { highlightKai } from '../lib/highlight';
 
 interface Props {
   lang: Lang;
@@ -7,24 +8,87 @@ interface Props {
 const { lang } = Astro.props;
 const tt = t(lang);
 
-const features = [
-  { titleKey: 'features.effects.title',    bodyKey: 'features.effects.body' },
-  { titleKey: 'features.pipelines.title',  bodyKey: 'features.pipelines.body' },
-  { titleKey: 'features.memory.title',     bodyKey: 'features.memory.body' },
-  { titleKey: 'features.units.title',      bodyKey: 'features.units.body' },
-  { titleKey: 'features.contracts.title',  bodyKey: 'features.contracts.body' },
-  { titleKey: 'features.agents.title',     bodyKey: 'features.agents.body' },
-] as const;
+// Each card carries a fragment lifted from the quickstart programs or the
+// book, so the identifiers follow the edition's language.
+const code = {
+  es: {
+    effects: `fn greet(name: String) : Unit / Log {
+  Log.log("hello, #{name}")
+}`,
+    pipelines: `let total = [1..4]
+  | cuadrado
+  || divisores
+  |? es_par
+  |> list.sum`,
+    memory: `let f = spawn.spawn { trabajador("B", 3) }
+trabajador("A", 3)
+spawn.await(f)`,
+    units: `fn convertir_a_usd(monto: Real<EUR>, tasa: Real<USD/EUR>) : Real<USD>
+  = monto * tasa`,
+    contracts: `fn dividir(a: Int, b: Int) : Int
+  requires b != 0
+  ensures  result * b == a
+{
+  a / b
+}`,
+    agents: `fn area_circulo(r: Real) : Real = ?formula`,
+  },
+  en: {
+    effects: `fn greet(name: String) : Unit / Log {
+  Log.log("hello, #{name}")
+}`,
+    pipelines: `let total = [1..4]
+  | square
+  || divisors
+  |? is_even
+  |> list.sum`,
+    memory: `let f = spawn.spawn { worker("B", 3) }
+worker("A", 3)
+spawn.await(f)`,
+    units: `fn to_usd(amount: Real<EUR>, rate: Real<USD/EUR>) : Real<USD>
+  = amount * rate`,
+    contracts: `fn divide(a: Int, b: Int) : Int
+  requires b != 0
+  ensures  result * b == a
+{
+  a / b
+}`,
+    agents: `fn circle_area(r: Real) : Real = ?formula`,
+  },
+} as const;
+
+const ids = ['effects', 'pipelines', 'memory', 'units', 'contracts', 'agents'] as const;
+
+const features = await Promise.all(
+  ids.map(async (id) => ({
+    id,
+    title: tt(`features.${id}.title`),
+    body: tt(`features.${id}.body`),
+    html: await highlightKai(code[lang][id]),
+  })),
+);
 ---
 
 <section class="features">
   <div class="container">
-    <h2>{tt('features.title')}</h2>
+    <header class="section-head">
+      <h2>{tt('features.title')}</h2>
+      <p>{tt('features.intro')}</p>
+    </header>
     <div class="grid">
-      {features.map(({ titleKey, bodyKey }) => (
+      {features.map(({ id, title, body, html }, i) => (
         <article class="card">
-          <h3>{tt(titleKey)}</h3>
-          <p>{tt(bodyKey)}</p>
+          <div class="card-text">
+            <span class="num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </div>
+          <div class="card-code">
+            <Fragment set:html={html} />
+            {id === 'agents' && (
+              <pre class="run"><code><span class="prompt">$ kai build --holes-json</span>"expected_type": "Real"</code></pre>
+            )}
+          </div>
         </article>
       ))}
     </div>
@@ -33,36 +97,89 @@ const features = [
 
 <style>
   .features {
-    padding-block: var(--space-12);
-    border-top: 1px solid var(--border);
+    padding-block: var(--space-16);
+    background: var(--bg-subtle);
+    border-block: 1px solid var(--border);
   }
-  .features h2 {
+  .section-head {
     margin-bottom: var(--space-8);
+  }
+  .section-head h2 {
+    margin-bottom: var(--space-2);
+  }
+  .section-head p {
+    color: var(--fg-muted);
+    margin: 0;
   }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-6);
   }
   .card {
-    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
     background: var(--bg-elevated);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
+    overflow: hidden;
     transition: border-color 120ms ease, transform 120ms ease;
   }
   .card:hover {
     border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+  .card-text {
+    padding: var(--space-6);
+    flex: 1;
+  }
+  .num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent-warm);
+    margin-bottom: var(--space-2);
   }
   .card h3 {
-    margin-bottom: var(--space-3);
-    color: var(--accent);
-    font-size: 1.1rem;
+    margin-bottom: var(--space-2);
+    font-size: 1.2rem;
   }
   .card p {
     color: var(--fg-muted);
     margin: 0;
     line-height: 1.55;
     font-size: 0.95rem;
+  }
+  .card-code {
+    background: var(--code-bg);
+    border-top: 1px solid var(--code-border);
+  }
+  /* Shiki paints a background inline; the card supplies its own. */
+  .card-code :global(pre.shiki) {
+    background: transparent !important;
+    margin: 0;
+    border-radius: 0;
+    padding: var(--space-4) var(--space-6);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .run {
+    margin: 0;
+    border-radius: 0;
+    border-top: 1px solid var(--code-border);
+    background: rgba(0, 0, 0, 0.25);
+    padding: var(--space-3) var(--space-6);
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+  .prompt {
+    display: block;
+    color: rgba(230, 237, 243, 0.5);
+  }
+
+  @media (max-width: 50rem) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

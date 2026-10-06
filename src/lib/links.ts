@@ -10,4 +10,6 @@ export const links = {
     en: '/kaikai-book-en.pdf',
   },
   blog: 'https://lnds.net',
+  installCommand:
+    'curl -fsSL https://raw.githubusercontent.com/kaikailang-org/kaikai/main/install.sh | sh',
 } as const;

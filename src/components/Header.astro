@@ -212,12 +212,21 @@ const otherPath =
     .header-inner {
       flex-wrap: wrap;
     }
+    .header-actions { margin-left: auto; }
+    /* flex-basis, not width: the base rule's `flex: 1` zeroes the basis. */
     .primary-nav {
       order: 3;
-      width: 100%;
+      flex: 1 0 100%;
+      min-width: 0;
       justify-content: flex-start;
     }
-    .primary-nav ul { gap: var(--space-4); }
+    .primary-nav ul {
+      gap: var(--space-4);
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
   }
 </style>
 

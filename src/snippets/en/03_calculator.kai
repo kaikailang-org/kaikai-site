@@ -1,4 +1,4 @@
-# Mini calculator — recursive sum types + pattern match.
+# Mini calculator: recursive sum types and pattern matching.
 #
 # `Expr` is a sum type that mentions itself in its own constructors,
 # making the AST a tree. `eval` walks the tree by pattern-matching

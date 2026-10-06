@@ -1,8 +1,9 @@
 # FizzBuzz.
 #
-# Tipos suma + calce de patrones, expresados como pipeline en vez de
-# una recursión escrita a mano: `[1..15]` es un literal de rango, `|`
-# mapea sobre la lista y `|>` aplica una función a la lista completa.
+# El clásico, sin escribir un solo bucle. Un tipo suma clasifica cada
+# número y una cadena de operadores hace el recorrido: `[1..15]` es un
+# literal de rango, `|` transforma cada elemento y `|>` le pasa la
+# lista completa a una función.
 #
 #   $ kai run examples/quickstart/02_fizzbuzz.kai
 #   1
@@ -19,8 +20,8 @@ type Tag
   | Buzz
   | Otro(Int)
 
-# Las guardas permiten que cada rama lleve su propia condición, así la
-# cascada de `if / else if` se colapsa dentro del match.
+# Cada rama lleva su propia condición con una guarda, así que no
+# necesitas una cascada de `if / else if`.
 fn clasificar(n: Int) : Tag = match n {
   n if n % 15 == 0 -> Ambos
   n if n % 3 == 0  -> Fizz
@@ -32,14 +33,13 @@ fn etiqueta(c: Tag) : String = match c {
   Ambos    -> "FizzBuzz"
   Fizz     -> "Fizz"
   Buzz     -> "Buzz"
-  # Interpolación de strings: `#{expr}` renderiza cualquier valor
-  # mostrable.
+  # `#{expr}` inserta cualquier valor mostrable dentro del texto.
   Otro(n)  -> "#{n}"
 }
 
 fn main() {
   [1..15]
-    | clasificar              # map: [Int] -> [Tag]
-    | etiqueta                # map: [Tag] -> [String]
-    |> list.foreach(println)  # apply: imprime cada línea
+    | clasificar              # transforma: [Int] -> [Tag]
+    | etiqueta                # transforma: [Tag] -> [String]
+    |> list.foreach(println)  # aplica: imprime cada línea
 }

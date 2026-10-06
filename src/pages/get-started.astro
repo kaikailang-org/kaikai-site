@@ -10,38 +10,40 @@ const helloHtml = await highlightKai(helloSnippet);
 ---
 
 <Base title="Empezar · kaikai" lang="es">
-  <article class="get-started-page">
+  <article class="get-started-page page page--doc backdrop">
     <div class="container">
       <header>
         <p class="eyebrow">Empezar</p>
         <h1>Instalar kaikai</h1>
         <p class="lead">
-          La herramienta de línea de comandos se llama <code>kai</code>.
-          La forma recomendada es el instalador oficial; también hay
-          Homebrew, y puedes compilar desde el código fuente si quieres
-          modificar el compilador.
+          La herramienta de línea de comandos se llama <code>kai</code>
+          y se instala en un minuto. Lo más simple es el instalador
+          oficial. Si lo prefieres, también está en Homebrew, y puedes
+          compilarla desde el código fuente si quieres meterle mano al
+          compilador.
         </p>
       </header>
 
       <section>
         <h2>Instalador oficial · macOS y Linux</h2>
         <p>
-          Un instalador estilo rustup, sin dependencias. Publica
-          binarios para macOS en Apple Silicon
-          (<code>darwin-arm64</code>) y Linux en x86-64
-          (<code>linux-x86_64</code>); detecta la plataforma solo:
+          Un solo comando y sin dependencias. Detecta tu plataforma y
+          descarga el binario que corresponde: macOS en Apple Silicon
+          (<code>darwin-arm64</code>) o Linux en x86-64
+          (<code>linux-x86_64</code>).
         </p>
 <pre><code>curl -fsSL https://raw.githubusercontent.com/kaikailang-org/kaikai/main/install.sh | sh</code></pre>
         <p>
-          Descarga el último release, verifica su SHA-256, lo instala en
-          <code>~/.kaikai/</code> y agrega <code>~/.kaikai/bin</code> al
-          <code>PATH</code>. Verifica la instalación:
+          El instalador descarga la última versión, verifica su SHA-256,
+          la deja en <code>~/.kaikai/</code> y agrega
+          <code>~/.kaikai/bin</code> a tu <code>PATH</code>. Comprueba
+          que quedó bien:
         </p>
 <pre><code>kai --version</code></pre>
         <p>
-          El binario es auto-contenido: trae LLVM enlazado estático y
-          compila a código nativo sin <code>clang</code> ni toolchain
-          externo. Para actualizar más adelante:
+          El binario se basta solo: trae LLVM enlazado de forma estática
+          y compila a código nativo sin pedirte <code>clang</code> ni
+          ninguna otra herramienta. Cuando quieras actualizar:
         </p>
 <pre><code>kai upgrade</code></pre>
       </section>
@@ -49,34 +51,36 @@ const helloHtml = await highlightKai(helloSnippet);
       <section>
         <h2>Homebrew · solo macOS (Apple Silicon)</h2>
         <p>
-          La distribución oficial también vive en un tap propio. En
-          Linux usa el instalador oficial.
+          Si usas Homebrew, kaikai tiene su propio repositorio de
+          fórmulas. En Linux usa el instalador oficial.
         </p>
 <pre><code>brew install kaikailang-org/kaikai/kaikai</code></pre>
         <p>
-          En una instalación por Homebrew las actualizaciones van por
-          <code>brew upgrade kaikai</code>, no por <code>kai upgrade</code>.
+          Si instalaste con Homebrew, actualiza con
+          <code>brew upgrade kaikai</code> y no con
+          <code>kai upgrade</code>.
         </p>
       </section>
 
       <section>
         <h2>Desde el código fuente</h2>
         <p>
-          Solo lo necesitas para modificar el compilador, o en
-          plataformas donde el instalador aún no publica binarios (hoy
-          los precompilados son para macOS en Apple Silicon y Linux en
-          x86-64). Requiere
-          un <code>cc</code> y los headers de desarrollo de LLVM
-          (ubicados vía <code>llvm-config</code>):
+          Solo lo necesitas si quieres modificar el compilador, o si tu
+          plataforma todavía no tiene binarios publicados (hoy existen
+          para macOS en Apple Silicon y Linux en x86-64). Te hace
+          falta un compilador de C (<code>cc</code>) y las cabeceras
+          de desarrollo de LLVM, que se ubican con
+          <code>llvm-config</code>:
         </p>
 <pre><code>git clone {links.github.kaikai}
 cd kaikai
 make all</code></pre>
         <p>
-          El bootstrap regenera el compilador desde nada más que un
-          compilador de C: la etapa 0 (C) construye <code>kaic0</code>,
-          que compila el compilador mínimo <code>kaic1</code>, que
-          compila el compilador completo auto-hospedado.
+          El compilador se construye a sí mismo en tres etapas, partiendo
+          solo de un compilador de C. La etapa 0, escrita en C,
+          construye <code>kaic0</code>; este compila el compilador
+          mínimo <code>kaic1</code>, y ese compila el compilador
+          completo, que está escrito en kaikai.
         </p>
       </section>
 
@@ -90,7 +94,7 @@ make all</code></pre>
 <pre><code>kai run hola.kai
 # hola, kaikai</code></pre>
         <p>
-          Para compilar a un binario nativo en lugar de ejecutar:
+          Si prefieres un binario nativo en vez de ejecutarlo directo:
         </p>
 <pre><code>kai build hola.kai -o hola
 ./hola</code></pre>
@@ -100,15 +104,16 @@ make all</code></pre>
         <h2>¿Y ahora?</h2>
         <ul class="nextsteps">
           <li>
-            Mira los <a href="/examples">ejemplos</a> en el sitio.
+            Recorre los <a href="/examples">ejemplos</a>: nueve programas
+            cortos, cada uno con una idea.
           </li>
           <li>
-            Lee el <a href="/book">libro</a> para entender el lenguaje
-            completo, en orden, con casos reales.
+            Lee el <a href="/book">libro</a> para conocer el lenguaje
+            completo, en orden y con casos reales.
           </li>
           <li>
-            Revisa el <a href={links.github.kaikai} rel="noopener">repo
-            en GitHub</a> y abre un issue si encuentras algo raro.
+            Visita el <a href={links.github.kaikai} rel="noopener">repositorio
+            en GitHub</a> y cuéntanos si encuentras algo raro.
           </li>
         </ul>
       </section>
@@ -117,46 +122,12 @@ make all</code></pre>
 </Base>
 
 <style>
-  .get-started-page {
-    padding-block: var(--space-16) var(--space-12);
-  }
-  .eyebrow {
-    color: var(--accent);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: var(--space-2);
-  }
-  .get-started-page header {
-    margin-bottom: var(--space-12);
-  }
-  .lead {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    color: var(--fg-muted);
-    max-width: 60ch;
-    line-height: 1.6;
-  }
-  section {
-    margin-top: var(--space-12);
-    max-width: 70ch;
-  }
-  section h2 {
-    margin-bottom: var(--space-4);
-  }
-  section p {
-    font-family: var(--font-serif);
-    font-size: 1.02rem;
-    line-height: 1.65;
-  }
-  section pre {
-    margin-block: var(--space-4) var(--space-6);
-  }
   .code-block :global(pre.shiki) {
     background: var(--code-bg) !important;
     margin-block: var(--space-4) var(--space-6);
     padding: var(--space-4) var(--space-6);
-    border-radius: var(--radius);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-lg);
     overflow-x: auto;
     font-size: 0.88rem;
   }
@@ -164,7 +135,6 @@ make all</code></pre>
     list-style: none;
     padding: 0;
     margin: 0;
-    font-family: var(--font-serif);
     font-size: 1.05rem;
     line-height: 1.8;
   }

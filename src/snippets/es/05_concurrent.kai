@@ -1,16 +1,18 @@
-# Dos fibras cooperativas.
+# Dos fibras que se turnan.
 #
-# `spawn.spawn` agenda una fibra pero todavía no la ejecuta — el
-# scheduler la toma en el siguiente punto de cesión. `spawn.yield` es
-# un punto de cooperación explícito: la fibra actual se suspende y el
-# scheduler elige la próxima que esté lista.
+# `spawn.spawn` deja una fibra lista para correr, pero todavía no la
+# ejecuta: el planificador la toma en el siguiente punto de cesión.
+# `spawn.yield` es justamente eso, un punto de cesión explícito. La
+# fibra actual se detiene y el planificador elige la próxima que esté
+# lista.
 #
-# `loop.repeat(n) { ... }` es una función común de la stdlib, no una
-# palabra reservada: el cuerpo es una lambda final, así que su fila de
-# efectos (aquí `Stdout + Spawn`) fluye directo hacia el llamador.
+# `loop.repeat(n) { ... }` es una función común de la biblioteca
+# estándar, no una palabra reservada. Su cuerpo es una lambda final,
+# así que sus efectos (aquí `Stdout + Spawn`) pasan directo a quien
+# la llama.
 #
-# La rotación estricta A/B de abajo se cumple con un solo hilo de
-# scheduler.
+# El turno estricto A/B de abajo se cumple con un solo hilo en el
+# planificador.
 #
 #   $ KAI_THREADS=1 kai run examples/quickstart/05_concurrent.kai
 #   A
@@ -31,7 +33,7 @@ fn trabajador(tag: String, n: Int) : Unit / Stdout + Spawn {
 }
 
 fn main() {
-  # Forma con lambda final: `spawn.spawn { ... }` en vez de
+  # Con lambda final escribes `spawn.spawn { ... }` en vez de
   # `spawn.spawn(() => ...)`.
   let f = spawn.spawn { trabajador("B", 3) }
   trabajador("A", 3)

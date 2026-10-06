@@ -1,12 +1,12 @@
-# Efecto propio con su handler.
+# Un efecto propio y su manejador.
 #
-# Los efectos algebraicos son el diferenciador de kaikai: una función
-# declara en su tipo los efectos que usa, y quien la llame debe o bien
-# declararlos también, o instalar un handler que los provea.
+# Los efectos algebraicos son el sello de kaikai. Una función declara
+# en su tipo los efectos que usa, y quien la llama tiene dos caminos:
+# declararlos también, o instalar un manejador que los resuelva.
 #
-# Abajo, `Log` es un efecto propio con una sola operación, `log(msg)`.
-# `saludar` la usa pero no dice CÓMO se registra. `main` lo decide al
-# momento de llamar: prefija cada mensaje con `[INFO]` y lo manda a la
+# Aquí `Log` es un efecto con una sola operación, `log(msg)`.
+# `saludar` la usa sin saber CÓMO se registra el mensaje. Eso lo
+# decide `main` al llamarla: le antepone `[INFO]` y lo envía a la
 # salida estándar.
 #
 #   $ kai run examples/quickstart/04_effect.kai
@@ -18,7 +18,7 @@ effect Log {
 }
 
 fn saludar(nombre: String) : Unit / Log {
-  # `#{...}` interpola dentro del string — sin concatenación manual.
+  # `#{...}` inserta el valor en el texto, sin concatenar a mano.
   Log.log("hello, #{nombre}")
 }
 
