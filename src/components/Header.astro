@@ -1,6 +1,7 @@
 ---
 import { t, pathInLang, type Lang } from '../i18n/ui';
 import { links } from '../lib/links';
+import { getBlogPosts, blogIndexPath } from '../lib/blog';
 
 interface Props {
   lang: Lang;
@@ -18,6 +19,10 @@ const navItems = [
   { href: pathInLang('/book', lang), key: 'nav.book' as const },
   { href: pathInLang('/ecosystem', lang), key: 'nav.ecosystem' as const },
   { href: pathInLang('/community', lang), key: 'nav.community' as const },
+  // Listed only once this edition has a post to show.
+  ...((await getBlogPosts(lang)).length > 0
+    ? [{ href: blogIndexPath(lang), key: 'nav.blog' as const }]
+    : []),
 ];
 
 const otherLang: Lang = lang === 'es' ? 'en' : 'es';

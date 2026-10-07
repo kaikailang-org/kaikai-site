@@ -21,4 +21,26 @@ const book = defineCollection({
   }),
 });
 
-export const collections = { book };
+// Blog posts are written in Spanish under src/content/blog/es/ and translated
+// into src/content/blog/en/ under the same file name, which is what pairs the
+// two editions. The language comes from the directory, not the frontmatter.
+const blog = defineCollection({
+  loader: glob({
+    pattern: '{es,en}/*.md',
+    base: './src/content/blog',
+    generateId: ({ entry }) => entry.replace(/\.md$/, ''),
+  }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    description: z.string().optional(),
+    // URL segment; defaults to the file name without its date prefix.
+    slug: z.string().optional(),
+    // Footnote hung from the title, e.g. to say a post is a translation.
+    titleNote: z.string().optional(),
+    // Drafts render in `astro dev` and are left out of the build.
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { book, blog };
