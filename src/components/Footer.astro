@@ -1,12 +1,14 @@
 ---
 import { t, pathInLang, type Lang } from '../i18n/ui';
 import { links } from '../lib/links';
+import { getBlogPosts, blogIndexPath } from '../lib/blog';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const tt = t(lang);
+const hasBlog = (await getBlogPosts(lang)).length > 0;
 ---
 
 <footer class="site-footer">
@@ -24,6 +26,7 @@ const tt = t(lang);
         <li><a href={pathInLang('/book', lang)}>{tt('nav.book')}</a></li>
         <li><a href={pathInLang('/ecosystem', lang)}>{tt('nav.ecosystem')}</a></li>
         <li><a href={pathInLang('/community', lang)}>{tt('nav.community')}</a></li>
+        {hasBlog && <li><a href={blogIndexPath(lang)}>{tt('nav.blog')}</a></li>}
       </ul>
     </nav>
     <nav class="external" aria-label="External">

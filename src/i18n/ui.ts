@@ -15,6 +15,15 @@ export const ui = {
     'nav.book': 'El libro',
     'nav.ecosystem': 'Ecosistema',
     'nav.community': 'Comunidad',
+    'nav.blog': 'Blog',
+
+    'blog.lead':
+      'Novedades, decisiones de diseño y la historia de cómo se construye kaikai.',
+    'blog.empty': 'Todavía no hay publicaciones. Vuelve pronto.',
+    'blog.back': 'Volver al blog',
+    'blog.draft': 'Borrador',
+    'blog.note': 'Nota al pie',
+    'blog.noteBack': 'Volver al título',
 
     'theme.toggle': 'Cambiar entre claro y oscuro',
 
@@ -130,6 +139,15 @@ export const ui = {
     'nav.book': 'The book',
     'nav.ecosystem': 'Ecosystem',
     'nav.community': 'Community',
+    'nav.blog': 'Blog',
+
+    'blog.lead':
+      'News, design decisions and the story of how kaikai gets built.',
+    'blog.empty': 'No posts yet. Check back soon.',
+    'blog.back': 'Back to the blog',
+    'blog.draft': 'Draft',
+    'blog.note': 'Footnote',
+    'blog.noteBack': 'Back to the title',
 
     'theme.toggle': 'Toggle light and dark',
 

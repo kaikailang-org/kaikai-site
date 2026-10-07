@@ -1,0 +1,122 @@
+---
+import Base from './Base.astro';
+import { t, type Lang } from '../i18n/ui';
+import {
+  blogIndexPath,
+  blogCounterpartPath,
+  formatPostDate,
+  type BlogEntry,
+} from '../lib/blog';
+
+interface Props {
+  entry: BlogEntry;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const tt = t(lang);
+const altPath = await blogCounterpartPath(entry);
+---
+
+<Base
+  title={`${entry.data.title} · kaikai`}
+  description={entry.data.description}
+  lang={lang}
+  altPath={altPath}
+>
+  <article class="post page backdrop">
+    <div class="container">
+      <header>
+        <p class="eyebrow">
+          <a href={blogIndexPath(lang)}>{tt('nav.blog')}</a>
+        </p>
+        <h1>
+          {entry.data.title}{entry.data.titleNote && (
+            <sup class="note-ref"><a href="#title-note" id="title-note-ref" aria-label={tt('blog.note')}>*</a></sup>
+          )}
+        </h1>
+        <p class="meta">
+          <time datetime={entry.data.date.toISOString().slice(0, 10)}>
+            {formatPostDate(entry.data.date, lang)}
+          </time>
+          {entry.data.draft && <span class="draft">{tt('blog.draft')}</span>}
+        </p>
+      </header>
+
+      <div class="prose rich-prose post-body">
+        <slot />
+      </div>
+
+      {entry.data.titleNote && (
+        <p class="title-note" id="title-note">
+          <a href="#title-note-ref" aria-label={tt('blog.noteBack')}>*</a> {entry.data.titleNote}
+        </p>
+      )}
+
+      <p class="back">
+        <a href={blogIndexPath(lang)}><span aria-hidden="true">←</span> {tt('blog.back')}</a>
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .eyebrow a {
+    color: inherit;
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    color: var(--fg-muted);
+  }
+  .draft {
+    padding: 0.05rem 0.5rem;
+    border: 1px solid var(--accent-warm);
+    border-radius: 999px;
+    color: var(--accent-warm);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .post-body {
+    max-width: 44rem;
+    font-size: 1.08rem;
+    line-height: 1.75;
+  }
+  .post-body :global(h2) {
+    margin-top: var(--space-12);
+    font-size: 1.7rem;
+  }
+  .post-body :global(h3) {
+    margin-top: var(--space-8);
+  }
+  .post-body :global(li) {
+    margin-bottom: var(--space-2);
+  }
+  .note-ref {
+    font-size: 0.5em;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin-left: 0.15em;
+  }
+  .title-note {
+    margin: var(--space-12) 0 0;
+    max-width: 44rem;
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+    scroll-margin-top: 5rem;
+  }
+  .title-note + .back {
+    margin-top: var(--space-6);
+  }
+  .back {
+    margin: var(--space-16) 0 0;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+    max-width: 44rem;
+    font-weight: 600;
+  }
+</style>

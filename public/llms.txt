@@ -11,6 +11,7 @@
 - [Ecosistema (es)](https://kaikai-lang.org/ecosystem/): bibliotecas y herramientas alrededor del lenguaje.
 - [Comunidad (es)](https://kaikai-lang.org/community/): canales de discusión, contribuciones y código de conducta.
 - [El nombre (es)](https://kaikai-lang.org/about/): historia y significado del nombre kaikai.
+- [Blog (es)](https://kaikai-lang.org/blog/): novedades, decisiones de diseño y la historia de cómo se construye kaikai.
 
 ## English
 
@@ -21,6 +22,7 @@
 - [Ecosystem (en)](https://kaikai-lang.org/en/ecosystem/): libraries, tools and tooling around the language.
 - [Community (en)](https://kaikai-lang.org/en/community/): discussion channels, contributions and code of conduct.
 - [About the name (en)](https://kaikai-lang.org/en/about/): history and meaning of the name kaikai.
+- [Blog (en)](https://kaikai-lang.org/en/blog/): news, design decisions and the story of how kaikai gets built.
 
 ## Código fuente
 
