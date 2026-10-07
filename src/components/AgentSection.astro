@@ -1,0 +1,309 @@
+---
+import { pathInLang, type Lang } from '../i18n/ui';
+import { highlightKai } from '../lib/highlight';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// The exchange is the case study from the book's chapter on holes, so the
+// identifiers follow the edition's language.
+const content = {
+  es: {
+    eyebrow: 'Agentes primero',
+    title: 'El compilador le enseña al agente',
+    lead: 'Un lenguaje nuevo no tiene millones de programas de los que un modelo pueda aprender. kaikai apuesta por otro camino: el compilador responde con datos precisos, y el agente itera hasta llegar al programa correcto.',
+    roles: [
+      ['Tú decides el qué', 'Escribes la firma y las pruebas. Lo que falta lo dejas como un hueco.'],
+      ['El agente decide el cómo', 'Lee qué tipo se espera y qué tiene a mano, y propone el cuerpo.'],
+      ['El compilador arbitra', 'Nada se acepta hasta que los tipos y las pruebas pasan.'],
+    ],
+    steps: ['Tú escribes la firma', 'El compilador responde', 'El agente completa'],
+    signature: 'fn aprobados(notas: [(String, Int)]) : [String] = ?cuerpo',
+    report: `{
+  "name": "cuerpo",
+  "expected_type": "[String]",
+  "in_scope": [
+    {"name": "notas", "type": "[(String, Int)]"}
+  ],
+  "candidates": [
+    {"expr": "[]", "kind": "literal"}
+  ]
+}`,
+    answer: `fn aprobados(notas: [(String, Int)]) : [String] =
+  notas
+    |? . .1 >= 4
+    | . .0
+    |> list.sort`,
+    channelsTitle: 'Todo lo que el compilador sabe, como datos',
+    channels: [
+      ['kai build --holes-json', 'Qué tipo espera cada hueco, qué hay en alcance y qué candidatos calzan.'],
+      ['kai build --diags-json', 'Los errores con archivo, línea y mensaje, listos para procesar.'],
+      ['kai build --effects-json', 'Los efectos de cada función. Saber si toca el disco no requiere leer el código.'],
+      ['kai check --json', 'El resultado de cada prueba y el contraejemplo exacto cuando una propiedad falla.'],
+      ['kai info llm', 'La guía de arranque para un agente que llega a un repositorio kaikai.'],
+      ['kai info <tema> --json', 'La documentación del lenguaje como datos, sin abrir un navegador.'],
+    ],
+    noteBefore: 'Este sitio también se presenta a los modelos en ',
+    noteMiddle: ', y el ',
+    noteChapter: 'capítulo 15 del libro',
+    noteAfter: ' cuenta el flujo completo.',
+    chapter: '/book/cap15-holes-ia',
+  },
+  en: {
+    eyebrow: 'Agents first',
+    title: 'The compiler teaches the agent',
+    lead: 'A new language has no millions of programs for a model to learn from. kaikai bets on another path: the compiler answers with precise data, and the agent iterates until it reaches the right program.',
+    roles: [
+      ['You decide the what', 'You write the signature and the tests. Whatever is missing you leave as a hole.'],
+      ['The agent decides the how', 'It reads what type is expected and what it has at hand, and proposes the body.'],
+      ['The compiler referees', 'Nothing is accepted until the types and the tests pass.'],
+    ],
+    steps: ['You write the signature', 'The compiler answers', 'The agent fills it in'],
+    signature: 'fn passed(grades: [(String, Int)]) : [String] = ?body',
+    report: `{
+  "name": "body",
+  "expected_type": "[String]",
+  "in_scope": [
+    {"name": "grades", "type": "[(String, Int)]"}
+  ],
+  "candidates": [
+    {"expr": "[]", "kind": "literal"}
+  ]
+}`,
+    answer: `fn passed(grades: [(String, Int)]) : [String] =
+  grades
+    |? . .1 >= 4
+    | . .0
+    |> list.sort`,
+    channelsTitle: 'Everything the compiler knows, as data',
+    channels: [
+      ['kai build --holes-json', 'What type each hole expects, what is in scope and which candidates fit.'],
+      ['kai build --diags-json', 'Errors with file, line and message, ready to process.'],
+      ['kai build --effects-json', 'The effects of every function. Knowing whether it touches the disk takes no code reading.'],
+      ['kai check --json', 'The result of every test, and the exact counterexample when a property fails.'],
+      ['kai info llm', 'The bootstrap guide for an agent arriving at a kaikai repository.'],
+      ['kai info <topic> --json', 'The language documentation as data, without opening a browser.'],
+    ],
+    noteBefore: 'This site also introduces itself to models in ',
+    noteMiddle: ', and ',
+    noteChapter: 'chapter 15 of the book',
+    noteAfter: ' tells the whole workflow.',
+    chapter: '/book/ch15-holes-ai',
+  },
+} as const;
+
+const c = content[lang];
+const signatureHtml = await highlightKai(c.signature);
+const answerHtml = await highlightKai(c.answer);
+---
+
+<section class="agents" id="agents">
+  <div class="container">
+    <div class="agents-grid">
+      <div class="agents-text">
+        <p class="eyebrow">{c.eyebrow}</p>
+        <h2>{c.title}</h2>
+        <p class="lead">{c.lead}</p>
+        <ol class="roles">
+          {c.roles.map(([name, body]) => (
+            <li>
+              <strong>{name}</strong>
+              <span>{body}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="exchange">
+        <div class="turn">
+          <p class="turn-label"><span>1</span>{c.steps[0]}</p>
+          <Fragment set:html={signatureHtml} />
+        </div>
+        <div class="turn">
+          <p class="turn-label"><span>2</span>{c.steps[1]}</p>
+          <pre class="report"><code><span class="prompt">$ kai build --holes-json</span>{c.report}</code></pre>
+        </div>
+        <div class="turn">
+          <p class="turn-label"><span>3</span>{c.steps[2]}</p>
+          <Fragment set:html={answerHtml} />
+        </div>
+      </div>
+    </div>
+
+    <h3 class="channels-title">{c.channelsTitle}</h3>
+    <ul class="channels">
+      {c.channels.map(([command, body]) => (
+        <li>
+          <code>{command}</code>
+          <span>{body}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="note">
+      {c.noteBefore}<a href="/llms.txt">llms.txt</a>{c.noteMiddle}<a
+        href={pathInLang(c.chapter, lang)}>{c.noteChapter}</a>{c.noteAfter}
+    </p>
+  </div>
+</section>
+
+<style>
+  /* Dark in both themes, so the section reads as its own band. */
+  .agents {
+    --ink: #e6edf3;
+    --ink-muted: #9aa3b2;
+    --line: #26303f;
+    --panel: #0d1117;
+    --warm: #ffd166;
+    background:
+      radial-gradient(40rem 24rem at 12% 0%, rgba(255, 209, 102, 0.1), transparent 70%),
+      #101826;
+    color: var(--ink);
+    padding-block: var(--space-16);
+    border-block: 1px solid var(--line);
+    scroll-margin-top: 4rem;
+  }
+  .agents-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: var(--space-12);
+    align-items: center;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--warm);
+    margin-bottom: var(--space-3);
+  }
+  h2 {
+    font-size: clamp(1.9rem, 3.6vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .lead {
+    color: var(--ink-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-8);
+  }
+  .roles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .roles li {
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--warm);
+  }
+  .roles strong {
+    display: block;
+  }
+  .roles span {
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+  }
+
+  .exchange {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.8);
+  }
+  .turn + .turn {
+    border-top: 1px solid var(--line);
+  }
+  .turn-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+    padding: var(--space-3) var(--space-6) 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-muted);
+  }
+  .turn-label span {
+    display: inline-grid;
+    place-items: center;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: var(--warm);
+    color: #101826;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+  /* Shiki paints a background inline; the panel supplies its own. */
+  .turn :global(pre.shiki),
+  .report {
+    background: transparent !important;
+    margin: 0;
+    border-radius: 0;
+    padding: var(--space-3) var(--space-6) var(--space-4);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: var(--ink);
+  }
+  .prompt {
+    display: block;
+    color: rgba(230, 237, 243, 0.5);
+  }
+
+  .channels-title {
+    margin: var(--space-16) 0 var(--space-6);
+    font-size: 1.3rem;
+  }
+  .channels {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+  .channels li {
+    padding: var(--space-4) var(--space-6);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+  .channels code {
+    display: block;
+    padding: 0;
+    background: none;
+    color: var(--warm);
+    font-size: 0.85rem;
+    margin-bottom: var(--space-2);
+  }
+  .channels span {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+  .note {
+    margin: var(--space-8) 0 0;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+  }
+  .note a {
+    color: var(--warm);
+  }
+
+  @media (max-width: 62rem) {
+    .agents-grid { grid-template-columns: minmax(0, 1fr); }
+    .channels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 40rem) {
+    .agents { padding-block: var(--space-12); }
+    .channels { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
