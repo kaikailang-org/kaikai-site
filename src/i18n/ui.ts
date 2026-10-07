@@ -27,10 +27,11 @@ export const ui = {
     'book.next': 'Siguiente',
     'book.backToIndex': 'Volver al índice',
 
-    'hero.title.line1': 'Efectos en el tipo.',
-    'hero.title.line2': 'Memoria sin pausas.',
+    'hero.pill': 'Mira cómo trabaja un agente con kaikai',
+    'hero.title.line1': 'Diseñado para que humanos y agentes',
+    'hero.title.line2': 'lo escriban juntos.',
     'hero.lead':
-      'kaikai es un lenguaje funcional con efectos algebraicos y fibras aisladas, sin recolector de basura ni verificador de préstamos. Pensado para que personas y agentes lo escriban juntos.',
+      'Lenguaje funcional con efectos algebraicos y fibras aisladas. Sin recolector de basura ni verificador de préstamos.',
     'hero.cta.install': 'Instalar',
     'hero.cta.start': 'Empezar',
     'hero.cta.examples': 'Ver ejemplos',
@@ -141,10 +142,11 @@ export const ui = {
     'book.next': 'Next',
     'book.backToIndex': 'Back to contents',
 
-    'hero.title.line1': 'Effects in the type.',
-    'hero.title.line2': 'Memory with no GC.',
+    'hero.pill': 'See how an agent works with kaikai',
+    'hero.title.line1': 'Designed to be written with,',
+    'hero.title.line2': 'and by, agents.',
     'hero.lead':
-      'kaikai is a functional language with algebraic effects and isolated fibers, with no garbage collector and no borrow checker. Designed for people and agents to write together.',
+      'A functional language with algebraic effects and isolated fibers. No garbage collector, no borrow checker.',
     'hero.cta.install': 'Install',
     'hero.cta.start': 'Get started',
     'hero.cta.examples': 'See examples',
