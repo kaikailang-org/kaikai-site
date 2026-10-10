@@ -17,3 +17,7 @@ public/kaikai-book-en.pdf
 # content collection resolves even before the first sync.
 src/content/book/**/*.md
 public/book/figuras/*.png
+
+# Blog videos are large binaries kept out of git. Copy them into
+# public/blog/<post>/ before a build; the posts reference them by path.
+public/blog/**/*.mp4

@@ -348,6 +348,15 @@ pre code {
   margin: var(--space-6) auto;
   border-radius: var(--radius);
 }
+.rich-prose video {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: var(--space-6) auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: #000;
+}
 .rich-prose pre.astro-code {
   background: var(--code-bg) !important;
   padding: var(--space-4) var(--space-6);
