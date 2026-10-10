@@ -1,6 +1,6 @@
 ---
 import { t, type Lang } from '../i18n/ui';
-import { getBlogPosts, blogPostPath, formatPostDate } from '../lib/blog';
+import { getBlogPosts, blogPostPath, blogFeedPath, formatPostDate } from '../lib/blog';
 
 interface Props {
   lang: Lang;
@@ -16,6 +16,9 @@ const posts = await getBlogPosts(lang);
       <p class="eyebrow">kaikai</p>
       <h1>{tt('nav.blog')}</h1>
       <p class="lead">{tt('blog.lead')}</p>
+      <p class="feed">
+        <a href={blogFeedPath(lang)}>{tt('blog.feed')} <span aria-hidden="true">→</span></a>
+      </p>
     </header>
 
     {posts.length === 0 ? (
@@ -42,6 +45,11 @@ const posts = await getBlogPosts(lang);
 </article>
 
 <style>
+  .feed {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
   .empty {
     color: var(--fg-muted);
   }
