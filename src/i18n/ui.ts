@@ -24,6 +24,8 @@ export const ui = {
     'blog.draft': 'Borrador',
     'blog.note': 'Nota al pie',
     'blog.noteBack': 'Volver al título',
+    'blog.feedTitle': 'Blog de kaikai',
+    'blog.feed': 'Seguir por RSS',
 
     'theme.toggle': 'Cambiar entre claro y oscuro',
 
@@ -148,6 +150,8 @@ export const ui = {
     'blog.draft': 'Draft',
     'blog.note': 'Footnote',
     'blog.noteBack': 'Back to the title',
+    'blog.feedTitle': 'kaikai blog',
+    'blog.feed': 'Follow via RSS',
 
     'theme.toggle': 'Toggle light and dark',
 
