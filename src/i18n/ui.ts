@@ -129,7 +129,7 @@ export const ui = {
 
     'cta.title': '¿Lo probamos?',
     'cta.body':
-      'Se instala con un solo comando en macOS y Linux, sin dependencias. Y el libro te acompaña desde el primer programa hasta un caso de estudio completo.',
+      'Se instala con un solo comando en macOS, Linux y Windows (con WSL2), sin dependencias. Y el libro te acompaña desde el primer programa hasta un caso de estudio completo.',
 
     'footer.tagline': 'Lenguaje de programación.',
     'footer.copy': 'Por Eduardo Díaz.',
@@ -255,7 +255,7 @@ export const ui = {
 
     'cta.title': 'Shall we try it?',
     'cta.body':
-      'It installs with a single command on macOS and Linux, with no dependencies. And the book walks with you from the first program to a complete case study.',
+      'It installs with a single command on macOS, Linux and Windows (via WSL2), with no dependencies. And the book walks with you from the first program to a complete case study.',
 
     'footer.tagline': 'Programming language.',
     'footer.copy': 'By Eduardo Díaz.',

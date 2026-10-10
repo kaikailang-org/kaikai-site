@@ -24,13 +24,13 @@ const helloHtml = await highlightKai(helloSnippet);
       </header>
 
       <section>
-        <h2>Official installer &middot; macOS and Linux</h2>
+        <h2>Official installer &middot; macOS, Linux and Windows (WSL2)</h2>
         <p>
           A rustup-style installer with no dependencies. It ships
           binaries for macOS on Apple Silicon
           (<code>darwin-arm64</code>) and Linux on x86-64
           (<code>linux-x86_64</code>), and detects your platform for
-          you:
+          you. On Windows it runs inside WSL2, using the Linux binary:
         </p>
 <pre><code>curl -fsSL https://raw.githubusercontent.com/kaikailang-org/kaikai/main/install.sh | sh</code></pre>
         <p>

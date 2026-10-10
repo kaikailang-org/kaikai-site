@@ -25,12 +25,13 @@ const helloHtml = await highlightKai(helloSnippet);
       </header>
 
       <section>
-        <h2>Instalador oficial · macOS y Linux</h2>
+        <h2>Instalador oficial · macOS, Linux y Windows (WSL2)</h2>
         <p>
           Un solo comando y sin dependencias. Detecta tu plataforma y
           descarga el binario que corresponde: macOS en Apple Silicon
           (<code>darwin-arm64</code>) o Linux en x86-64
-          (<code>linux-x86_64</code>).
+          (<code>linux-x86_64</code>). En Windows funciona dentro de
+          WSL2, con el binario de Linux.
         </p>
 <pre><code>curl -fsSL https://raw.githubusercontent.com/kaikailang-org/kaikai/main/install.sh | sh</code></pre>
         <p>
