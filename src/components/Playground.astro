@@ -1,0 +1,352 @@
+---
+import { t, type Lang } from '../i18n/ui';
+import fs from 'node:fs';
+import path from 'node:path';
+import { parseSnippet } from '../lib/snippet';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+const snippetsDir = path.resolve(process.cwd(), 'src/snippets', lang);
+
+// The quickstart programs, in the order the examples page teaches them.
+const examples = [
+  { id: 'hello', file: '01_hello.kai' },
+  { id: 'fizzbuzz', file: '02_fizzbuzz.kai' },
+  { id: 'calculator', file: '03_calculator.kai' },
+  { id: 'effect', file: '04_effect.kai' },
+  { id: 'concurrent', file: '05_concurrent.kai' },
+  { id: 'pipes', file: '06_pipes.kai' },
+  { id: 'uom', file: '07_uom.kai' },
+  { id: 'kinds', file: '09_kinds.kai' },
+  { id: 'contracts', file: '08_contracts.kai' },
+].map((e) => ({
+  id: e.id,
+  title: tt(`examples.item.${e.id}.title` as never) as string,
+  code: parseSnippet(fs.readFileSync(path.join(snippetsDir, e.file), 'utf-8')).code + '\n',
+}));
+
+// What the page script says to the reader, keyed the way it asks for them.
+const strings = {
+  hint: tt('play.hint'),
+  running: tt('play.running'),
+  formatting: tt('play.formatting'),
+  shared: tt('play.shared'),
+  noOutput: tt('play.noOutput'),
+  exit: tt('play.exit'),
+  timeout: tt('play.timeout'),
+  outputLimit: tt('play.outputLimit'),
+  killed: tt('play.killed'),
+  buildTimeout: tt('play.buildTimeout'),
+  internal: tt('play.internal'),
+  tooFast: tt('play.tooFast'),
+  busy: tt('play.busy'),
+  tooLarge: tt('play.tooLarge'),
+  offline: tt('play.offline'),
+};
+---
+
+<section class="play backdrop">
+  <div class="container">
+    <header class="play-head">
+      <h1>{tt('play.title')}</h1>
+      <p>{tt('play.lead')}</p>
+    </header>
+
+    <div class="pg" data-playground>
+      <script type="application/json" data-strings set:html={JSON.stringify(strings)} />
+      <script type="application/json" data-examples set:html={JSON.stringify(examples).replace(/</g, '\\u003c')} />
+
+      <div class="pg-bar">
+        <span class="pg-file">main.kai</span>
+        <div class="pg-actions">
+          <label class="pg-pick">
+            <span class="visually-hidden">{tt('play.examples')}</span>
+            <select data-picker>
+              <option value="">{tt('play.examples')}</option>
+              {examples.map((e) => <option value={e.id}>{e.title}</option>)}
+            </select>
+          </label>
+          <button type="button" class="pg-btn" data-format>
+            <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 6h16M4 12h10M4 18h13" />
+            </svg>
+            <span>{tt('play.format')}</span>
+          </button>
+          <button type="button" class="pg-btn" data-share>
+            <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />
+            </svg>
+            <span>{tt('play.share')}</span>
+          </button>
+          <button type="button" class="pg-btn pg-run" data-run title="Ctrl+Enter">
+            <svg class="pg-play" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" />
+            </svg>
+            <span class="pg-spin" aria-hidden="true"></span>
+            <span>{tt('play.run')}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="pg-panes">
+        <div class="pg-editor" data-editor></div>
+        <div class="pg-term">
+          <div class="pg-term-bar">
+            <span>{tt('play.output')}</span>
+            <span class="pg-version" data-version></span>
+          </div>
+          <pre class="pg-output" data-output aria-live="polite"><span class="pg-note">{tt('play.hint')}</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <p class="play-foot">{tt('play.limits')}</p>
+  </div>
+</section>
+
+<script>
+  import { mountPlayground } from '../lib/playground-client';
+
+  const root = document.querySelector<HTMLElement>('[data-playground]');
+  if (root) void mountPlayground(root);
+</script>
+
+<style>
+  .play {
+    padding-block: var(--space-8) var(--space-12);
+  }
+  .play-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+  .play-head h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .play-head p {
+    margin: 0;
+    color: var(--fg-muted);
+    font-size: 0.98rem;
+  }
+  .play-foot {
+    margin: var(--space-4) 0 0;
+    color: var(--fg-subtle);
+    font-size: 0.85rem;
+  }
+
+  .pg {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    color: var(--code-fg);
+  }
+
+  .pg-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-right: var(--space-3);
+    border-bottom: 1px solid var(--code-border);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .pg-file {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    padding: 0 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: rgba(230, 237, 243, 0.8);
+    border-bottom: 2px solid var(--accent-soft);
+    margin-bottom: -1px;
+  }
+  .pg-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-block: 0.45rem;
+    min-width: 0;
+  }
+
+  .pg-btn,
+  .pg-pick select {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2rem;
+    padding: 0 0.7rem;
+    font: 500 0.82rem var(--font-sans);
+    color: rgba(230, 237, 243, 0.85);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+  }
+  .pg-btn:hover,
+  .pg-pick select:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #3d4757;
+    color: #fff;
+  }
+  .pg-btn:focus-visible,
+  .pg-pick select:focus-visible {
+    outline: 2px solid #ffd166;
+    outline-offset: 1px;
+  }
+  .pg-btn:disabled {
+    cursor: progress;
+    opacity: 0.6;
+  }
+  .pg-pick select {
+    -webkit-appearance: none;
+    appearance: none;
+    max-width: 11rem;
+    padding-right: 1.7rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='none' stroke='%23adbac7' stroke-width='1.6' stroke-linecap='round' d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 0.75rem;
+  }
+  .pg-pick option {
+    color: #1a1f2e;
+  }
+
+  .pg-run {
+    background: #ffd166;
+    border-color: #ffd166;
+    color: #1a1305;
+    font-weight: 600;
+    padding: 0 0.95rem;
+  }
+  .pg-run:hover {
+    background: #ffdc85;
+    border-color: #ffdc85;
+    color: #1a1305;
+  }
+  .pg-spin {
+    display: none;
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 2px solid rgba(26, 19, 5, 0.3);
+    border-top-color: #1a1305;
+    border-radius: 50%;
+    animation: pg-spin 700ms linear infinite;
+  }
+  .pg[data-busy] .pg-run .pg-spin {
+    display: inline-block;
+  }
+  .pg[data-busy] .pg-run .pg-play {
+    display: none;
+  }
+  @keyframes pg-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pg-spin {
+      animation-duration: 2s;
+    }
+  }
+
+  .pg-panes {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    height: clamp(26rem, 68vh, 46rem);
+  }
+  .pg-editor {
+    min-width: 0;
+    min-height: 0;
+  }
+  .pg-term {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    border-left: 1px solid var(--code-border);
+    background: rgba(0, 0, 0, 0.25);
+  }
+  .pg-term-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: 0.55rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(230, 237, 243, 0.5);
+    border-bottom: 1px solid var(--code-border);
+  }
+  .pg-version {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .pg-output {
+    flex: 1;
+    margin: 0;
+    padding: 0.9rem 1rem;
+    overflow: auto;
+    background: transparent;
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 0.83rem;
+    line-height: 1.65;
+    color: var(--code-fg);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .pg-output :global(.pg-note) {
+    color: rgba(230, 237, 243, 0.5);
+  }
+  .pg-output :global(.pg-err) {
+    color: #ff938a;
+  }
+
+  @media (max-width: 56rem) {
+    .pg-panes {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(18rem, 55vh) minmax(10rem, auto);
+      height: auto;
+    }
+    .pg-term {
+      border-left: 0;
+      border-top: 1px solid var(--code-border);
+    }
+    .pg-output {
+      max-height: 22rem;
+    }
+    .pg-btn span:not(.pg-spin) {
+      display: none;
+    }
+    .pg-run span:not(.pg-spin) {
+      display: inline;
+    }
+    .pg-pick select {
+      max-width: 7.5rem;
+    }
+    .pg-file {
+      display: none;
+    }
+    .pg-actions {
+      padding-left: var(--space-3);
+      flex: 1;
+    }
+    .pg-run {
+      margin-left: auto;
+    }
+  }
+</style>
