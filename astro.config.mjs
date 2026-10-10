@@ -13,6 +13,12 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+  // In development the playground page talks to a local playground server.
+  vite: {
+    server: {
+      proxy: { '/api': 'http://127.0.0.1:8090' },
+    },
+  },
   markdown: {
     shikiConfig: {
       theme: 'github-dark-dimmed',
