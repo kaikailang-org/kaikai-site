@@ -8,10 +8,9 @@ titleNote: "This post was originally written in Spanish. The English translation
 
 If you want to know what kaikai is about without reading a whole book, this video tells it in under six minutes.
 
-<video controls preload="metadata" playsinline width="1920" height="1080" poster="/blog/kaikai-en-seis-minutos/poster-en.jpg">
-  <source src="/blog/kaikai-en-seis-minutos/kaikai-en.mp4" type="video/mp4" />
-  Your browser cannot play the video. You can <a href="/blog/kaikai-en-seis-minutos/kaikai-en.mp4">download it</a>.
-</video>
+<iframe src="https://www.youtube-nocookie.com/embed/LjpYcCpnMc0" title="The Kaikai Programming Language Intro" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+You can also [watch it on YouTube](https://youtu.be/LjpYcCpnMc0).
 
 ## What you will see
 
