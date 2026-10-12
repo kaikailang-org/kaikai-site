@@ -116,7 +116,7 @@ export const ui = {
     'examples.page.lead':
       'Nueve programas cortos para conocer el lenguaje paso a paso. Cada uno cabe en una pantalla y te muestra una sola idea.',
     'examples.page.note':
-      'Puedes ejecutarlos tal cual con kai run. La salida que ves junto a cada uno es la que produce kaikai 0.142.',
+      'Puedes ejecutarlos tal cual con kai run. La salida que ves junto a cada uno es la que produce kaikai 0.145.',
     'examples.page.eyebrow': 'Inicio rápido',
     'examples.page.index': 'Índice de ejemplos',
     'examples.page.output': 'Salida',
@@ -269,7 +269,7 @@ export const ui = {
     'examples.page.lead':
       'Nine short programs to get to know the language one step at a time. Each fits on a screen and shows you a single idea.',
     'examples.page.note':
-      'You can run them as they are with kai run. The output next to each one is what kaikai 0.142 prints.',
+      'You can run them as they are with kai run. The output next to each one is what kaikai 0.145 prints.',
     'examples.page.eyebrow': 'Quickstart',
     'examples.page.index': 'Example index',
     'examples.page.output': 'Output',
