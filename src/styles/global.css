@@ -348,9 +348,11 @@ pre code {
   margin: var(--space-6) auto;
   border-radius: var(--radius);
 }
-.rich-prose video {
+.rich-prose video,
+.rich-prose iframe {
   width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
   display: block;
   margin: var(--space-6) auto;
   border-radius: var(--radius-lg);

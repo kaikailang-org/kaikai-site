@@ -7,10 +7,9 @@ slug: kaikai-en-seis-minutos
 
 Si quieres saber de qué se trata kaikai sin leer un libro entero, este video lo cuenta en menos de seis minutos.
 
-<video controls preload="metadata" playsinline width="1920" height="1080" poster="/blog/kaikai-en-seis-minutos/poster-es.jpg">
-  <source src="/blog/kaikai-en-seis-minutos/kaikai-es.mp4" type="video/mp4" />
-  Tu navegador no puede reproducir el video. Puedes <a href="/blog/kaikai-en-seis-minutos/kaikai-es.mp4">descargarlo</a>.
-</video>
+<iframe src="https://www.youtube-nocookie.com/embed/AK0ehwWILzg" title="El lenguaje de programación kaikai" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+También puedes [verlo en YouTube](https://youtu.be/AK0ehwWILzg).
 
 ## Lo que vas a ver
 
