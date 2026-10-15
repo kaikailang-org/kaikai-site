@@ -274,7 +274,7 @@ export async function mountPlayground(root: HTMLElement): Promise<void> {
   fetch('/api/version')
     .then((r) => (r.ok ? r.json() : null))
     .then((v) => {
-      // "kaikai 0.146.0 - hanga-roa (…)": the name and number are enough here.
+      // "kaikai 0.158.1 - hanga-roa (…)": the name and number are enough here.
       if (v?.version) version.textContent = String(v.version).split(' - ')[0];
     })
     .catch(() => {});
