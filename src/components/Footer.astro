@@ -14,9 +14,14 @@ const hasBlog = (await getBlogPosts(lang)).length > 0;
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="brand-col">
-      <strong>kaikai</strong>
-      <p>{tt('footer.tagline')}</p>
-      <p class="muted">{tt('footer.copy')}</p>
+      <a class="honu" href={`${pathInLang('/about', lang)}#honu`} title="Honu">
+        <img src="/honu/honu-icon-96.webp" alt="Honu" width="48" height="48" loading="lazy" />
+      </a>
+      <div>
+        <strong>kaikai</strong>
+        <p>{tt('footer.tagline')}</p>
+        <p class="muted">{tt('footer.copy')}</p>
+      </div>
     </div>
     <nav class="footer-nav" aria-label="Footer">
       <ul>
@@ -50,6 +55,20 @@ const hasBlog = (await getBlogPosts(lang)).length > 0;
     display: grid;
     grid-template-columns: 1.4fr 1fr 1fr;
     gap: var(--space-8);
+  }
+  .brand-col {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  .honu img {
+    display: block;
+    width: 48px;
+    height: auto;
+    transition: transform 0.2s ease;
+  }
+  .honu:hover img {
+    transform: rotate(-8deg);
   }
   .brand-col strong {
     font-size: 1.1rem;
