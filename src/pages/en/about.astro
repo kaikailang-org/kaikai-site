@@ -77,6 +77,31 @@ import { links } from '../../lib/links';
         </ul>
       </section>
 
+      <section id="honu">
+        <h2>Honu</h2>
+        <div class="mascot">
+          <img
+            src="/honu/honu.webp"
+            alt="Honu, a green sea turtle walking upright, with a brown belt and a tough look"
+            width="900"
+            height="1194"
+            loading="lazy"
+          />
+          <div>
+            <p>
+              The project's mascot is Honu, a sea turtle. In Rapa Nui,
+              <em>honu</em> means turtle, and its shape is carved into
+              the island's petroglyphs.
+            </p>
+            <p>
+              Honu has an icon of its own, just the head, which you can
+              <a href="/honu/honu-icon-512.png" download>download</a>
+              to use as an avatar or in a talk.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section>
         <h2>How it is written</h2>
         <p>
@@ -145,5 +170,21 @@ import { links } from '../../lib/links';
     color: var(--fg-muted);
     line-height: 1.55;
     margin-top: 0.2rem;
+  }
+  .mascot {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .mascot p:first-child {
+    margin-top: 0;
+  }
+  .mascot img {
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 560px) {
+    .mascot { grid-template-columns: 7rem minmax(0, 1fr); gap: var(--space-4); }
   }
 </style>
