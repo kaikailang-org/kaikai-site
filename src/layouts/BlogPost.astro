@@ -1,5 +1,6 @@
 ---
 import Base from './Base.astro';
+import ShareButtons from '../components/ShareButtons.astro';
 import { t, type Lang } from '../i18n/ui';
 import {
   blogIndexPath,
@@ -46,6 +47,8 @@ const altPath = await blogCounterpartPath(entry);
       <div class="prose rich-prose post-body">
         <slot />
       </div>
+
+      <ShareButtons lang={lang} title={entry.data.title} />
 
       {entry.data.titleNote && (
         <p class="title-note" id="title-note">
