@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getLangFromUrl, t, type Lang } from '../i18n/ui';
+import { getLangFromUrl, pathInLang, t, type Lang } from '../i18n/ui';
 import { blogFeedPath } from '../lib/blog';
 
 interface Props {
@@ -21,6 +21,14 @@ const desc =
   (lang === 'es'
     ? 'Lenguaje funcional con efectos algebraicos. Diseñado para programar con y por agentes.'
     : 'A functional language with algebraic effects. Designed to be written with and by agents.');
+
+// The same counterpart the header's language switch links to.
+const otherLang: Lang = lang === 'es' ? 'en' : 'es';
+const otherPath =
+  altPath ?? pathInLang(Astro.url.pathname.replace(/^\/en/, '') || '/', otherLang);
+const site = 'https://kaikai-lang.org';
+const esPath = lang === 'es' ? Astro.url.pathname : otherPath;
+const enPath = lang === 'en' ? Astro.url.pathname : otherPath;
 ---
 
 <!doctype html>
@@ -36,6 +44,45 @@ const desc =
       title={t(lang)('blog.feedTitle')}
       href={blogFeedPath(lang)}
     />
+
+    <link rel="alternate" hreflang="es" href={`${site}${esPath}`} />
+    <link rel="alternate" hreflang="en" href={`${site}${enPath}`} />
+    <link rel="alternate" hreflang="x-default" href={`${site}${esPath}`} />
+
+    {lang === 'es' && (
+      <script is:inline define:vars={{ enPath }}>
+        // A visitor arriving from outside the site gets the English edition
+        // when they chose it with the language switch, or, with no choice
+        // stored, when their browser ranks English above Spanish. Moving
+        // around inside the site never redirects, and neither do crawlers.
+        try {
+          var fromOutside =
+            !document.referrer || new URL(document.referrer).origin !== location.origin;
+          var crawler = /bot|crawl|spider|slurp|preview/i.test(navigator.userAgent);
+          if (fromOutside && !crawler) {
+            var choice = null;
+            try {
+              choice = localStorage.getItem('kaikai-lang');
+            } catch (e) {
+              /* no storage: fall back to the browser's languages */
+            }
+            if (!choice) {
+              var langs = navigator.languages || [navigator.language || ''];
+              for (var i = 0; i < langs.length; i++) {
+                var l = String(langs[i]).toLowerCase();
+                if (l.indexOf('es') === 0 || l.indexOf('en') === 0) {
+                  choice = l.slice(0, 2);
+                  break;
+                }
+              }
+            }
+            if (choice === 'en') location.replace(enPath + location.search + location.hash);
+          }
+        } catch (e) {
+          /* stay on the Spanish page */
+        }
+      </script>
+    )}
 
     <link rel="icon" type="image/x-icon" href="/honu/honu-favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/honu/honu-32.png" />

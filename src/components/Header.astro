@@ -94,7 +94,12 @@ const otherPath =
           />
         </svg>
       </a>
-      <a href={otherPath} class="lang-switch" aria-label={`Switch to ${otherLang}`}>
+      <a
+        href={otherPath}
+        class="lang-switch"
+        data-lang-switch={otherLang}
+        aria-label={`Switch to ${otherLang}`}
+      >
         {otherLang === 'en' ? 'EN' : 'ES'}
       </a>
     </div>
@@ -237,6 +242,16 @@ const otherPath =
 </style>
 
 <script>
+  // Picking an edition by hand is remembered, and wins over the browser's
+  // languages the next time the visitor arrives from outside the site.
+  document.querySelector<HTMLAnchorElement>('[data-lang-switch]')?.addEventListener('click', (e) => {
+    try {
+      localStorage.setItem('kaikai-lang', (e.currentTarget as HTMLElement).dataset.langSwitch!);
+    } catch (err) {
+      /* nothing to persist to; the link still switches the page */
+    }
+  });
+
   // The toggle flips to the opposite of what is currently shown, taking the
   // OS preference as the starting point when nothing was chosen before.
   const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
