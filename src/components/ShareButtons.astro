@@ -1,0 +1,118 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;
+}
+const { lang, title } = Astro.props;
+const tt = t(lang);
+
+// Plain links to each network's share page: no widgets, no third-party
+// scripts, nothing loads until the reader clicks.
+const url = `https://kaikai-lang.org${Astro.url.pathname}`;
+const u = encodeURIComponent(url);
+const tx = encodeURIComponent(title);
+const both = encodeURIComponent(`${title} ${url}`);
+
+const networks = [
+  { name: 'X', href: `https://x.com/intent/post?text=${tx}&url=${u}` },
+  { name: 'Bluesky', href: `https://bsky.app/intent/compose?text=${both}` },
+  { name: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}` },
+  { name: 'Reddit', href: `https://www.reddit.com/submit?url=${u}&title=${tx}` },
+  { name: 'Hacker News', href: `https://news.ycombinator.com/submitlink?u=${u}&t=${tx}` },
+  { name: 'WhatsApp', href: `https://wa.me/?text=${both}` },
+  { name: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
+];
+---
+
+<section class="share" aria-label={tt('blog.share')} data-share data-url={url} data-title={title}>
+  <p class="share-label">{tt('blog.share')}</p>
+  <ul>
+    {networks.map(({ name, href }) => (
+      <li><a href={href} target="_blank" rel="noopener noreferrer">{name}</a></li>
+    ))}
+    <li>
+      <button type="button" data-copy data-done={tt('blog.copied')}>{tt('blog.copyLink')}</button>
+    </li>
+    <li hidden data-native-item>
+      <button type="button" data-native>{tt('blog.shareMore')}</button>
+    </li>
+  </ul>
+</section>
+
+<style>
+  .share {
+    max-width: 44rem;
+    margin-top: var(--space-12);
+  }
+  .share-label {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-muted);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  a,
+  button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg-muted);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.3;
+    cursor: pointer;
+  }
+  a:hover,
+  button:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  [hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-share]').forEach((box) => {
+    const url = box.dataset.url!;
+    const title = box.dataset.title!;
+
+    const copy = box.querySelector<HTMLButtonElement>('[data-copy]');
+    copy?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        const label = copy.textContent;
+        copy.textContent = copy.dataset.done!;
+        setTimeout(() => (copy.textContent = label), 2000);
+      } catch (e) {
+        /* clipboard blocked: the address bar still has the link */
+      }
+    });
+
+    // The system share sheet, where the device offers one (mostly phones).
+    if (typeof navigator.share === 'function') {
+      box.querySelector<HTMLElement>('[data-native-item]')!.hidden = false;
+      box.querySelector('[data-native]')!.addEventListener('click', () => {
+        navigator.share({ title, url }).catch(() => {
+          /* the reader closed the sheet */
+        });
+      });
+    }
+  });
+</script>

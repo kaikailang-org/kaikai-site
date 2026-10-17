@@ -53,6 +53,10 @@ export const ui = {
     'blog.noteBack': 'Volver al título',
     'blog.feedTitle': 'Blog de kaikai',
     'blog.feed': 'Seguir por RSS',
+    'blog.share': 'Compartir',
+    'blog.copyLink': 'Copiar enlace',
+    'blog.copied': 'Enlace copiado',
+    'blog.shareMore': 'Más opciones',
 
     'theme.toggle': 'Cambiar entre claro y oscuro',
 
@@ -206,6 +210,10 @@ export const ui = {
     'blog.noteBack': 'Back to the title',
     'blog.feedTitle': 'kaikai blog',
     'blog.feed': 'Follow via RSS',
+    'blog.share': 'Share',
+    'blog.copyLink': 'Copy link',
+    'blog.copied': 'Link copied',
+    'blog.shareMore': 'More options',
 
     'theme.toggle': 'Toggle light and dark',
 
