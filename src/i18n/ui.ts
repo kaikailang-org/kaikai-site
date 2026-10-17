@@ -68,6 +68,7 @@ export const ui = {
     'book.prev': 'Anterior',
     'book.next': 'Siguiente',
     'book.backToIndex': 'Volver al índice',
+    'book.onThisPage': 'En este capítulo',
 
     'hero.pill': 'Mira cómo trabaja un agente con kaikai',
     'hero.title.line1': 'Diseñado para que humanos y agentes',
@@ -225,6 +226,7 @@ export const ui = {
     'book.prev': 'Previous',
     'book.next': 'Next',
     'book.backToIndex': 'Back to contents',
+    'book.onThisPage': 'In this chapter',
 
     'hero.pill': 'See how an agent works with kaikai',
     'hero.title.line1': 'Designed to be written with,',

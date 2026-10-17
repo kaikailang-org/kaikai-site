@@ -7,14 +7,17 @@ import {
   bookCounterpartPath,
   type BookEntry,
 } from '../lib/book';
+import type { MarkdownHeading } from 'astro';
 
 interface Props {
   entry: BookEntry;
   prev?: BookEntry;
   next?: BookEntry;
+  headings?: MarkdownHeading[];
 }
 
-const { entry, prev, next } = Astro.props;
+const { entry, prev, next, headings = [] } = Astro.props;
+const sections = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const lang: Lang = entry.data.lang;
 const tt = t(lang);
 
@@ -34,7 +37,7 @@ function tocLink(c: BookEntry) {
 ---
 
 <Base title={`${entry.data.title} · kaikai`} lang={lang} altPath={altPath}>
-  <div class="book-reader container">
+  <div class={`book-reader container${sections.length ? ' has-sections' : ''}`}>
     <aside class="book-toc" aria-label={tt('book.contents')}>
       <a class="toc-home" href={indexPath}>{tt('nav.book')}</a>
       <nav>
@@ -104,6 +107,19 @@ function tocLink(c: BookEntry) {
         <a href={indexPath}>← {tt('book.backToIndex')}</a>
       </p>
     </article>
+
+    {sections.length > 0 && (
+      <aside class="page-toc" aria-label={tt('book.onThisPage')}>
+        <p class="toc-heading">{tt('book.onThisPage')}</p>
+        <ol>
+          {sections.map((h) => (
+            <li class={`depth-${h.depth}`}>
+              <a href={`#${h.slug}`} data-section={h.slug}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </aside>
+    )}
   </div>
 </Base>
 
@@ -166,6 +182,49 @@ function tocLink(c: BookEntry) {
     font-weight: 600;
     border-left-color: var(--accent);
     background: var(--bg-subtle);
+  }
+
+  /* --- Sections of this chapter ---------------------------------------- */
+  .page-toc {
+    display: none;
+    position: sticky;
+    top: calc(var(--space-16) + var(--space-2));
+    max-height: calc(100vh - var(--space-24));
+    overflow-y: auto;
+    font-size: 0.82rem;
+    border-left: 1px solid var(--border);
+    padding-left: var(--space-4);
+  }
+  .page-toc .toc-heading { margin-top: 0; }
+  .page-toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .page-toc li { margin: 0; }
+  .page-toc a {
+    display: block;
+    color: var(--fg-muted);
+    padding: 0.2rem 0;
+    line-height: 1.35;
+  }
+  .page-toc .depth-3 a {
+    padding-left: var(--space-3);
+    font-size: 0.78rem;
+    color: var(--fg-subtle);
+  }
+  .page-toc a:hover { color: var(--fg); text-decoration: none; }
+  .page-toc a[aria-current='true'] {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  @media (min-width: 1200px) {
+    .book-reader.has-sections {
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 13rem);
+      gap: var(--space-8);
+    }
+    .page-toc { display: block; }
   }
 
   /* --- Chapter content -------------------------------------------------- */
@@ -241,3 +300,44 @@ function tocLink(c: BookEntry) {
     }
   }
 </style>
+
+<script>
+  // Marks the section being read: the last heading that has scrolled past
+  // the top quarter of the viewport.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.page-toc [data-section]')];
+  const targets = links
+    .map((a) => document.getElementById(a.dataset.section!))
+    .filter((el): el is HTMLElement => el !== null);
+
+  // Scrolls only the TOC box, never the page, to keep the marked entry in sight.
+  const keepVisible = (a: HTMLElement) => {
+    const box = a.closest<HTMLElement>('.page-toc')!;
+    const top = a.offsetTop;
+    if (top < box.scrollTop) box.scrollTop = top - 8;
+    else if (top + a.offsetHeight > box.scrollTop + box.clientHeight)
+      box.scrollTop = top + a.offsetHeight - box.clientHeight + 8;
+  };
+
+  if (targets.length) {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight / 4;
+      let current = targets[0].id;
+      for (const el of targets) {
+        if (el.getBoundingClientRect().top <= line) current = el.id;
+        else break;
+      }
+      for (const a of links) {
+        const on = a.dataset.section === current;
+        if (on) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+        if (on) keepVisible(a);
+      }
+    };
+    window.addEventListener('scroll', () => (frame ||= requestAnimationFrame(update)), {
+      passive: true,
+    });
+    update();
+  }
+</script>
