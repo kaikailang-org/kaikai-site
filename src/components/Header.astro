@@ -220,6 +220,8 @@ const otherPath =
     text-decoration: none;
   }
   @media (max-width: 720px) {
+    /* With the links on several rows the header is too tall to pin. */
+    .site-header { position: static; }
     .header-inner {
       flex-wrap: wrap;
     }
@@ -231,13 +233,13 @@ const otherPath =
       min-width: 0;
       justify-content: flex-start;
     }
+    /* Every link stays in sight: they wrap onto extra rows rather than
+       scroll off the edge. */
     .primary-nav ul {
-      gap: var(--space-4);
-      flex-wrap: nowrap;
-      overflow-x: auto;
+      gap: var(--space-2) var(--space-4);
       white-space: nowrap;
-      scrollbar-width: none;
     }
+    .primary-nav a { font-size: 0.9rem; }
   }
 </style>
 
