@@ -2,8 +2,8 @@
 #
 # El clásico, sin escribir un solo bucle. Un tipo suma clasifica cada
 # número y una cadena de operadores hace el recorrido: `[1..15]` es un
-# literal de rango, `|` transforma cada elemento y `|>` le pasa la
-# lista completa a una función.
+# literal de rango, `|` transforma cada elemento y `|!` recorre la
+# lista por su efecto, aquí imprimir.
 #
 #   $ kai run examples/quickstart/02_fizzbuzz.kai
 #   1
@@ -39,7 +39,7 @@ fn etiqueta(c: Tag) : String = match c {
 
 fn main() {
   [1..15]
-    | clasificar              # transforma: [Int] -> [Tag]
-    | etiqueta                # transforma: [Tag] -> [String]
-    |> list.foreach(println)  # aplica: imprime cada línea
+    | clasificar  # transforma: [Int] -> [Tag]
+    | etiqueta    # transforma: [Tag] -> [String]
+    |! println    # recorre: imprime cada línea
 }

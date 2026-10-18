@@ -2,7 +2,7 @@
 #
 # Sum types + pattern match, expressed as a pipeline instead of a
 # hand-written recursion: `[1..15]` is a range literal, `|` maps over
-# the list, and `|>` applies a function to the whole list.
+# the list, and `|!` walks it for its effect, here printing.
 #
 #   $ kai run examples/quickstart/02_fizzbuzz.kai
 #   1
@@ -38,7 +38,7 @@ fn label(c: Tag) : String = match c {
 
 fn main() {
   [1..15]
-    | classify                # map: [Int] -> [Tag]
-    | label                   # map: [Tag] -> [String]
-    |> list.foreach(println)  # apply: print each line
+    | classify  # map: [Int] -> [Tag]
+    | label     # map: [Tag] -> [String]
+    |! println  # each: print each line
 }
