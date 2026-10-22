@@ -46,6 +46,10 @@ const strings = {
   busy: tt('play.busy'),
   tooLarge: tt('play.tooLarge'),
   offline: tt('play.offline'),
+  honuError: tt('play.honuError'),
+  honuErrorAt: tt('play.honuErrorAt'),
+  honuTimeout: tt('play.honuTimeout'),
+  honuFirst: tt('play.honuFirst'),
 };
 ---
 
@@ -330,6 +334,23 @@ const strings = {
   }
   .pg-output :global(.pg-err) {
     color: #ff938a;
+  }
+  /* Honu's one-line remark above the output, facing the editor. */
+  .pg-output :global(.pg-honu) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: #ffd166;
+    white-space: normal;
+  }
+  .pg-output :global(.pg-honu img) {
+    flex: none;
+    width: 2.4rem;
+    height: 2.4rem;
+    transform: scaleX(-1);
   }
 
   @media (max-width: 56rem) {

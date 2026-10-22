@@ -19,6 +19,7 @@ interface CompileReply {
 }
 
 const DRAFT_KEY = 'kaikai-playground-draft';
+const RAN_KEY = 'kaikai-playground-ran';
 
 // ---- lines the compiler complained about ----------------------------
 
@@ -154,8 +155,23 @@ export async function mountPlayground(root: HTMLElement): Promise<void> {
 
   type Part = { text: string; kind: 'out' | 'err' | 'note' };
 
-  function show(parts: Part[]): void {
+  /** Honu's remark: the mascot's head and one short line, above the output. */
+  function honu(line: string): HTMLElement {
+    const row = document.createElement('span');
+    row.className = 'pg-honu';
+    const head = document.createElement('img');
+    head.src = '/honu/honu-icon-96.webp';
+    head.alt = '';
+    head.width = head.height = 38;
+    const words = document.createElement('span');
+    words.textContent = line;
+    row.append(head, words);
+    return row;
+  }
+
+  function show(parts: Part[], say?: string): void {
     output.replaceChildren(
+      ...(say ? [honu(say)] : []),
       ...parts.map((p) => {
         const span = document.createElement('span');
         span.className = `pg-${p.kind}`;
@@ -205,7 +221,8 @@ export async function mountPlayground(root: HTMLElement): Promise<void> {
     if (reply.errors) {
       const lines = [...reply.errors.matchAll(/main\.kai:(\d+):\d+/g)].map((m) => Number(m[1]));
       view.dispatch({ effects: markErrors.of(lines) });
-      show([{ text: reply.errors, kind: 'err' }]);
+      const say = lines.length > 0 ? text.honuErrorAt.replace('{n}', String(lines[0])) : text.honuError;
+      show([{ text: reply.errors, kind: 'err' }], say);
       return;
     }
 
@@ -228,7 +245,21 @@ export async function mountPlayground(root: HTMLElement): Promise<void> {
     } else if (!printed) {
       parts.push({ text: text.noOutput, kind: 'note' });
     }
-    show(parts);
+    const stalled = ['timeout', 'killed', 'build_timeout', 'build_killed'].includes(reply.reason);
+    let say: string | undefined = stalled ? text.honuTimeout : undefined;
+    // The first clean run a reader gets is worth a word; later ones are not.
+    if (!reply.reason && reply.status === 0 && !ranBefore()) say = text.honuFirst;
+    show(parts, say);
+  }
+
+  function ranBefore(): boolean {
+    try {
+      if (localStorage.getItem(RAN_KEY)) return true;
+      localStorage.setItem(RAN_KEY, '1');
+    } catch {
+      /* without storage, every page load counts as the first */
+    }
+    return false;
   }
 
   async function format(): Promise<void> {
