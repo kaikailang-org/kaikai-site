@@ -27,7 +27,7 @@ export const ui = {
     'play.share': 'Compartir',
     'play.shared': 'Enlace copiado',
     'play.output': 'Salida',
-    'play.hint': 'Presiona Ejecutar o Ctrl+Enter.',
+    'play.hint': 'Presiona Ejecutar (o Ctrl+Enter) para compilar y correr este programa. Después cámbialo y vuelve a ejecutarlo.',
     'play.running': 'Compilando y ejecutando…',
     'play.formatting': 'Formateando…',
     'play.noOutput': 'El programa terminó sin imprimir nada.',
@@ -125,6 +125,7 @@ export const ui = {
     'examples.page.eyebrow': 'Inicio rápido',
     'examples.page.index': 'Índice de ejemplos',
     'examples.page.output': 'Salida',
+    'examples.page.try': 'Probar en el playground',
 
     'featured.title': 'Míralo correr',
     'featured.intro':
@@ -185,7 +186,7 @@ export const ui = {
     'play.share': 'Share',
     'play.shared': 'Link copied',
     'play.output': 'Output',
-    'play.hint': 'Press Run or Ctrl+Enter.',
+    'play.hint': 'Press Run (or Ctrl+Enter) to compile and run this program. Then change it and run it again.',
     'play.running': 'Compiling and running…',
     'play.formatting': 'Formatting…',
     'play.noOutput': 'The program finished without printing anything.',
@@ -283,6 +284,7 @@ export const ui = {
     'examples.page.eyebrow': 'Quickstart',
     'examples.page.index': 'Example index',
     'examples.page.output': 'Output',
+    'examples.page.try': 'Try it in the playground',
 
     'featured.title': 'See it run',
     'featured.intro':
