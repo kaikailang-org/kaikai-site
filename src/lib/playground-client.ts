@@ -245,7 +245,8 @@ export async function mountPlayground(root: HTMLElement): Promise<void> {
     } else if (!printed) {
       parts.push({ text: text.noOutput, kind: 'note' });
     }
-    const stalled = ['timeout', 'killed', 'build_timeout', 'build_killed'].includes(reply.reason);
+    // Only the reader's program can loop; a slow build is the server's fault.
+    const stalled = ['timeout', 'killed'].includes(reply.reason);
     let say: string | undefined = stalled ? text.honuTimeout : undefined;
     // The first clean run a reader gets is worth a word; later ones are not.
     if (!reply.reason && reply.status === 0 && !ranBefore()) say = text.honuFirst;
