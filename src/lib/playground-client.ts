@@ -107,19 +107,28 @@ export async function mountPlayground(root: HTMLElement): Promise<void> {
   const fromLink = location.hash.startsWith('#code=')
     ? await unpack(location.hash.slice('#code='.length))
     : null;
+  // `#ex=<id>` comes from the examples page: open that program, keep it as the
+  // draft, and drop the fragment so a reload keeps the reader's edits.
+  const fromExample = location.hash.startsWith('#ex=')
+    ? examples.find((e) => e.id === location.hash.slice('#ex='.length))?.code ?? null
+    : null;
   let draft: string | null = null;
   try {
+    if (fromExample) localStorage.setItem(DRAFT_KEY, fromExample);
     draft = localStorage.getItem(DRAFT_KEY);
   } catch {
-    /* storage unavailable: start from the first example */
+    /* storage unavailable: start from the default example */
   }
+  if (fromExample) history.replaceState(null, '', location.pathname);
+  // FizzBuzz shows more of the language on a first run than hello world does.
+  const firstExample = examples.find((e) => e.id === 'fizzbuzz') ?? examples[0];
 
   let busy = false;
 
   const view = new EditorView({
     parent: $('[data-editor]'),
     state: EditorState.create({
-      doc: fromLink ?? draft ?? examples[0].code,
+      doc: fromLink ?? fromExample ?? draft ?? firstExample.code,
       extensions: [
         keymap.of([
           { key: 'Mod-Enter', run: () => (void run(), true) },
@@ -185,6 +194,7 @@ export async function mountPlayground(root: HTMLElement): Promise<void> {
 
   async function run(): Promise<void> {
     if (busy) return;
+    root.removeAttribute('data-invite');
     setBusy(true);
     note('running');
     view.dispatch({ effects: markErrors.of([]) });

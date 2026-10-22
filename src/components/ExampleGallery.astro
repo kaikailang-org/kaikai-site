@@ -1,5 +1,5 @@
 ---
-import { t, type Lang } from '../i18n/ui';
+import { t, pathInLang, type Lang } from '../i18n/ui';
 import fs from 'node:fs';
 import path from 'node:path';
 import { highlightKai } from '../lib/highlight';
@@ -79,6 +79,9 @@ const items = await Promise.all(
           <div class="window">
             <div class="window-chrome">
               <span class="filename">{it.file}</span>
+              <a class="try" href={`${pathInLang('/playground', lang)}#ex=${it.id}`}>
+                {tt('examples.page.try')} <span aria-hidden="true">→</span>
+              </a>
             </div>
             <div class="code-body" set:html={it.html} />
           </div>
@@ -194,6 +197,22 @@ const items = await Promise.all(
   .filename {
     border-bottom: 2px solid var(--accent-soft);
     margin-bottom: -1px;
+  }
+  .try {
+    margin-left: auto;
+    align-self: center;
+    padding: 0 1rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ffd166;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .try:hover,
+  .try:focus-visible {
+    color: #ffdc85;
+    text-decoration: underline;
   }
   .term-chrome {
     font-size: 0.72rem;
