@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { highlightKai } from '../lib/highlight';
 import { parseSnippet } from '../lib/snippet';
+import { wasmDemos } from '../lib/wasm-demos';
+import WasmGallery from './WasmGallery.astro';
 
 interface Props {
   lang: Lang;
@@ -56,7 +58,7 @@ const items = await Promise.all(
       <p class="lead">{tt('examples.page.lead')}</p>
       <p class="web-link">
         {tt('examples.page.web')}{' '}
-        <a href={pathInLang('/web', lang)}>{tt('examples.page.web.link')} <span aria-hidden="true">→</span></a>
+        <a href="#web">{tt('examples.page.web.link')} <span aria-hidden="true">↓</span></a>
       </p>
     </header>
 
@@ -65,6 +67,12 @@ const items = await Promise.all(
         <a class="chip" href={`#${it.id}`}>
           <span class="chip-n">{it.n}</span>
           <span class="chip-t">{it.title}</span>
+        </a>
+      ))}
+      {wasmDemos.map((d, i) => (
+        <a class="chip chip-web" href={`#${d.id}`}>
+          <span class="chip-n">{String(items.length + 1 + i).padStart(2, '0')}</span>
+          <span class="chip-t">{tt(`web.item.${d.id}.title` as never)}</span>
         </a>
       ))}
     </nav>
@@ -99,6 +107,8 @@ const items = await Promise.all(
         </div>
       </article>
     ))}
+
+    <WasmGallery lang={lang} start={items.length + 1} />
   </div>
 </section>
 
@@ -136,6 +146,11 @@ const items = await Promise.all(
   .chip:hover {
     color: var(--accent);
     border-color: var(--accent);
+  }
+  /* The programs that run in the page, marked as such in the index. */
+  .chip-web .chip-n::before {
+    content: 'wasm ';
+    color: var(--accent-warm);
   }
   .chip-n {
     font-family: var(--font-mono);

@@ -4,29 +4,25 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { highlightKai } from '../lib/highlight';
 import { parseSnippet } from '../lib/snippet';
+import { wasmDemos } from '../lib/wasm-demos';
 
 interface Props {
   lang: Lang;
+  /** Number of the first demo, continuing the examples above it. */
+  start: number;
 }
-const { lang } = Astro.props;
+const { lang, start } = Astro.props;
 const tt = t(lang);
 
-// Built into public/wasm/<lang>/<id>/ by scripts/build-wasm-demos.sh.
-// `height` is what each page needs to show without scrolling.
-const demos = [
-  { id: 'counter', height: 150 },
-  { id: 'race', height: 220 },
-  { id: 'life', height: 360 },
-];
-
 const items = await Promise.all(
-  demos.map(async (d) => {
+  wasmDemos.map(async (d, i) => {
     const source = fs.readFileSync(
       path.resolve(process.cwd(), 'src/wasm', lang, `${d.id}.kai`),
       'utf-8',
     );
     return {
       ...d,
+      n: String(start + i).padStart(2, '0'),
       file: `${d.id}.kai`,
       src: `/wasm/${lang}/${d.id}/${d.id}.html`,
       title: tt(`web.item.${d.id}.title` as never),
@@ -38,19 +34,23 @@ const items = await Promise.all(
 );
 ---
 
-<section class="web page backdrop">
-  <div class="container">
+<section class="web" id="web">
     <header class="web-head">
       <p class="eyebrow">{tt('web.eyebrow')}</p>
-      <h1>{tt('web.title')}</h1>
+      <h2 class="web-title"><a href="#web">{tt('web.title')}</a></h2>
       <p class="lead">{tt('web.lead')}</p>
       <p class="note">{tt('web.note')}</p>
     </header>
 
     {items.map((it) => (
       <article class="demo" id={it.id}>
-        <h2><a href={`#${it.id}`}>{it.title}</a></h2>
-        <p class="desc">{it.desc}</p>
+        <div class="ex-head">
+          <span class="ex-n" aria-hidden="true">{it.n}</span>
+          <div>
+            <h3><a href={`#${it.id}`}>{it.title}</a></h3>
+            <p class="desc">{it.desc}</p>
+          </div>
+        </div>
 
         <div class="demo-body">
           <div class="live">
@@ -80,12 +80,25 @@ const items = await Promise.all(
       {tt('web.more')}{' '}
       <a href={pathInLang('/book/apG-webassembly', lang)}>{tt('web.more.link')}</a>
     </p>
-  </div>
 </section>
 
 <style>
+  /* A second part of the examples page, set off from the quickstart above. */
+  .web {
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border);
+    scroll-margin-top: var(--space-8);
+  }
   .web-head {
     margin-bottom: var(--space-12);
+  }
+  .web-title {
+    margin: 0 0 var(--space-3);
+    font-size: 2rem;
+  }
+  .web-title a {
+    color: inherit;
+    text-decoration: none;
   }
   .note {
     margin: var(--space-4) 0 0;
@@ -98,17 +111,31 @@ const items = await Promise.all(
     margin-bottom: var(--space-16);
     scroll-margin-top: var(--space-8);
   }
-  .demo h2 {
-    margin: 0 0 0.3rem;
+  .ex-head {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    margin-bottom: var(--space-6);
+  }
+  .ex-n {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--accent-warm);
+    opacity: 0.55;
+  }
+  .demo h3 {
+    margin: 0 0 0.2rem;
     font-size: 1.5rem;
   }
-  .demo h2 a {
+  .demo h3 a {
     color: inherit;
     text-decoration: none;
   }
-  .demo h2 a:hover { color: var(--accent); }
+  .demo h3 a:hover { color: var(--accent); }
   .desc {
-    margin: 0 0 var(--space-6);
+    margin: 0;
     color: var(--fg-muted);
     font-size: 1.02rem;
     line-height: 1.55;
@@ -188,5 +215,8 @@ const items = await Promise.all(
   @media (max-width: 62rem) {
     .demo-body { grid-template-columns: 1fr; }
     .code-body { max-height: 22rem; }
+  }
+  @media (max-width: 40rem) {
+    .ex-n { font-size: 1.5rem; }
   }
 </style>
