@@ -130,8 +130,8 @@ export const ui = {
     'examples.page.index': 'Índice de ejemplos',
     'examples.page.output': 'Salida',
     'examples.page.try': 'Probar en el playground',
-    'examples.page.web': 'Tres programas más corren en tu navegador, compilados a WebAssembly.',
-    'examples.page.web.link': 'kaikai en el navegador',
+    'examples.page.web': 'Al final hay tres más, compilados a WebAssembly, que corren aquí mismo, en tu navegador.',
+    'examples.page.web.link': 'Ir a ellos',
 
     'web.eyebrow': 'WebAssembly',
     'web.title': 'kaikai en el navegador',
@@ -158,7 +158,7 @@ export const ui = {
     'featured.title': 'Míralo correr',
     'featured.intro':
       'Un programa completo con su salida. Toma los números del 1 al 4 y encadena las cuatro tuberías para sumar los cuadrados pares.',
-    'featured.seeAll': 'Ver los nueve ejemplos',
+    'featured.seeAll': 'Ver los doce ejemplos',
 
     'examples.item.hello.title': 'Hola, mundo',
     'examples.item.hello.desc':
@@ -317,8 +317,8 @@ export const ui = {
     'examples.page.index': 'Example index',
     'examples.page.output': 'Output',
     'examples.page.try': 'Try it in the playground',
-    'examples.page.web': 'Three more programs run in your browser, compiled to WebAssembly.',
-    'examples.page.web.link': 'kaikai in the browser',
+    'examples.page.web': 'At the end there are three more, compiled to WebAssembly, that run right here in your browser.',
+    'examples.page.web.link': 'Jump to them',
 
     'web.eyebrow': 'WebAssembly',
     'web.title': 'kaikai in the browser',
@@ -345,7 +345,7 @@ export const ui = {
     'featured.title': 'See it run',
     'featured.intro':
       'A whole program and what it prints. It takes the numbers 1 to 4 and chains all four pipes to sum the even squares.',
-    'featured.seeAll': 'See all nine examples',
+    'featured.seeAll': 'See all twelve examples',
 
     'examples.item.hello.title': 'Hello, world',
     'examples.item.hello.desc':

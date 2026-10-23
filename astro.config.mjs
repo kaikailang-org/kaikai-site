@@ -6,6 +6,11 @@ const kaikaiGrammar = require('./src/syntax/kaikai.tmLanguage.json');
 
 export default defineConfig({
   site: 'https://kaikai-lang.org',
+  // The WebAssembly demos had a page of their own before joining the examples.
+  redirects: {
+    '/web': '/examples#web',
+    '/en/web': '/en/examples#web',
+  },
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en'],
