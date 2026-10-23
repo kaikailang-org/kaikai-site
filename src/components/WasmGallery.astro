@@ -1,0 +1,192 @@
+---
+import { t, pathInLang, type Lang } from '../i18n/ui';
+import fs from 'node:fs';
+import path from 'node:path';
+import { highlightKai } from '../lib/highlight';
+import { parseSnippet } from '../lib/snippet';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const tt = t(lang);
+
+// Built into public/wasm/<lang>/<id>/ by scripts/build-wasm-demos.sh.
+// `height` is what each page needs to show without scrolling.
+const demos = [
+  { id: 'counter', height: 150 },
+  { id: 'race', height: 220 },
+  { id: 'life', height: 360 },
+];
+
+const items = await Promise.all(
+  demos.map(async (d) => {
+    const source = fs.readFileSync(
+      path.resolve(process.cwd(), 'src/wasm', lang, `${d.id}.kai`),
+      'utf-8',
+    );
+    return {
+      ...d,
+      file: `${d.id}.kai`,
+      src: `/wasm/${lang}/${d.id}/${d.id}.html`,
+      title: tt(`web.item.${d.id}.title` as never),
+      desc: tt(`web.item.${d.id}.desc` as never),
+      hint: tt(`web.item.${d.id}.hint` as never),
+      html: await highlightKai(parseSnippet(source).code),
+    };
+  }),
+);
+---
+
+<section class="web page backdrop">
+  <div class="container">
+    <header class="web-head">
+      <p class="eyebrow">{tt('web.eyebrow')}</p>
+      <h1>{tt('web.title')}</h1>
+      <p class="lead">{tt('web.lead')}</p>
+      <p class="note">{tt('web.note')}</p>
+    </header>
+
+    {items.map((it) => (
+      <article class="demo" id={it.id}>
+        <h2><a href={`#${it.id}`}>{it.title}</a></h2>
+        <p class="desc">{it.desc}</p>
+
+        <div class="demo-body">
+          <div class="live">
+            <div class="chrome">
+              <span>{tt('web.live')}</span>
+              <span class="hint">{it.hint}</span>
+            </div>
+            <iframe
+              src={it.src}
+              title={it.title}
+              loading="lazy"
+              style={`height: ${it.height}px`}
+            />
+          </div>
+
+          <div class="window">
+            <div class="chrome"><span class="filename">{it.file}</span></div>
+            <div class="code-body" set:html={it.html} />
+          </div>
+        </div>
+
+        <pre class="cmd"><code>$ kai build --target=wasm32-browser {it.file} -o {it.id}</code></pre>
+      </article>
+    ))}
+
+    <p class="more">
+      {tt('web.more')}{' '}
+      <a href={pathInLang('/book/apG-webassembly', lang)}>{tt('web.more.link')}</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .web-head {
+    margin-bottom: var(--space-12);
+  }
+  .note {
+    margin: var(--space-4) 0 0;
+    color: var(--fg-subtle);
+    font-size: 0.9rem;
+    max-width: 62ch;
+  }
+
+  .demo {
+    margin-bottom: var(--space-16);
+    scroll-margin-top: var(--space-8);
+  }
+  .demo h2 {
+    margin: 0 0 0.3rem;
+    font-size: 1.5rem;
+  }
+  .demo h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .demo h2 a:hover { color: var(--accent); }
+  .desc {
+    margin: 0 0 var(--space-6);
+    color: var(--fg-muted);
+    font-size: 1.02rem;
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+
+  /* The running program first; its source beside it, scrolling on its own. */
+  .demo-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .live,
+  .window {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .chrome {
+    display: flex;
+    gap: var(--space-3);
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--code-border);
+    background: rgba(255, 255, 255, 0.03);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(230, 237, 243, 0.55);
+  }
+  .hint {
+    margin-left: auto;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #ffd166;
+  }
+  .filename {
+    text-transform: none;
+    letter-spacing: 0;
+    color: rgba(230, 237, 243, 0.8);
+  }
+  iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: #0d1117;
+  }
+  .code-body {
+    max-height: 30rem;
+    overflow: auto;
+  }
+  /* Shiki sets background-color inline; !important is the only override. */
+  .code-body :global(pre.shiki) {
+    background: transparent !important;
+    margin: 0;
+    padding: var(--space-4) var(--space-6);
+    font-size: 0.8rem;
+  }
+  .cmd {
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--fg-subtle);
+    overflow-x: auto;
+  }
+
+  .more {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+  }
+
+  @media (max-width: 62rem) {
+    .demo-body { grid-template-columns: 1fr; }
+    .code-body { max-height: 22rem; }
+  }
+</style>

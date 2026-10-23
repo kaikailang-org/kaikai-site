@@ -54,6 +54,10 @@ const items = await Promise.all(
       <p class="eyebrow">{tt('examples.page.eyebrow')}</p>
       <h1>{tt('examples.page.title')}</h1>
       <p class="lead">{tt('examples.page.lead')}</p>
+      <p class="web-link">
+        {tt('examples.page.web')}{' '}
+        <a href={pathInLang('/web', lang)}>{tt('examples.page.web.link')} <span aria-hidden="true">→</span></a>
+      </p>
     </header>
 
     <nav class="jump" aria-label={tt('examples.page.index')}>
@@ -99,6 +103,14 @@ const items = await Promise.all(
 </section>
 
 <style>
+
+  .web-link {
+    margin: var(--space-4) 0 0;
+    color: var(--fg-muted);
+  }
+  .web-link a {
+    font-weight: 600;
+  }
 
   /* Index: chips that wrap, instead of a boxed multi-column list. */
   .jump {

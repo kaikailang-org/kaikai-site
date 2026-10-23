@@ -130,6 +130,30 @@ export const ui = {
     'examples.page.index': 'Índice de ejemplos',
     'examples.page.output': 'Salida',
     'examples.page.try': 'Probar en el playground',
+    'examples.page.web': 'Tres programas más corren en tu navegador, compilados a WebAssembly.',
+    'examples.page.web.link': 'kaikai en el navegador',
+
+    'web.eyebrow': 'WebAssembly',
+    'web.title': 'kaikai en el navegador',
+    'web.lead':
+      'Estos tres programas están escritos en kaikai y compilados a WebAssembly con kai build --target=wasm32-browser. No corren en un servidor: corren aquí, en tu navegador.',
+    'web.note':
+      'Los tres esperan eventos o el reloj sin bloquear la página, y para eso necesitan JavaScript Promise Integration: Chrome o Edge 137, Firefox 153 o Safari 27, o una versión posterior.',
+    'web.live': 'En vivo',
+    'web.more': 'El apéndice G del libro cuenta los dos destinos de WebAssembly, qué corre en cada uno y por qué el compilador lo sabe antes de generar nada:',
+    'web.more.link': 'WebAssembly',
+    'web.item.counter.title': 'Un contador sin callbacks',
+    'web.item.counter.desc':
+      'Un clic no llama a ninguna función tuya. Dom.next_event espera el siguiente evento como si leyeras una línea de la entrada, y el estado del contador es el argumento de una función recursiva.',
+    'web.item.counter.hint': 'Haz clic en el botón',
+    'web.item.race.title': 'Honu contra la liebre',
+    'web.item.race.desc':
+      'Dos actores corren en fibras separadas y le mandan sus pasos a un juez. El juez es el único que toca la página, porque una fibra no hereda los handlers de quien la lanza. La liebre es más rápida, pero se duerme.',
+    'web.item.race.hint': 'Presiona ▶ para largar',
+    'web.item.life.title': 'El Juego de la Vida',
+    'web.item.life.desc':
+      'El tablero es un Vec[Bool] inmutable: cada generación es un vector nuevo, calculado con una tubería sobre un rango. Se dibuja en un canvas con el efecto Dom.',
+    'web.item.life.hint': 'Clic para sembrar otro tablero',
 
     'featured.title': 'Míralo correr',
     'featured.intro':
@@ -293,6 +317,30 @@ export const ui = {
     'examples.page.index': 'Example index',
     'examples.page.output': 'Output',
     'examples.page.try': 'Try it in the playground',
+    'examples.page.web': 'Three more programs run in your browser, compiled to WebAssembly.',
+    'examples.page.web.link': 'kaikai in the browser',
+
+    'web.eyebrow': 'WebAssembly',
+    'web.title': 'kaikai in the browser',
+    'web.lead':
+      'These three programs are written in kaikai and compiled to WebAssembly with kai build --target=wasm32-browser. They don’t run on a server: they run right here, in your browser.',
+    'web.note':
+      'All three wait on events or the clock without blocking the page, which takes JavaScript Promise Integration: Chrome or Edge 137, Firefox 153 or Safari 27, or later.',
+    'web.live': 'Live',
+    'web.more': 'Appendix G of the book covers both WebAssembly targets, what runs on each, and how the compiler knows before it generates anything:',
+    'web.more.link': 'WebAssembly',
+    'web.item.counter.title': 'A counter without callbacks',
+    'web.item.counter.desc':
+      'A click doesn’t call any function of yours. Dom.next_event waits for the next event the way you’d read a line of input, and the counter’s state is the argument of a recursive function.',
+    'web.item.counter.hint': 'Click the button',
+    'web.item.race.title': 'Honu and the hare',
+    'web.item.race.desc':
+      'Two actors run on separate fibers and report their steps to a judge. The judge is the only one that touches the page, because a fiber doesn’t inherit the handlers of whoever spawned it. The hare is faster, but it falls asleep.',
+    'web.item.race.hint': 'Press ▶ to start',
+    'web.item.life.title': 'The Game of Life',
+    'web.item.life.desc':
+      'The board is an immutable Vec[Bool]: each generation is a new vector, computed with a pipe over a range. It’s drawn on a canvas through the Dom effect.',
+    'web.item.life.hint': 'Click to seed a new board',
 
     'featured.title': 'See it run',
     'featured.intro':

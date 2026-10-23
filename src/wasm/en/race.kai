@@ -1,0 +1,68 @@
+# Each runner is an actor that reports its steps to the judge. Only
+# the judge touches the page: a fiber doesn't inherit the handlers of
+# whoever spawned it, so `Dom` lives in one place.
+import web.dom
+import web.run
+import actor
+import time
+
+const FINISH : Int = 24
+
+type Step = Step(String, Int)
+
+fn track(who: String, step: Int) : String =
+  "#{string.repeat("·", step)}#{who}#{string.repeat("·", FINISH - step)}🏁"
+
+fn runner(judge: Pid[Step], who: String, pace: (Int) -> Int, step: Int) : Unit / Actor[Unit] + Clock {
+  Actor.send(judge, Step(who, step))
+  if step < FINISH {
+    time.sleep(time.millis(pace(step)))
+    runner(judge, who, pace, step + 1)
+  }
+}
+
+fn judge(hare: Node, honu: Node, podium: Node, arrived: Int) : Unit / Actor[Step] + Dom {
+  if arrived < 2 {
+    match Actor.receive() {
+      Step(who, step) -> {
+        Dom.set_text(if who == "🐇" { hare } else { honu }, track(who, step))
+        if step == FINISH and arrived == 0 { Dom.set_text(podium, "🏆 #{who}") }
+        judge(hare, honu, podium, if step == FINISH { arrived + 1 } else { arrived })
+      }
+    }
+  }
+}
+
+# Drops the clicks that came in during the race.
+fn drain() : Unit / Dom = match Dom.poll_event() {
+  Some(_) -> drain()
+  None -> ()
+}
+
+fn races(button: Node, hare: Node, honu: Node, podium: Node) : Unit / Actor[Step] + Dom + Spawn {
+  let _ = Dom.next_event()
+  Dom.set_text(podium, "")
+  let me = Actor.self()
+  # The hare is fast, but halfway there it takes a nap.
+  let _ = spawn_actor(() => runner(me, "🐇", s => if s == 12 { 4500 } else { 70 }, 0))
+  let _ = spawn_actor(() => runner(me, "🐢", _s => 230, 0))
+  judge(hare, honu, podium, 0)
+  drain()
+  Dom.set_text(button, "↻")
+  races(button, hare, honu, podium)
+}
+
+fn main() : Unit / Js + Ffi + Clock + Spawn =
+  run.run(() => with_mailbox {
+    let body = Dom.query("body") ?? Dom.create("div")
+    let button = Dom.create("button")
+    let hare = Dom.create("pre")
+    let honu = Dom.create("pre")
+    let podium = Dom.create("pre")
+    [button, hare, honu, podium] |! Dom.append(body, .)
+    Dom.set_text(button, "▶")
+    Dom.set_text(hare, track("🐇", 0))
+    Dom.set_text(honu, track("🐢", 0))
+    Dom.listen(button, "click")
+    races(button, hare, honu, podium)
+  })

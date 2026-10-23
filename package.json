@@ -11,7 +11,8 @@
     "astro": "astro",
     "sync:book": "bash scripts/sync-book-content.sh",
     "sync:book-pdfs": "bash scripts/sync-book-pdfs.sh",
-    "prebuild": "npm run sync:book"
+    "build:wasm": "bash scripts/build-wasm-demos.sh",
+    "prebuild": "npm run sync:book && npm run build:wasm"
   },
   "dependencies": {
     "@codemirror/commands": "^6.11.1",
