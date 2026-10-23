@@ -1,0 +1,54 @@
+# El Juego de la Vida de Conway sobre un canvas. El tablero es un
+# `Vec[Bool]` inmutable: cada generación es un vector nuevo. Un clic
+# siembra otro tablero al azar.
+import web.dom
+import web.run
+import web.timer
+
+const ANCHO : Int = 64
+const ALTO : Int = 40
+const LADO : Int = 8
+
+fn viva(g: Vec[Bool], x: Int, y: Int) : Int =
+  if vec_get(g, ((y + ALTO) % ALTO) * ANCHO + (x + ANCHO) % ANCHO) { 1 } else { 0 }
+
+fn vecinas(g: Vec[Bool], x: Int, y: Int) : Int =
+  viva(g, x - 1, y - 1) + viva(g, x, y - 1) + viva(g, x + 1, y - 1) +
+  viva(g, x - 1, y) + viva(g, x + 1, y) +
+  viva(g, x - 1, y + 1) + viva(g, x, y + 1) + viva(g, x + 1, y + 1)
+
+fn siguiente(g: Vec[Bool]) : Vec[Bool] =
+  [0..ANCHO * ALTO - 1] | (i => {
+    let n = vecinas(g, i % ANCHO, i / ANCHO)
+    n == 3 or (n == 2 and vec_get(g, i))
+  })
+
+fn sembrar() : Vec[Bool] / Random =
+  [0..ANCHO * ALTO - 1] | (_i => Random.int_range(0, 99) < 28)
+
+fn dibujar(c: Ctx2d, g: Vec[Bool]) : Unit / Dom {
+  Dom.set_fill_style(c, "#0d1117")
+  Dom.fill_rect(c, 0, 0, ANCHO * LADO, ALTO * LADO)
+  Dom.set_fill_style(c, "#ffd166")
+  [0..ANCHO * ALTO - 1] |? (i => vec_get(g, i))
+    |! Dom.fill_rect(c, (. % ANCHO) * LADO, (. / ANCHO) * LADO, LADO - 1, LADO - 1)
+}
+
+fn vivir(c: Ctx2d, g: Vec[Bool]) : Unit / Dom + Timer + Random {
+  dibujar(c, g)
+  Timer.sleep_ms(100)
+  match Dom.poll_event() {
+    Some(e) if e.kind == "click" -> vivir(c, sembrar())
+    _ -> vivir(c, siguiente(g))
+  }
+}
+
+fn main() : Unit / Js + Ffi + Clock + Random =
+  run.run(() => {
+    let lienzo = Dom.create("canvas")
+    Dom.set_attr(lienzo, "width", "#{ANCHO * LADO}")
+    Dom.set_attr(lienzo, "height", "#{ALTO * LADO}")
+    Dom.append(Dom.query("body") ?? lienzo, lienzo)
+    Dom.listen(lienzo, "click")
+    vivir(Dom.context_2d(lienzo), sembrar())
+  })

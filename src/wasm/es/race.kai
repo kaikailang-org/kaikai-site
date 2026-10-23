@@ -1,0 +1,68 @@
+# Cada corredor es un actor que le avisa sus pasos al juez. Solo el
+# juez toca la página: una fibra no hereda los handlers de quien la
+# lanza, así que `Dom` vive en un solo lugar.
+import web.dom
+import web.run
+import actor
+import time
+
+const META : Int = 24
+
+type Paso = Paso(String, Int)
+
+fn pista(quien: String, paso: Int) : String =
+  "#{string.repeat("·", paso)}#{quien}#{string.repeat("·", META - paso)}🏁"
+
+fn corredor(juez: Pid[Paso], quien: String, ritmo: (Int) -> Int, paso: Int) : Unit / Actor[Unit] + Clock {
+  Actor.send(juez, Paso(quien, paso))
+  if paso < META {
+    time.sleep(time.millis(ritmo(paso)))
+    corredor(juez, quien, ritmo, paso + 1)
+  }
+}
+
+fn juez(liebre: Node, honu: Node, podio: Node, llegaron: Int) : Unit / Actor[Paso] + Dom {
+  if llegaron < 2 {
+    match Actor.receive() {
+      Paso(quien, paso) -> {
+        Dom.set_text(if quien == "🐇" { liebre } else { honu }, pista(quien, paso))
+        if paso == META and llegaron == 0 { Dom.set_text(podio, "🏆 #{quien}") }
+        juez(liebre, honu, podio, if paso == META { llegaron + 1 } else { llegaron })
+      }
+    }
+  }
+}
+
+# Descarta los clics que llegaron durante la carrera.
+fn vaciar() : Unit / Dom = match Dom.poll_event() {
+  Some(_) -> vaciar()
+  None -> ()
+}
+
+fn carreras(boton: Node, liebre: Node, honu: Node, podio: Node) : Unit / Actor[Paso] + Dom + Spawn {
+  let _ = Dom.next_event()
+  Dom.set_text(podio, "")
+  let yo = Actor.self()
+  # La liebre es rápida, pero a mitad de camino se echa una siesta.
+  let _ = spawn_actor(() => corredor(yo, "🐇", p => if p == 12 { 4500 } else { 70 }, 0))
+  let _ = spawn_actor(() => corredor(yo, "🐢", _p => 230, 0))
+  juez(liebre, honu, podio, 0)
+  vaciar()
+  Dom.set_text(boton, "↻")
+  carreras(boton, liebre, honu, podio)
+}
+
+fn main() : Unit / Js + Ffi + Clock + Spawn =
+  run.run(() => with_mailbox {
+    let cuerpo = Dom.query("body") ?? Dom.create("div")
+    let boton = Dom.create("button")
+    let liebre = Dom.create("pre")
+    let honu = Dom.create("pre")
+    let podio = Dom.create("pre")
+    [boton, liebre, honu, podio] |! Dom.append(cuerpo, .)
+    Dom.set_text(boton, "▶")
+    Dom.set_text(liebre, pista("🐇", 0))
+    Dom.set_text(honu, pista("🐢", 0))
+    Dom.listen(boton, "click")
+    carreras(boton, liebre, honu, podio)
+  })

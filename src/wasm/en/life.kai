@@ -1,0 +1,54 @@
+# Conway's Game of Life on a canvas. The board is an immutable
+# `Vec[Bool]`: each generation is a new vector. A click seeds a fresh
+# random board.
+import web.dom
+import web.run
+import web.timer
+
+const WIDTH : Int = 64
+const HEIGHT : Int = 40
+const SIDE : Int = 8
+
+fn alive(g: Vec[Bool], x: Int, y: Int) : Int =
+  if vec_get(g, ((y + HEIGHT) % HEIGHT) * WIDTH + (x + WIDTH) % WIDTH) { 1 } else { 0 }
+
+fn neighbors(g: Vec[Bool], x: Int, y: Int) : Int =
+  alive(g, x - 1, y - 1) + alive(g, x, y - 1) + alive(g, x + 1, y - 1) +
+  alive(g, x - 1, y) + alive(g, x + 1, y) +
+  alive(g, x - 1, y + 1) + alive(g, x, y + 1) + alive(g, x + 1, y + 1)
+
+fn next(g: Vec[Bool]) : Vec[Bool] =
+  [0..WIDTH * HEIGHT - 1] | (i => {
+    let n = neighbors(g, i % WIDTH, i / WIDTH)
+    n == 3 or (n == 2 and vec_get(g, i))
+  })
+
+fn seed() : Vec[Bool] / Random =
+  [0..WIDTH * HEIGHT - 1] | (_i => Random.int_range(0, 99) < 28)
+
+fn draw(c: Ctx2d, g: Vec[Bool]) : Unit / Dom {
+  Dom.set_fill_style(c, "#0d1117")
+  Dom.fill_rect(c, 0, 0, WIDTH * SIDE, HEIGHT * SIDE)
+  Dom.set_fill_style(c, "#ffd166")
+  [0..WIDTH * HEIGHT - 1] |? (i => vec_get(g, i))
+    |! Dom.fill_rect(c, (. % WIDTH) * SIDE, (. / WIDTH) * SIDE, SIDE - 1, SIDE - 1)
+}
+
+fn live(c: Ctx2d, g: Vec[Bool]) : Unit / Dom + Timer + Random {
+  draw(c, g)
+  Timer.sleep_ms(100)
+  match Dom.poll_event() {
+    Some(e) if e.kind == "click" -> live(c, seed())
+    _ -> live(c, next(g))
+  }
+}
+
+fn main() : Unit / Js + Ffi + Clock + Random =
+  run.run(() => {
+    let canvas = Dom.create("canvas")
+    Dom.set_attr(canvas, "width", "#{WIDTH * SIDE}")
+    Dom.set_attr(canvas, "height", "#{HEIGHT * SIDE}")
+    Dom.append(Dom.query("body") ?? canvas, canvas)
+    Dom.listen(canvas, "click")
+    live(Dom.context_2d(canvas), seed())
+  })
